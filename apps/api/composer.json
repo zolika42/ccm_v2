@@ -1,0 +1,13 @@
+{
+  "name": "columbiagames/rewrite-api",
+  "description": "Sprint 1 starter API for the ColumbiaGames rewrite",
+  "type": "project",
+  "require": {
+    "php": "^8.2"
+  },
+  "autoload": {
+    "psr-4": {
+      "ColumbiaGames\Api\": "src/"
+    }
+  }
+}

@@ -1,0 +1,487 @@
+Fix alapelvek
+
+Ezek nem vita tárgyai az első körben:
+
+a régi Perl app érintetlen marad
+
+a legacy DB sémákhoz nem nyúlunk
+
+két DB-vel számolunk:
+
+ccm → kosár / order-state / browser-state
+
+columbia_games → customer / product / preorder / library meta
+
+az új app külön projekt lesz
+
+minden DB refresh után egy parancsból reprodukálható állapot kell
+
+elsődleges v1 scope:
+
+login/logout
+
+terméklista
+
+kosár
+
+vásárlás
+
+digital library
+
+EPIC A — Discovery freeze és guardrail-ek
+CG-001 — Legacy domain map véglegesítése
+
+Cél: a most feltárt működést egyetlen fejlesztői dokumentumba fagyasztani.
+Tartalom: auth, catalog, cart, checkout, library, DB-k, cookie-k, functionök, filesystem függések.
+Elfogadás: van egy docs/legacy-domain-map.md, amit a teljes csapat tud használni.
+
+CG-002 — Legacy integration contract
+
+Cél: pontosan leírni, mihez nyúlhat az új app és mihez nem.
+Tartalom: érintett táblák, view-k, functionök, cookie-k, file pathok, ismert veszélyek.
+Elfogadás: van egy docs/legacy-contract.md.
+
+CG-003 — UI parity inventory
+
+Cél: feltérképezni a jelenlegi felületeket képernyőnként.
+Tartalom: login, terméklista, termék részletező, kosár, checkout, library.
+Elfogadás: minden fontos screenhez van screenshot + rövid funkcióleírás.
+
+CG-004 — Scope freeze v1
+
+Cél: lezárni, hogy mi fér bele az első új app verzióba.
+Elfogadás: van egy végleges v1 lista és külön parking lot a későbbi ötleteknek.
+
+EPIC B — Projekt alap és lokális környezet
+CG-010 — Új repository / monorepo skeleton
+
+Cél: a projekt alapstruktúrájának létrehozása.
+Struktúra: apps/api, apps/web, packages/api-client, docs, scripts, infra.
+Elfogadás: üres, buildelhető repo-struktúra.
+
+CG-011 — Dockeres local dev stack
+
+Cél: egy paranccsal induló fejlesztői környezet.
+Tartalom: API, web, postgres restore workflow, opcionális redis.
+Elfogadás: docker compose up-ra feláll a fejlesztői környezet.
+
+CG-012 — Környezeti konfiguráció és secret stratégia
+
+Cél: tiszta env-kezelés.
+Tartalom: .env.example, DB connectionök, app URL-ek, legacy pathok, payment placeholder config.
+Elfogadás: dokumentált és reprodukálható config.
+
+CG-013 — Két DB connection bekötése
+
+Cél: az új backend egyszerre tudja használni a ccm és columbia_games DB-ket.
+Elfogadás: health endpoint visszaadja mindkét kapcsolat állapotát.
+
+CG-014 — Restore script: ccm
+
+Cél: dumpból automatizált helyreállítás.
+Elfogadás: egy scriptből visszaáll a ccm DB.
+
+CG-015 — Restore script: columbia_games
+
+Cél: dumpból automatizált helyreállítás.
+Elfogadás: egy scriptből visszaáll a columbia_games DB.
+
+CG-016 — Post-restore verifier
+
+Cél: ellenőrizni, hogy restore után minden kötelező objektum megvan.
+Tartalom: táblák, view-k, functionök, indexek, kritikus row count sanity check.
+Elfogadás: a script hibát dob, ha valami hiányzik.
+
+CG-017 — Legacy refresh pipeline
+
+Cél: egyetlen parancsra teljes refresh.
+Parancs: pl. make legacy-refresh
+Lépések: restore → verify → smoke.
+Elfogadás: egy parancs futtatásával használható fejlesztői állapot jön létre.
+
+CG-018 — Smoke testek DB refresh után
+
+Cél: azonnal jelezni, ha a frissített környezet használhatatlan.
+Tartalom: login lookup, terméklista lekérés, cart read, library lekérés.
+Elfogadás: minden refresh után automatikusan lefut.
+
+EPIC C — Backend alapréteg
+CG-020 — Laravel API skeleton
+
+Cél: az API projekt alapjának létrehozása.
+Elfogadás: induló Laravel app, routing, config, health endpoint.
+
+CG-021 — Legacy repository réteg
+
+Cél: az adatbázis-hozzáférés leválasztása a controllerekről.
+Tartalom: külön repository a ccm és columbia_games DB-khez.
+Elfogadás: nincs közvetlen random SQL a controller szinten.
+
+CG-022 — Service layer alap
+
+Cél: a domain logika rendezett szolgáltatásokba kerüljön.
+Tartalom: AuthService, CatalogService, CartService, CheckoutService, LibraryService.
+Elfogadás: az üzleti logika service osztályokba kerül.
+
+CG-023 — Egységes error/response modell
+
+Cél: normális API válaszok és hibák.
+Elfogadás: standard error payload, logging, request ID.
+
+CG-024 — OpenAPI alap
+
+Cél: a backend szerződése leírt és generálható legyen.
+Elfogadás: van OpenAPI spec, abból később TS kliens generálható.
+
+CG-025 — API kliens generálás a frontendhez
+
+Cél: ne kézzel barkácsolt fetch-ek legyenek mindenhol.
+Elfogadás: generált typed kliens használható a web appból.
+
+EPIC D — Frontend alapréteg
+CG-030 — React web skeleton
+
+Cél: az új frontend alapjának létrehozása.
+Elfogadás: futó React app routinggal.
+
+CG-031 — Router és layout alap
+
+Cél: stabil oldalstruktúra.
+Tartalom: public/private route-ok, app shell, header/footer placeholder.
+Elfogadás: a fő oldalak route-ról elérhetők.
+
+CG-032 — API state management
+
+Cél: normális szerveroldali state kezelés.
+Tartalom: auth state, query cache, loading/error állapotok.
+Elfogadás: legalább az auth és catalog oldalak typed klienssel működnek.
+
+CG-033 — Legacy look alapú design shell
+
+Cél: a jelenlegi kinézet durva újratervezés nélkül legyen átmentve.
+Tartalom: tipográfia, spacing, fő layout, fő komponens-váz.
+Elfogadás: a frontend nem “új brand”, hanem legacy-közeli.
+
+CG-034 — Error és empty state komponensek
+
+Cél: stabil UX hiba és üres állapot esetén is.
+Elfogadás: nincs nyers exception vagy szétesett képernyő.
+
+EPIC E — Auth
+CG-100 — Legacy customer auth read model
+
+Cél: tiszta auth lekérdező réteg a customers tábla fölé.
+Tartalom: email lookup, password mező kezelés, customer DTO.
+Elfogadás: a backend képes customer rekordot stabilan visszaadni.
+
+CG-101 — Login endpoint
+
+Cél: email + password login a legacy adatok alapján.
+Megjegyzés: a legacy mezőkhöz alkalmazkodik, de az új app sessionje külön él.
+Elfogadás: sikeres login után az új app saját session/cookie állapotot ad.
+
+CG-102 — Logout endpoint
+
+Cél: normális kijelentkezés.
+Elfogadás: session törlődik, kliens oldali auth állapot nullázódik.
+
+CG-103 — GET /auth/me
+
+Cél: a frontend tudja, ki a belépett user.
+Elfogadás: login után stabil customer profil jön vissza.
+
+CG-104 — Frontend login oldal
+
+Cél: működő login UI a legacy dizájnhoz közel.
+Elfogadás: login/logout végigkattintható.
+
+CG-105 — Password recovery spike
+
+Cél: csak feltárás, nem azonnali implementáció.
+Feladat: pontosan megérteni a legacy recovery működését és eldönteni, mi fér bele v1-be.
+Elfogadás: döntési jegyzet kész.
+
+EPIC F — Catalog
+CG-120 — Kategória / alkategória lekérdezések
+
+Cél: a terméklista navigációs alapjainak felépítése.
+Elfogadás: backend endpointok visszaadják a kategóriahierarchiát.
+
+CG-121 — Terméklista endpoint
+
+Cél: listázás legacy DB alapján.
+Tartalom: kategória, alkategória, elérhetőség, downloadable flag, alap szűrés.
+Elfogadás: használható lista endpoint.
+
+CG-122 — Termék részletező endpoint
+
+Cél: egy konkrét termék teljes adatmodellje.
+Elfogadás: név, leírás, ár, státusz, downloadable, stb. elérhető.
+
+CG-123 — Related products endpoint
+
+Cél: a kapcsolódó termékek új appból is működjenek.
+Elfogadás: termékhez kapcsolódó lista visszajön.
+
+CG-124 — Keresés endpoint
+
+Cél: kereshető legyen a katalógus.
+Elfogadás: query alapján releváns terméklista jön vissza.
+
+CG-125 — Terméklista frontend oldal
+
+Cél: működő listázó oldal.
+Elfogadás: route-ról elérhető, filterezhető, kattintható.
+
+CG-126 — Termék részletező frontend oldal
+
+Cél: működő PDP.
+Elfogadás: részletező oldalon megjelenik minden szükséges adat.
+
+EPIC G — Kosár
+CG-140 — bid-cg cookie bridge
+
+Cél: az új app kompatibilis legyen a legacy cart identity modellel.
+Elfogadás: a backend kezeli és visszaadja a browser/cart identity-t.
+
+CG-141 — Aktív kosár lekérdezés
+
+Cél: az aktuális kosár állapotának kiolvasása a ccm DB-ből.
+Elfogadás: a frontend látja az aktív cartot.
+
+CG-142 — Kosárba helyezés
+
+Cél: termék hozzáadása a legacy cart struktúrához igazítva.
+Elfogadás: add-to-cart után a kosárban megjelenik a tétel.
+
+CG-143 — Mennyiség módosítás / törlés
+
+Cél: cart edit műveletek.
+Elfogadás: update/remove működik.
+
+CG-144 — Kosár összesítő
+
+Cél: subtotal / item count / releváns meta visszaadása.
+Elfogadás: a frontend stabilan mutatja az összesítést.
+
+CG-145 — Frontend kosár oldal
+
+Cél: végigkattintható kosár UI.
+Elfogadás: tétel hozzáadás, módosítás, törlés működik.
+
+EPIC H — Checkout / vásárlás
+CG-160 — Checkout adatmodell feltérképezés
+
+Cél: pontos mezőtérkép a legacy checkout és az új frontend között.
+Elfogadás: van checkout field map dokumentum.
+
+CG-161 — Checkout summary endpoint
+
+Cél: az aktuális rendelés és összegek lekérése.
+Elfogadás: a frontend a vásárlás előtt látja a végső állapotot.
+
+CG-162 — Checkout validate endpoint
+
+Cél: a szükséges mezők és rendelési állapot ellenőrzése elküldés előtt.
+Elfogadás: a hibák strukturáltan jönnek vissza.
+
+CG-163 — Order submit service
+
+Cél: a tényleges rendelés lezárása az ismert legacy logikához igazítva.
+Tartalom: record_order() és record_item() hívások.
+Elfogadás: a rendelés rögzül, preorder/pont logika lefut.
+
+CG-164 — Payment flow audit ticket
+
+Cél: a payment routing teljes feltárása a legacy configokból.
+Elfogadás: pontos döntés arról, hogy v1-ben mi az implementációs út.
+
+CG-165 — Checkout frontend oldal
+
+Cél: működő vásárlási flow UI.
+Elfogadás: validációval és backend integrációval végigmegy a flow.
+
+CG-166 — Purchase smoke scenario
+
+Cél: egy automata vagy félautomata végigfutás a purchase flow-ra.
+Elfogadás: refresh után ellenőrizhető a rendelési alapfolyamat.
+
+EPIC I — Digital library
+CG-180 — Owned downloads lekérdezés
+
+Cél: a felhasználó megvett letölthető termékeinek listázása.
+Forrás: preorders + products.
+Elfogadás: stabil library lista endpoint.
+
+CG-181 — Digital library frontend oldal
+
+Cél: működő library nézet.
+Elfogadás: a user látja a saját letölthető termékeit.
+
+CG-182 — Legacy download delivery bridge
+
+Cél: a tényleges fájlletöltés összekötése a meglévő delivery logikával.
+Elfogadás: legalább egy ismert letölthető termék működik új appból.
+
+CG-183 — Download security review
+
+Cél: megérteni, hogy a legacy dl.db alapú rendszerrel hogyan maradunk kompatibilisek kockázatminimalizálva.
+Elfogadás: döntési jegyzet és implementációs szabályok.
+
+EPIC J — A/B teszt és minőségbiztosítás
+CG-190 — Parity checklist
+
+Cél: régi és új app összehasonlító ellenőrzőlista.
+Elfogadás: screenenként és feature-önként kipipálható lista.
+
+CG-191 — Fixture user és fixture product készlet
+
+Cél: legyen stabil tesztadat a kézi és automata tesztekhez.
+Elfogadás: dokumentált teszt userek és termékek.
+
+CG-192 — Audit log és request tracing
+
+Cél: könnyű hibakeresés.
+Elfogadás: request ID, strukturált log, fontos checkout események logolva.
+
+CG-193 — UAT script
+
+Cél: kézi végigtesztelési forgatókönyv.
+Elfogadás: a teljes v1 scope végigjárható lépésről lépésre.
+
+CG-194 — Cutover readiness checklist
+
+Cél: későbbi élesítés előkészítése.
+Elfogadás: egyértelmű go/no-go lista.
+
+Parking lot — nem most, de fontos
+
+Ezeket nem tesszük bele az első kivitelbe, csak nyilvántartjuk:
+
+CG-P01 — Legacy password hardening strategy
+CG-P02 — Payment modernizálás / provider csere
+CG-P03 — Új download token rendszer
+CG-P04 — Wishlist rewrite
+CG-P05 — Support request modul
+CG-P06 — React Native indítás
+CG-P07 — DB refactor / additív normalizálás később
+Javasolt sprint sorrend
+Sprint 1
+
+Cél: alap + auth + catalog read-only alap
+
+CG-001
+
+CG-002
+
+CG-004
+
+CG-010
+
+CG-011
+
+CG-012
+
+CG-013
+
+CG-014
+
+CG-015
+
+CG-016
+
+CG-017
+
+CG-020
+
+CG-021
+
+CG-022
+
+CG-024
+
+CG-030
+
+CG-031
+
+CG-032
+
+CG-100
+
+CG-101
+
+CG-102
+
+CG-103
+
+CG-104
+
+CG-120
+
+CG-121
+
+CG-122
+
+Sprint 2
+
+Cél: catalog teljesítés + kosár
+
+CG-123
+
+CG-124
+
+CG-125
+
+CG-126
+
+CG-140
+
+CG-141
+
+CG-142
+
+CG-143
+
+CG-144
+
+CG-145
+
+CG-190
+
+CG-191
+
+Sprint 3
+
+Cél: checkout alap
+
+CG-160
+
+CG-161
+
+CG-162
+
+CG-163
+
+CG-164
+
+CG-165
+
+CG-166
+
+CG-192
+
+Sprint 4
+
+Cél: digital library + stabilizálás
+
+CG-180
+
+CG-181
+
+CG-182
+
+CG-183
+
+CG-193
+
+CG-194
