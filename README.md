@@ -1,9 +1,11 @@
 # ColumbiaGames Rewrite – Sprint 1 Starter
 
-Ez a csomag a tényleges Sprint 1 kezdetét adja meg:
-- futtatható, dependency-light PHP API starter
+Ez a repo már nem csak kódszkeletont, hanem **futtatható fejlesztői környezetet** is ad:
+- natív PHP API starter
 - React + TypeScript web starter
-- legacy-kompatibilis auth és catalog read-only flow
+- Docker Compose stack (API + web + Postgres)
+- opcionális DDEV wrapper
+- restore / verify / smoke workflow a legacy dumpokhoz
 
 ## Mi van benne?
 
@@ -28,16 +30,23 @@ A frontend tartalmaz:
 - termék részletező oldal
 - typed API kliens
 
-## Miért nem teljes Laravel app?
-Itt most az volt a cél, hogy azonnal legyen **végrehajtható, kézzelfogható induló kód**. A mappastruktúra és a service/repository szétválasztás már úgy van rendezve, hogy ezt később könnyen Laravel alá lehessen húzni.
+## Gyors indítás Dockerrel
+1. Másold át a root `.env.example` fájlt `.env` névre.
+2. Indítsd el a stacket:
+   - `make up`
+3. Ha megvannak a dumpok, töltsd be őket:
+   - `make restore CCM_DUMP=/abs/path/ccm.sql.gz STORE_DUMP=/abs/path/columbia_games.sql.gz`
+4. Ellenőrzés:
+   - `make verify`
+   - `make smoke`
 
-## Gyors indítás
-1. Másold át az `.env.example`-t `.env`-re a rootban és az API mappában.
-2. Állítsd be a két DB kapcsolatot.
-3. API indítás:
-   - `make api`
-4. Frontend indítás:
-   - `make web`
+Elérhetőségek:
+- API: `http://localhost:8080`
+- Web: `http://localhost:5173`
+- Postgres: `localhost:55432`
+
+## DDEV
+A `.ddev/` mappa opcionális kényelmi réteg. A source of truth továbbra is a Docker Compose.
 
 ## Következő ticketek
 - cart cookie bridge (`bid-cg`)

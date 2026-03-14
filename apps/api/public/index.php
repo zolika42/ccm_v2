@@ -9,11 +9,15 @@ use ColumbiaGames\Api\Repositories\CustomerRepository;
 use ColumbiaGames\Api\Repositories\ProductRepository;
 use ColumbiaGames\Api\Services\AuthService;
 use ColumbiaGames\Api\Services\CatalogService;
+use ColumbiaGames\Api\Support\Cors;
 use ColumbiaGames\Api\Support\JsonResponse;
 use ColumbiaGames\Api\Support\Request;
 use ColumbiaGames\Api\Support\Router;
 
 require_once __DIR__ . '/../bootstrap.php';
+
+Cors::apply();
+Cors::maybeHandlePreflight();
 
 $request = Request::fromGlobals();
 $router = new Router();
