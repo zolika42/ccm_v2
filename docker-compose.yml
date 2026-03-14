@@ -1,22 +1,20 @@
 services:
   postgres:
-    image: ${POSTGRES_IMAGE:-postgres:18-bookworm}
+    image: postgres:18-bookworm
     container_name: ccm_v2_postgres
-    restart: unless-stopped
     environment:
       POSTGRES_USER: ${LEGACY_DB_SUPERUSER:-postgres}
-      POSTGRES_PASSWORD: ${LEGACY_DB_SUPERPASSWORD:-postgres}
-      POSTGRES_DB: postgres
+      POSTGRES_PASSWORD: ${LEGACY_DB_SUPERUSER_PASSWORD:-postgres}
     ports:
-      - "${POSTGRES_HOST_PORT:-55432}:5432"
+      - "5432:5432"
     volumes:
-      - postgres_data:/var/lib/postgresql/data
+      - postgres_data:/var/lib/postgresql
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U ${LEGACY_DB_SUPERUSER:-postgres} -d postgres"]
-      interval: 5s
+      test: ["CMD-SHELL", "pg_isready -h 127.0.0.1 -U ${LEGACY_DB_SUPERUSER:-postgres} -d postgres || exit 1"]
+      interval: 10s
       timeout: 5s
-      retries: 20
-
+      retries: 30
+      start_period: 20s
   api:
     build:
       context: .
