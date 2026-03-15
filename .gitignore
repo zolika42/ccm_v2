@@ -1,1 +1,10 @@
 dumps/
+# macOS
+.DS_Store
+
+# Web frontend
+apps/web/node_modules/
+apps/web/dist/
+
+# Optional: generated API client
+# apps/web/src/api/generated.ts

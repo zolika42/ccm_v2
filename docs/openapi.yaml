@@ -132,18 +132,21 @@ components:
 paths:
   /health:
     get:
+      operationId: getHealth
       summary: Health check
       responses:
         '200':
           description: OK
   /openapi:
     get:
+      operationId: getOpenapi
       summary: Download OpenAPI contract
       responses:
         '200':
           description: YAML document
   /auth/login:
     post:
+      operationId: login
       summary: Login
       requestBody:
         required: true
@@ -164,12 +167,14 @@ paths:
           description: Invalid credentials
   /auth/logout:
     post:
+      operationId: logout
       summary: Logout
       responses:
         '200':
           description: Logged out
   /auth/me:
     get:
+      operationId: me
       summary: Current user
       responses:
         '200':
@@ -178,6 +183,7 @@ paths:
           description: Not authenticated
   /catalog/products:
     get:
+      operationId: listProducts
       summary: List products
       parameters:
         - in: query
@@ -189,7 +195,15 @@ paths:
           schema:
             type: integer
         - in: query
-          name: search
+          name: q
+          schema:
+            type: string
+        - in: query
+          name: category
+          schema:
+            type: string
+        - in: query
+          name: sub_category
           schema:
             type: string
       responses:
@@ -197,6 +211,7 @@ paths:
           description: Product list
   /catalog/products/{productId}:
     get:
+      operationId: getProduct
       summary: Product details
       parameters:
         - in: path
@@ -211,6 +226,7 @@ paths:
           description: Product not found
   /catalog/products/{productId}/related:
     get:
+      operationId: getRelatedProducts
       summary: Related products
       parameters:
         - in: path
@@ -223,24 +239,28 @@ paths:
           description: Related products
   /cart/identity:
     get:
+      operationId: getCartIdentity
       summary: Resolve cart identity
       responses:
         '200':
           description: Identity
   /cart:
     get:
+      operationId: getCart
       summary: Read active cart
       responses:
         '200':
           description: Cart state
   /cart/summary:
     get:
+      operationId: getCartSummary
       summary: Read cart summary
       responses:
         '200':
           description: Cart summary
   /cart/items:
     post:
+      operationId: addCartItem
       summary: Add item to cart
       requestBody:
         required: true
@@ -261,6 +281,7 @@ paths:
           description: Validation error
   /cart/items/{productId}:
     patch:
+      operationId: updateCartItem
       summary: Update item quantity
       parameters:
         - in: path
@@ -284,6 +305,7 @@ paths:
         '422':
           description: Validation error
     delete:
+      operationId: removeCartItem
       summary: Remove item from cart
       parameters:
         - in: path
@@ -296,12 +318,14 @@ paths:
           description: Updated cart
   /checkout/summary:
     get:
+      operationId: getCheckoutSummary
       summary: Checkout summary
       responses:
         '200':
           description: Checkout state
   /checkout/validate:
     post:
+      operationId: validateCheckout
       summary: Validate checkout draft
       requestBody:
         required: true
@@ -315,6 +339,7 @@ paths:
           description: Checkout validation result
   /checkout/submit:
     post:
+      operationId: submitCheckout
       summary: Submit order
       requestBody:
         required: true
@@ -332,6 +357,7 @@ paths:
           description: Checkout validation error
   /library:
     get:
+      operationId: getLibrary
       summary: Owned downloadable products
       security:
         - sessionCookie: []
