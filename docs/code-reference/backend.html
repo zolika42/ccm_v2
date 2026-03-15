@@ -147,7 +147,7 @@
                   </li>
                   <li>
                     <a href="#apps-api-src-controllers-librarycontroller-php">LibraryController.php</a>
-                    <ul class="symbol-list"><li><a href="#apps-api-src-controllers-librarycontroller-php-librarycontroller">LibraryController</a></li></ul>
+                    <ul class="symbol-list"><li><a href="#apps-api-src-controllers-librarycontroller-php-librarycontroller">LibraryController</a></li><li><a href="#apps-api-src-controllers-librarycontroller-php-download">download</a></li></ul>
                   </li>
               </ul>
             </section>
@@ -230,6 +230,10 @@
                     <ul class="symbol-list"><li><a href="#apps-api-src-support-cors-php-cors">Cors</a></li></ul>
                   </li>
                   <li>
+                    <a href="#apps-api-src-support-downloadresponse-php">DownloadResponse.php</a>
+                    <ul class="symbol-list"><li><a href="#apps-api-src-support-downloadresponse-php-downloadresponse">DownloadResponse</a></li><li><a href="#apps-api-src-support-downloadresponse-php-streamfile">streamFile</a></li></ul>
+                  </li>
+                  <li>
                     <a href="#apps-api-src-support-jsonresponse-php">JsonResponse.php</a>
                     <ul class="symbol-list"><li><a href="#apps-api-src-support-jsonresponse-php-jsonresponse">JsonResponse</a></li><li><a href="#apps-api-src-support-jsonresponse-php-success">success</a></li><li><a href="#apps-api-src-support-jsonresponse-php-error">error</a></li><li><a href="#apps-api-src-support-jsonresponse-php-send">send</a></li></ul>
                   </li>
@@ -266,7 +270,7 @@
             <article class="file-card searchable" id="apps-api-public-index-php" data-search="apps/api/public/index.php HTTP entrypoint: wires the request lifecycle, service container, routes, and top-level exception handling.   ColumbiaGames\Api\Controllers\AuthController ColumbiaGames\Api\Controllers\CatalogController ColumbiaGames\Api\Controllers\CartController ColumbiaGames\Api\Controllers\CheckoutController ColumbiaGames\Api\Controllers\LibraryController ColumbiaGames\Api\Database\ConnectionFactory ColumbiaGames\Api\Repositories\CartRepository ColumbiaGames\Api\Repositories\CheckoutRepository ColumbiaGames\Api\Repositories\CustomerRepository ColumbiaGames\Api\Repositories\LibraryRepository ColumbiaGames\Api\Repositories\ProductRepository ColumbiaGames\Api\Services\AuthService">
               <div class="card-head">
                 <div>
-                  <p class="eyebrow">PHP · 4.1 KB</p>
+                  <p class="eyebrow">PHP · 4.2 KB</p>
                   <h3><code>apps/api/public/index.php</code></h3>
                 </div>
                 <a class="anchor-link" href="#apps-api-public-index-php">#</a>
@@ -275,7 +279,7 @@
               <div class="meta-grid">
                 
                 <p><strong>Dependencies:</strong> <code>ColumbiaGames\Api\Controllers\AuthController</code>, <code>ColumbiaGames\Api\Controllers\CatalogController</code>, <code>ColumbiaGames\Api\Controllers\CartController</code>, <code>ColumbiaGames\Api\Controllers\CheckoutController</code>, <code>ColumbiaGames\Api\Controllers\LibraryController</code>, <code>ColumbiaGames\Api\Database\ConnectionFactory</code>, <code>ColumbiaGames\Api\Repositories\CartRepository</code>, <code>ColumbiaGames\Api\Repositories\CheckoutRepository</code>, <code>ColumbiaGames\Api\Repositories\CustomerRepository</code>, <code>ColumbiaGames\Api\Repositories\LibraryRepository</code>, <code>ColumbiaGames\Api\Repositories\ProductRepository</code>, <code>ColumbiaGames\Api\Services\AuthService</code></p>
-                <p class="muted tiny">Snapshot timestamp: 2026-03-15T09:46:57.000Z</p>
+                <p class="muted tiny">Snapshot timestamp: 2026-03-15T21:32:01.000Z</p>
               </div>
               <details>
                 <summary>Comment highlights</summary>
@@ -450,19 +454,19 @@
     </section></div>
               </div>
             </article>
-            <article class="file-card searchable" id="apps-api-src-controllers-librarycontroller-php" data-search="apps/api/src/Controllers/LibraryController.php Controller for the authenticated digital library endpoint.  LibraryController __construct index ColumbiaGames\Api\Services\LibraryService ColumbiaGames\Api\Support\JsonResponse ColumbiaGames\Api\Support\Request RuntimeException">
+            <article class="file-card searchable" id="apps-api-src-controllers-librarycontroller-php" data-search="apps/api/src/Controllers/LibraryController.php Controller for authenticated digital-library listing and legacy download delivery.  LibraryController __construct index download ColumbiaGames\Api\Services\LibraryService ColumbiaGames\Api\Support\DownloadResponse ColumbiaGames\Api\Support\JsonResponse ColumbiaGames\Api\Support\Request RuntimeException">
               <div class="card-head">
                 <div>
-                  <p class="eyebrow">PHP · 0.7 KB</p>
+                  <p class="eyebrow">PHP · 1.9 KB</p>
                   <h3><code>apps/api/src/Controllers/LibraryController.php</code></h3>
                 </div>
                 <a class="anchor-link" href="#apps-api-src-controllers-librarycontroller-php">#</a>
               </div>
-              <p class="overview">Controller for the authenticated digital library endpoint.</p>
+              <p class="overview">Controller for authenticated digital-library listing and legacy download delivery.</p>
               <div class="meta-grid">
-                <p><strong>Detected symbols:</strong> <code>LibraryController</code>, <code>__construct</code>, <code>index</code></p>
-                <p><strong>Dependencies:</strong> <code>ColumbiaGames\Api\Services\LibraryService</code>, <code>ColumbiaGames\Api\Support\JsonResponse</code>, <code>ColumbiaGames\Api\Support\Request</code>, <code>RuntimeException</code></p>
-                <p class="muted tiny">Snapshot timestamp: 2026-03-15T09:46:57.000Z</p>
+                <p><strong>Detected symbols:</strong> <code>LibraryController</code>, <code>__construct</code>, <code>index</code>, <code>download</code></p>
+                <p><strong>Dependencies:</strong> <code>ColumbiaGames\Api\Services\LibraryService</code>, <code>ColumbiaGames\Api\Support\DownloadResponse</code>, <code>ColumbiaGames\Api\Support\JsonResponse</code>, <code>ColumbiaGames\Api\Support\Request</code>, <code>RuntimeException</code></p>
+                <p class="muted tiny">Snapshot timestamp: 2026-03-15T10:46:47.000Z</p>
               </div>
               <details>
                 <summary>Comment highlights</summary>
@@ -471,20 +475,32 @@
               <div class="symbol-section">
                 <div class="symbol-section-head">
                   <h4>Documented symbols</h4>
-                  <span class="count-pill">1</span>
+                  <span class="count-pill">2</span>
                 </div>
                 <div class="symbol-grid">
-    <section class="symbol-card searchable" id="apps-api-src-controllers-librarycontroller-php-librarycontroller" data-search="class LibraryController No dedicated symbol docblock found; inherits file intent: Controller for the authenticated digital library endpoint. final class LibraryController ">
+    <section class="symbol-card searchable" id="apps-api-src-controllers-librarycontroller-php-librarycontroller" data-search="class LibraryController No dedicated symbol docblock found; inherits file intent: Controller for authenticated digital-library listing and legacy download delivery. final class LibraryController ">
       <div class="symbol-head">
         <div>
-          <p class="eyebrow">class · line 16</p>
+          <p class="eyebrow">class · line 17</p>
           <h4><code>LibraryController</code></h4>
         </div>
         <a class="anchor-link" href="#apps-api-src-controllers-librarycontroller-php-librarycontroller">#</a>
       </div>
       <p class="symbol-signature"><code>final class LibraryController</code></p>
-      <p class="overview">No dedicated symbol docblock found; inherits file intent: Controller for the authenticated digital library endpoint.</p>
+      <p class="overview">No dedicated symbol docblock found; inherits file intent: Controller for authenticated digital-library listing and legacy download delivery.</p>
       
+    </section>
+    <section class="symbol-card searchable" id="apps-api-src-controllers-librarycontroller-php-download" data-search="function download No descriptive summary was found for this symbol. public function download(Request $request, array $params): void param array&lt;string, string&gt; $params">
+      <div class="symbol-head">
+        <div>
+          <p class="eyebrow">function · line 32</p>
+          <h4><code>download</code></h4>
+        </div>
+        <a class="anchor-link" href="#apps-api-src-controllers-librarycontroller-php-download">#</a>
+      </div>
+      <p class="symbol-signature"><code>public function download(Request $request, array $params): void</code></p>
+      <p class="overview">No descriptive summary was found for this symbol.</p>
+      <details class="tags-block"><summary>Doc tags</summary><ul><li><code>@param</code> array&lt;string, string&gt; $params</li></ul></details>
     </section></div>
               </div>
             </article>
@@ -946,19 +962,19 @@
     </section></div>
               </div>
             </article>
-            <article class="file-card searchable" id="apps-api-src-repositories-libraryrepository-php" data-search="apps/api/src/Repositories/LibraryRepository.php Digital-library read model built from store preorders and products.  LibraryRepository __construct ownedDownloads PDO">
+            <article class="file-card searchable" id="apps-api-src-repositories-libraryrepository-php" data-search="apps/api/src/Repositories/LibraryRepository.php Digital-library read model built from store preorders and products.  LibraryRepository __construct ownedDownloads findOwnedDownload normalizeOwnedDownloadRow PDO">
               <div class="card-head">
                 <div>
-                  <p class="eyebrow">PHP · 2.3 KB</p>
+                  <p class="eyebrow">PHP · 4.3 KB</p>
                   <h3><code>apps/api/src/Repositories/LibraryRepository.php</code></h3>
                 </div>
                 <a class="anchor-link" href="#apps-api-src-repositories-libraryrepository-php">#</a>
               </div>
               <p class="overview">Digital-library read model built from store preorders and products.</p>
               <div class="meta-grid">
-                <p><strong>Detected symbols:</strong> <code>LibraryRepository</code>, <code>__construct</code>, <code>ownedDownloads</code></p>
+                <p><strong>Detected symbols:</strong> <code>LibraryRepository</code>, <code>__construct</code>, <code>ownedDownloads</code>, <code>findOwnedDownload</code>, <code>normalizeOwnedDownloadRow</code></p>
                 <p><strong>Dependencies:</strong> <code>PDO</code></p>
-                <p class="muted tiny">Snapshot timestamp: 2026-03-15T09:46:57.000Z</p>
+                <p class="muted tiny">Snapshot timestamp: 2026-03-15T10:46:47.000Z</p>
               </div>
               <details>
                 <summary>Comment highlights</summary>
@@ -1145,10 +1161,10 @@
     </section></div>
               </div>
             </article>
-            <article class="file-card searchable" id="apps-api-src-services-checkoutservice-php" data-search="apps/api/src/Services/CheckoutService.php Checkout application service for summary, validation, and submit orchestration.  CheckoutService __construct summary validate submit buildCheckoutPayload loadCheckoutCustomer buildDraft normalizeInput buildRequirements validateDraft requireField ColumbiaGames\Api\Repositories\CartRepository ColumbiaGames\Api\Repositories\CheckoutRepository ColumbiaGames\Api\Repositories\CustomerRepository ColumbiaGames\Api\Support\SessionAuth">
+            <article class="file-card searchable" id="apps-api-src-services-checkoutservice-php" data-search="apps/api/src/Services/CheckoutService.php Checkout application service for summary, validation, and submit orchestration.  CheckoutService __construct summary validate submit buildCheckoutPayload loadCheckoutCustomer buildDraft normalizeInput buildRequirements validateDraft requireField ColumbiaGames\Api\Repositories\CartRepository ColumbiaGames\Api\Repositories\CheckoutRepository ColumbiaGames\Api\Repositories\CustomerRepository ColumbiaGames\Api\Support\ApiLogger ColumbiaGames\Api\Support\SessionAuth">
               <div class="card-head">
                 <div>
-                  <p class="eyebrow">PHP · 16.1 KB</p>
+                  <p class="eyebrow">PHP · 17.5 KB</p>
                   <h3><code>apps/api/src/Services/CheckoutService.php</code></h3>
                 </div>
                 <a class="anchor-link" href="#apps-api-src-services-checkoutservice-php">#</a>
@@ -1156,8 +1172,8 @@
               <p class="overview">Checkout application service for summary, validation, and submit orchestration.</p>
               <div class="meta-grid">
                 <p><strong>Detected symbols:</strong> <code>CheckoutService</code>, <code>__construct</code>, <code>summary</code>, <code>validate</code>, <code>submit</code>, <code>buildCheckoutPayload</code>, <code>loadCheckoutCustomer</code>, <code>buildDraft</code>, <code>normalizeInput</code>, <code>buildRequirements</code>, <code>validateDraft</code>, <code>requireField</code></p>
-                <p><strong>Dependencies:</strong> <code>ColumbiaGames\Api\Repositories\CartRepository</code>, <code>ColumbiaGames\Api\Repositories\CheckoutRepository</code>, <code>ColumbiaGames\Api\Repositories\CustomerRepository</code>, <code>ColumbiaGames\Api\Support\SessionAuth</code></p>
-                <p class="muted tiny">Snapshot timestamp: 2026-03-15T09:46:57.000Z</p>
+                <p><strong>Dependencies:</strong> <code>ColumbiaGames\Api\Repositories\CartRepository</code>, <code>ColumbiaGames\Api\Repositories\CheckoutRepository</code>, <code>ColumbiaGames\Api\Repositories\CustomerRepository</code>, <code>ColumbiaGames\Api\Support\ApiLogger</code>, <code>ColumbiaGames\Api\Support\SessionAuth</code></p>
+                <p class="muted tiny">Snapshot timestamp: 2026-03-15T10:47:15.000Z</p>
               </div>
               <details>
                 <summary>Comment highlights</summary>
@@ -1172,7 +1188,7 @@
     <section class="symbol-card searchable" id="apps-api-src-services-checkoutservice-php-checkoutservice" data-search="class CheckoutService No dedicated symbol docblock found; inherits file intent: Checkout application service for summary, validation, and submit orchestration. final class CheckoutService ">
       <div class="symbol-head">
         <div>
-          <p class="eyebrow">class · line 16</p>
+          <p class="eyebrow">class · line 17</p>
           <h4><code>CheckoutService</code></h4>
         </div>
         <a class="anchor-link" href="#apps-api-src-services-checkoutservice-php-checkoutservice">#</a>
@@ -1183,19 +1199,19 @@
     </section></div>
               </div>
             </article>
-            <article class="file-card searchable" id="apps-api-src-services-libraryservice-php" data-search="apps/api/src/Services/LibraryService.php Library application service for owned-download retrieval.  LibraryService __construct ownedDownloads ColumbiaGames\Api\Repositories\LibraryRepository ColumbiaGames\Api\Support\SessionAuth RuntimeException">
+            <article class="file-card searchable" id="apps-api-src-services-libraryservice-php" data-search="apps/api/src/Services/LibraryService.php Library application service for owned-download retrieval and legacy delivery bridging.  LibraryService __construct ownedDownloads resolveDownload ColumbiaGames\Api\Repositories\LibraryRepository ColumbiaGames\Api\Support\ApiLogger ColumbiaGames\Api\Support\SessionAuth RuntimeException">
               <div class="card-head">
                 <div>
-                  <p class="eyebrow">PHP · 1.1 KB</p>
+                  <p class="eyebrow">PHP · 6.3 KB</p>
                   <h3><code>apps/api/src/Services/LibraryService.php</code></h3>
                 </div>
                 <a class="anchor-link" href="#apps-api-src-services-libraryservice-php">#</a>
               </div>
-              <p class="overview">Library application service for owned-download retrieval.</p>
+              <p class="overview">Library application service for owned-download retrieval and legacy delivery bridging.</p>
               <div class="meta-grid">
-                <p><strong>Detected symbols:</strong> <code>LibraryService</code>, <code>__construct</code>, <code>ownedDownloads</code></p>
-                <p><strong>Dependencies:</strong> <code>ColumbiaGames\Api\Repositories\LibraryRepository</code>, <code>ColumbiaGames\Api\Support\SessionAuth</code>, <code>RuntimeException</code></p>
-                <p class="muted tiny">Snapshot timestamp: 2026-03-15T09:46:57.000Z</p>
+                <p><strong>Detected symbols:</strong> <code>LibraryService</code>, <code>__construct</code>, <code>ownedDownloads</code>, <code>resolveDownload</code></p>
+                <p><strong>Dependencies:</strong> <code>ColumbiaGames\Api\Repositories\LibraryRepository</code>, <code>ColumbiaGames\Api\Support\ApiLogger</code>, <code>ColumbiaGames\Api\Support\SessionAuth</code>, <code>RuntimeException</code></p>
+                <p class="muted tiny">Snapshot timestamp: 2026-03-15T10:46:47.000Z</p>
               </div>
               <details>
                 <summary>Comment highlights</summary>
@@ -1207,16 +1223,16 @@
                   <span class="count-pill">1</span>
                 </div>
                 <div class="symbol-grid">
-    <section class="symbol-card searchable" id="apps-api-src-services-libraryservice-php-libraryservice" data-search="class LibraryService No dedicated symbol docblock found; inherits file intent: Library application service for owned-download retrieval. final class LibraryService ">
+    <section class="symbol-card searchable" id="apps-api-src-services-libraryservice-php-libraryservice" data-search="class LibraryService No dedicated symbol docblock found; inherits file intent: Library application service for owned-download retrieval and legacy delivery bridging. final class LibraryService ">
       <div class="symbol-head">
         <div>
-          <p class="eyebrow">class · line 15</p>
+          <p class="eyebrow">class · line 16</p>
           <h4><code>LibraryService</code></h4>
         </div>
         <a class="anchor-link" href="#apps-api-src-services-libraryservice-php-libraryservice">#</a>
       </div>
       <p class="symbol-signature"><code>final class LibraryService</code></p>
-      <p class="overview">No dedicated symbol docblock found; inherits file intent: Library application service for owned-download retrieval.</p>
+      <p class="overview">No dedicated symbol docblock found; inherits file intent: Library application service for owned-download retrieval and legacy delivery bridging.</p>
       
     </section></div>
               </div>
@@ -1226,14 +1242,14 @@
       <section class="group searchable" data-search="apps/api/src/Support">
         <div class="group-head">
           <h2>apps/api/src/Support</h2>
-          <span class="count-pill">8 file(s)</span>
+          <span class="count-pill">9 file(s)</span>
         </div>
         <div class="file-stack">
           
             <article class="file-card searchable" id="apps-api-src-support-apilogger-php" data-search="apps/api/src/Support/ApiLogger.php Small logging helper used by the API entrypoint and response layer.  ApiLogger info error exception write Throwable">
               <div class="card-head">
                 <div>
-                  <p class="eyebrow">PHP · 1.4 KB</p>
+                  <p class="eyebrow">PHP · 1.8 KB</p>
                   <h3><code>apps/api/src/Support/ApiLogger.php</code></h3>
                 </div>
                 <a class="anchor-link" href="#apps-api-src-support-apilogger-php">#</a>
@@ -1242,7 +1258,7 @@
               <div class="meta-grid">
                 <p><strong>Detected symbols:</strong> <code>ApiLogger</code>, <code>info</code>, <code>error</code>, <code>exception</code>, <code>write</code></p>
                 <p><strong>Dependencies:</strong> <code>Throwable</code></p>
-                <p class="muted tiny">Snapshot timestamp: 2026-03-15T09:46:57.000Z</p>
+                <p class="muted tiny">Snapshot timestamp: 2026-03-15T21:32:01.000Z</p>
               </div>
               <details>
                 <summary>Comment highlights</summary>
@@ -1377,6 +1393,56 @@
       <p class="symbol-signature"><code>final class Cors</code></p>
       <p class="overview">No dedicated symbol docblock found; inherits file intent: Central CORS policy helper for API requests and preflight handling.</p>
       
+    </section></div>
+              </div>
+            </article>
+            <article class="file-card searchable" id="apps-api-src-support-downloadresponse-php" data-search="apps/api/src/Support/DownloadResponse.php Streams downloadable files or issues safe redirects for legacy library delivery.  DownloadResponse streamFile redirect detectMimeType ">
+              <div class="card-head">
+                <div>
+                  <p class="eyebrow">PHP · 1.7 KB</p>
+                  <h3><code>apps/api/src/Support/DownloadResponse.php</code></h3>
+                </div>
+                <a class="anchor-link" href="#apps-api-src-support-downloadresponse-php">#</a>
+              </div>
+              <p class="overview">Streams downloadable files or issues safe redirects for legacy library delivery.</p>
+              <div class="meta-grid">
+                <p><strong>Detected symbols:</strong> <code>DownloadResponse</code>, <code>streamFile</code>, <code>redirect</code>, <code>detectMimeType</code></p>
+                
+                <p class="muted tiny">Snapshot timestamp: 2026-03-15T10:46:47.000Z</p>
+              </div>
+              <details>
+                <summary>Comment highlights</summary>
+                <p class="muted">No additional comment blocks were extracted from this file.</p>
+              </details>
+              <div class="symbol-section">
+                <div class="symbol-section-head">
+                  <h4>Documented symbols</h4>
+                  <span class="count-pill">2</span>
+                </div>
+                <div class="symbol-grid">
+    <section class="symbol-card searchable" id="apps-api-src-support-downloadresponse-php-downloadresponse" data-search="class DownloadResponse No dedicated symbol docblock found; inherits file intent: Streams downloadable files or issues safe redirects for legacy library delivery. final class DownloadResponse ">
+      <div class="symbol-head">
+        <div>
+          <p class="eyebrow">class · line 11</p>
+          <h4><code>DownloadResponse</code></h4>
+        </div>
+        <a class="anchor-link" href="#apps-api-src-support-downloadresponse-php-downloadresponse">#</a>
+      </div>
+      <p class="symbol-signature"><code>final class DownloadResponse</code></p>
+      <p class="overview">No dedicated symbol docblock found; inherits file intent: Streams downloadable files or issues safe redirects for legacy library delivery.</p>
+      
+    </section>
+    <section class="symbol-card searchable" id="apps-api-src-support-downloadresponse-php-streamfile" data-search="function streamFile No descriptive summary was found for this symbol. public static function streamFile(string $absolutePath, string $downloadName, array $headers = []): never param array&lt;string, string&gt; $headers">
+      <div class="symbol-head">
+        <div>
+          <p class="eyebrow">function · line 13</p>
+          <h4><code>streamFile</code></h4>
+        </div>
+        <a class="anchor-link" href="#apps-api-src-support-downloadresponse-php-streamfile">#</a>
+      </div>
+      <p class="symbol-signature"><code>public static function streamFile(string $absolutePath, string $downloadName, array $headers = []): never</code></p>
+      <p class="overview">No descriptive summary was found for this symbol.</p>
+      <details class="tags-block"><summary>Doc tags</summary><ul><li><code>@param</code> array&lt;string, string&gt; $headers</li></ul></details>
     </section></div>
               </div>
             </article>

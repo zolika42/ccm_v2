@@ -39,7 +39,7 @@ export class GeneratedApiClient {
     return requestEnvelope<{ user: AuthUser }>('GET', `/auth/me`, { options: options });
   }
 
-  async listProducts(query: { limit?: number; offset?: number; q?: string; category?: string; sub_category?: string } = {}, options: RequestOptions = {}): Promise<ApiEnvelope<{ items: Product[]; meta: { total: number; limit: number; offset: number } }>> {
+  async listProducts(query: { limit?: number; offset?: number; search?: string } = {}, options: RequestOptions = {}): Promise<ApiEnvelope<{ items: Product[]; meta: { total: number; limit: number; offset: number } }>> {
     return requestEnvelope<{ items: Product[]; meta: { total: number; limit: number; offset: number } }>('GET', `/catalog/products`, { query, options: options });
   }
 
@@ -89,6 +89,10 @@ export class GeneratedApiClient {
 
   async getLibrary(options: RequestOptions = {}): Promise<ApiEnvelope<LibraryState>> {
     return requestEnvelope<LibraryState>('GET', `/library`, { options: { ...options, allowStatuses: [401] } });
+  }
+
+  async getLibraryDownload(productId: string, options: RequestOptions = {}): Promise<string> {
+    return requestText('GET', `/library/${encodeURIComponent(productId)}/download`, { options: options });
   }
 }
 

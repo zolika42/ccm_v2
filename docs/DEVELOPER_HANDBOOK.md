@@ -1,7 +1,7 @@
 # Developer Handbook
 
 > Generated automatically by `scripts/docs/generate-docs.mjs`. Do not hand-edit this file; update the generator instead.
-> Generated at: 2026-03-15T09:54:38.809Z
+> Generated at: 2026-03-15T22:15:38.138Z
 
 ## 1. What this repo is
 
@@ -96,6 +96,7 @@ The repo is designed to let developers work in three modes:
 - `down`
 - `logs`
 - `api-logs`
+- `api-log-file`
 - `web-logs`
 - `ps`
 - `restore`
@@ -106,15 +107,15 @@ The repo is designed to let developers work in three modes:
 - `native-web`
 
 ### Frontend commands
-- `postinstall` → `node ../../scripts/docs/generate-docs.mjs && node ../../scripts/docs/verify-source-comments.mjs`
-- `docs:generate` → `node ../../scripts/docs/generate-docs.mjs`
-- `docs:check` → `node ../../scripts/docs/verify-source-comments.mjs`
 - `dev` → `node ./node_modules/vite/bin/vite.js`
 - `build` → `npm run generate:api && node ./node_modules/vite/bin/vite.js build`
 - `preview` → `node ./node_modules/vite/bin/vite.js preview`
 - `generate:api` → `node ./scripts/generate-api-client.mjs`
 - `typecheck` → `node ./node_modules/typescript/bin/tsc -p tsconfig.json --noEmit`
 - `check:api-client` → `npm run generate:api && npm run typecheck`
+- `docs:generate` → `node ../../scripts/docs/generate-docs.mjs && node ../../scripts/docs/generate-code-reference.mjs`
+- `docs:check` → `node ../../scripts/docs/verify-source-comments.mjs`
+- `postinstall` → `npm run docs:generate && npm run docs:check`
 
 ### Recommended loop
 1. Pull latest code
@@ -176,6 +177,7 @@ The frontend must not hand-roll raw fetch calls for project endpoints anymore. T
 - `POST /checkout/validate` → `validateCheckout`
 - `POST /checkout/submit` → `submitCheckout`
 - `GET /library` → `getLibrary`
+- `GET /library/{productId}/download` → `getLibraryDownload`
 
 ### Rule of thumb
 - Change backend route/shape? Update OpenAPI first.

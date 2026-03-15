@@ -98,5 +98,6 @@ $router->post('/checkout/validate', [$checkoutController, 'validate']);
 $router->post('/checkout/submit', [$checkoutController, 'submit']);
 
 $router->get('/library', [$libraryController, 'index']);
+$router->get('/library/{productId}/download', [$libraryController, 'download']);
 
 $router->dispatch($request);

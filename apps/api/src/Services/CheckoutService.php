@@ -11,6 +11,7 @@ namespace ColumbiaGames\Api\Services;
 use ColumbiaGames\Api\Repositories\CartRepository;
 use ColumbiaGames\Api\Repositories\CheckoutRepository;
 use ColumbiaGames\Api\Repositories\CustomerRepository;
+use ColumbiaGames\Api\Support\ApiLogger;
 use ColumbiaGames\Api\Support\SessionAuth;
 
 final class CheckoutService
@@ -58,6 +59,11 @@ final class CheckoutService
         $customer = $checkout['customer'];
 
         if (!$checkout['validation']['isValid']) {
+            ApiLogger::info('checkout_submit_rejected', [
+                'browserId' => $browserId,
+                'reason' => 'validation_failed',
+                'errorKeys' => array_keys((array) ($checkout['validation']['errors'] ?? [])),
+            ]);
             return [
                 'identity' => $identity,
                 'submitted' => false,
@@ -68,6 +74,10 @@ final class CheckoutService
         }
 
         if ($customer === null) {
+            ApiLogger::info('checkout_submit_rejected', [
+                'browserId' => $browserId,
+                'reason' => 'unauthenticated',
+            ]);
             return [
                 'identity' => $identity,
                 'submitted' => false,
@@ -76,6 +86,13 @@ final class CheckoutService
                 'submission' => null,
             ];
         }
+
+        ApiLogger::info('checkout_submit_started', [
+            'browserId' => $browserId,
+            'customerId' => (int) ($customer['customerId'] ?? 0),
+            'paymentType' => (string) ($checkout['draft']['paymentType'] ?? ''),
+            'itemCount' => (int) (($cart['summary']['itemCount'] ?? 0)),
+        ]);
 
         $this->checkout->beginStoreTransaction();
         $this->carts->beginTransaction();
@@ -89,9 +106,20 @@ final class CheckoutService
             );
             $this->checkout->commitStoreTransaction();
             $this->carts->commitTransaction();
+            ApiLogger::info('checkout_submit_succeeded', [
+                'browserId' => $browserId,
+                'customerId' => (int) ($customer['customerId'] ?? 0),
+                'orderId' => (string) ($storeSubmission['orderId'] ?? $legacyOrder['orderId'] ?? ''),
+                'recordedItemCount' => (int) (($storeSubmission['store']['recordedItemCount'] ?? 0)),
+            ]);
         } catch (\Throwable $e) {
             $this->checkout->rollBackStoreTransaction();
             $this->carts->rollBackTransaction();
+            ApiLogger::error('checkout_submit_failed', [
+                'browserId' => $browserId,
+                'customerId' => (int) ($customer['customerId'] ?? 0),
+                'message' => $e->getMessage(),
+            ]);
             throw $e;
         }
 

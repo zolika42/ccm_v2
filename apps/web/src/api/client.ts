@@ -9,6 +9,7 @@ import type {
   CheckoutState,
 } from '../types';
 import { generatedApiClient } from './generated';
+import { buildApiUrl } from './runtime';
 
 export async function login(email: string, password: string): Promise<AuthUser> {
   const payload = await generatedApiClient.login({ email, password });
@@ -84,3 +85,8 @@ export async function getLibrary() {
 
 export { generatedApiClient };
 export type { Cart };
+
+
+export function getLibraryDownloadUrl(productId: string) {
+  return buildApiUrl(`/library/${encodeURIComponent(productId)}/download`);
+}

@@ -39,6 +39,7 @@ final class ApiLogger
     {
         $ctx = RequestContext::current();
         $payload = [
+            'timestamp' => gmdate('c'),
             'level' => $level,
             'event' => $event,
             'requestId' => $ctx->requestId,
@@ -47,6 +48,19 @@ final class ApiLogger
             'context' => $context,
         ];
 
-        error_log((string) json_encode($payload, JSON_UNESCAPED_SLASHES));
+        $line = (string) json_encode($payload, JSON_UNESCAPED_SLASHES) . PHP_EOL;
+        $logFile = trim((string) getenv('APP_LOG_FILE'));
+        if ($logFile !== '') {
+            $directory = dirname($logFile);
+            if (!is_dir($directory)) {
+                @mkdir($directory, 0777, true);
+            }
+
+            if (@file_put_contents($logFile, $line, FILE_APPEND | LOCK_EX) !== false) {
+                return;
+            }
+        }
+
+        error_log(rtrim($line));
     }
 }

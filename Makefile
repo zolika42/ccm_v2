@@ -1,7 +1,8 @@
 # @fileoverview Common developer entrypoints for runtime management, restore/verify/smoke, and documentation generation.
-.PHONY: docs docs-check up down logs api-logs web-logs ps restore verify smoke legacy-refresh native-api native-web
+.PHONY: docs docs-check up down logs api-logs api-log-file web-logs ps restore verify smoke legacy-refresh native-api native-web
 
 docs:
+	@node ./scripts/docs/generate-docs.mjs
 	@node ./scripts/docs/generate-code-reference.mjs
 
 docs-check:
@@ -19,6 +20,9 @@ logs:
 
 api-logs:
 	docker compose logs -f --tail=200 api
+
+api-log-file:
+	tail -f var/log/api.log
 
 web-logs:
 	docker compose logs -f --tail=200 web

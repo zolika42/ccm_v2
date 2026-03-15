@@ -4,7 +4,7 @@
 import React from 'react';
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { getLibrary } from '../api/client';
+import { getLibrary, getLibraryDownloadUrl } from '../api/client';
 import type { LibraryState } from '../types';
 
 export function LibraryPage() {
@@ -116,6 +116,9 @@ export function LibraryPage() {
 
                 <div className="row wrap-row">
                   <Link className="button-link" to={`/products/${encodeURIComponent(item.productId)}`}>View product</Link>
+                  {item.hasDownloadFile ? (
+                    <a className="button-link" href={getLibraryDownloadUrl(item.productId)}>Download</a>
+                  ) : null}
                 </div>
               </div>
             </article>

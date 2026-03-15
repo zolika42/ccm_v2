@@ -13,7 +13,7 @@ export type RequestOptions = Omit<RequestInit, 'body' | 'method'> & {
   allowStatuses?: number[];
 };
 
-function buildUrl(path: string, query?: QueryParams) {
+export function buildApiUrl(path: string, query?: QueryParams) {
   const url = new URL(`${API_BASE}${path}`);
   if (query) {
     Object.entries(query).forEach(([key, value]) => {
@@ -54,7 +54,7 @@ export async function requestEnvelope<T>(
   const { query, body, options } = args;
   const allowStatuses = options?.allowStatuses ?? [];
 
-  const response = await fetch(buildUrl(path, query), buildInit(method, body, options));
+  const response = await fetch(buildApiUrl(path, query), buildInit(method, body, options));
   const json = (await response.json()) as ApiEnvelope<T>;
   if (!response.ok && !allowStatuses.includes(response.status)) {
     throw new Error(extractErrorMessage(json));
@@ -73,7 +73,7 @@ export async function requestText(
   } = {},
 ): Promise<string> {
   const { query, body, options } = args;
-  const response = await fetch(buildUrl(path, query), buildInit(method, body, options));
+  const response = await fetch(buildApiUrl(path, query), buildInit(method, body, options));
   if (!response.ok) {
     throw new Error(`Request failed with status ${response.status}`);
   }

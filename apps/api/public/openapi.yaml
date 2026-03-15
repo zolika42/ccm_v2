@@ -366,3 +366,25 @@ paths:
           description: Owned downloads
         '401':
           description: Not authenticated
+
+  /library/{productId}/download:
+    get:
+      operationId: getLibraryDownload
+      summary: Download an owned legacy downloadable product
+      security:
+        - sessionCookie: []
+      parameters:
+        - in: path
+          name: productId
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Binary download stream or redirect
+        '401':
+          description: Not authenticated
+        '404':
+          description: Product is not owned or file missing
+        '409':
+          description: File mapping is unsafe or unavailable

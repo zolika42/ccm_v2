@@ -40,6 +40,14 @@ if (is_file($envPath)) {
     }
 }
 
+
+if (getenv('APP_LOG_FILE') === false) {
+    $defaultLogFile = realpath(__DIR__ . '/../../var') ?: (__DIR__ . '/../../var');
+    $defaultLogFile .= '/log/api.log';
+    putenv('APP_LOG_FILE=' . $defaultLogFile);
+    $_ENV['APP_LOG_FILE'] = $defaultLogFile;
+}
+
 $cookieName = getenv('SESSION_COOKIE_NAME') ?: 'columbiagames_session';
 $secure = filter_var(getenv('SESSION_SECURE') ?: 'false', FILTER_VALIDATE_BOOL);
 

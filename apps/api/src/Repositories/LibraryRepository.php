@@ -69,4 +69,61 @@ SQL);
 
         return $items;
     }
+
+    public function findOwnedDownload(int $customerId, string $productId): ?array
+    {
+        $stmt = $this->db->prepare(<<<'SQL'
+SELECT
+    trim(pr.product_id) AS product_id,
+    COALESCE(pr.quantity, 0) AS quantity,
+    p.product_description,
+    p.product_price,
+    p.category,
+    p.sub_category,
+    p.product_image,
+    p.product_status,
+    p.is_downloadable,
+    p.downloadable_filename,
+    p.release_date,
+    p.preorder
+FROM preorders pr
+JOIN products p
+    ON trim(p.product_id) = trim(pr.product_id)
+WHERE pr.customerid = :customerid
+  AND trim(pr.product_id) = :product_id
+  AND COALESCE(pr.quantity, 0) > 0
+  AND (
+      COALESCE(p.is_downloadable, '') = 'Y'
+      OR COALESCE(trim(p.downloadable_filename), '') <> ''
+  )
+LIMIT 1
+SQL);
+        $stmt->execute([
+            'customerid' => $customerId,
+            'product_id' => trim($productId),
+        ]);
+
+        $row = $stmt->fetch(PDO::FETCH_ASSOC) ?: null;
+        return $row ? $this->normalizeOwnedDownloadRow($row) : null;
+    }
+
+
+    private function normalizeOwnedDownloadRow(array $row): array
+    {
+        return [
+            'productId' => trim((string) ($row['product_id'] ?? '')),
+            'description' => (string) ($row['product_description'] ?? ''),
+            'quantity' => max(0, (int) ($row['quantity'] ?? 0)),
+            'price' => (string) ($row['product_price'] ?? ''),
+            'category' => (string) ($row['category'] ?? ''),
+            'subCategory' => (string) ($row['sub_category'] ?? ''),
+            'image' => (string) ($row['product_image'] ?? ''),
+            'status' => (string) ($row['product_status'] ?? ''),
+            'isDownloadable' => (($row['is_downloadable'] ?? '') === 'Y'),
+            'downloadableFilename' => trim((string) ($row['downloadable_filename'] ?? '')),
+            'hasDownloadFile' => trim((string) ($row['downloadable_filename'] ?? '')) !== '',
+            'releaseDate' => (string) ($row['release_date'] ?? ''),
+            'preorder' => isset($row['preorder']) ? (int) $row['preorder'] : null,
+        ];
+    }
 }

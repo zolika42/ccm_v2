@@ -40,6 +40,7 @@ const operationConfig = {
     allowStatuses: [401, 422],
   },
   getLibrary: { responseType: 'LibraryState', allowStatuses: [401] },
+  getLibraryDownload: { responseType: 'string', rawText: true, pathParams: [{ name: 'productId', type: 'string' }] },
 };
 
 function parseOperations(yaml) {

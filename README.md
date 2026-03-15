@@ -70,3 +70,7 @@ A `.ddev/` mappa opcionális kényelmi réteg. A source of truth továbbra is a 
 ## Code comment reference
 
 A browsable HTML view of frontend/backend/tooling source comments is generated at `docs/code-reference/index.html`.
+
+Download bridge configuration for owned library files:
+- `LEGACY_DOWNLOAD_ROOT=/absolute/path/to/legacy/downloads` to stream files directly
+- or `LEGACY_DOWNLOAD_BASE_URL=https://legacy.example/downloads` to redirect to an existing trusted origin
