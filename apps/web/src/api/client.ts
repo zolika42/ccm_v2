@@ -4,6 +4,7 @@
 import type {
   AuthUser,
   Cart,
+  CatalogCategory,
   CheckoutDraft,
   CheckoutSubmission,
   CheckoutState,
@@ -21,11 +22,16 @@ export async function me(): Promise<AuthUser> {
   return payload.data.user;
 }
 
+export async function getCatalogCategories(): Promise<{ categories: CatalogCategory[]; meta: { categoryCount: number; subCategoryCount: number } }> {
+  const payload = await generatedApiClient.getCatalogCategories();
+  return payload.data;
+}
+
 export async function logout(): Promise<void> {
   await generatedApiClient.logout();
 }
 
-export async function listProducts(params: Record<string, string | number | undefined> = {}) {
+export async function listProducts(params: { limit?: number; offset?: number; q?: string; category?: string; sub_category?: string } = {}) {
   return generatedApiClient.listProducts(params);
 }
 

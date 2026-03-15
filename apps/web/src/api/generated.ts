@@ -10,6 +10,7 @@ import type {
   Cart,
   CartIdentity,
   CartSummary,
+  CatalogCategory,
   CheckoutDraft,
   CheckoutState,
   CheckoutSubmission,
@@ -39,7 +40,11 @@ export class GeneratedApiClient {
     return requestEnvelope<{ user: AuthUser }>('GET', `/auth/me`, { options: options });
   }
 
-  async listProducts(query: { limit?: number; offset?: number; search?: string } = {}, options: RequestOptions = {}): Promise<ApiEnvelope<{ items: Product[]; meta: { total: number; limit: number; offset: number } }>> {
+  async getCatalogCategories(options: RequestOptions = {}): Promise<ApiEnvelope<{ categories: CatalogCategory[]; meta: { categoryCount: number; subCategoryCount: number } }>> {
+    return requestEnvelope<{ categories: CatalogCategory[]; meta: { categoryCount: number; subCategoryCount: number } }>('GET', `/catalog/categories`, { options: options });
+  }
+
+  async listProducts(query: { limit?: number; offset?: number; q?: string; category?: string; sub_category?: string } = {}, options: RequestOptions = {}): Promise<ApiEnvelope<{ items: Product[]; meta: { total: number; limit: number; offset: number } }>> {
     return requestEnvelope<{ items: Product[]; meta: { total: number; limit: number; offset: number } }>('GET', `/catalog/products`, { query, options: options });
   }
 

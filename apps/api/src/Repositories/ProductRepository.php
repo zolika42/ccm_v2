@@ -151,6 +151,58 @@ SQL;
         return array_map([$this, 'normalizeProduct'], $stmt->fetchAll());
     }
 
+
+    public function categories(): array
+    {
+        $sql = <<<'SQL'
+SELECT
+    COALESCE(NULLIF(trim(category), ''), 'Uncategorized') AS category_name,
+    COALESCE(NULLIF(trim(sub_category), ''), '') AS sub_category_name,
+    COUNT(*) AS product_count,
+    MIN(category_weight) AS category_weight
+FROM products
+GROUP BY 1, 2
+ORDER BY category_weight NULLS LAST, category_name, sub_category_name
+SQL;
+        $stmt = $this->db->query($sql);
+        $rows = $stmt->fetchAll();
+
+        $categories = [];
+        $subCategoryCount = 0;
+
+        foreach ($rows as $row) {
+            $categoryName = (string) ($row['category_name'] ?? 'Uncategorized');
+            $subCategoryName = (string) ($row['sub_category_name'] ?? '');
+            $productCount = (int) ($row['product_count'] ?? 0);
+
+            if (!isset($categories[$categoryName])) {
+                $categories[$categoryName] = [
+                    'name' => $categoryName,
+                    'productCount' => 0,
+                    'subCategories' => [],
+                ];
+            }
+
+            $categories[$categoryName]['productCount'] += $productCount;
+
+            if ($subCategoryName !== '') {
+                $categories[$categoryName]['subCategories'][] = [
+                    'name' => $subCategoryName,
+                    'productCount' => $productCount,
+                ];
+                $subCategoryCount++;
+            }
+        }
+
+        return [
+            'categories' => array_values($categories),
+            'meta' => [
+                'categoryCount' => count($categories),
+                'subCategoryCount' => $subCategoryCount,
+            ],
+        ];
+    }
+
     private function normalizeProduct(array $row): array
     {
         return [

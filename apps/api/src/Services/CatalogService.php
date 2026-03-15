@@ -30,4 +30,9 @@ final class CatalogService
     {
         return $this->products->related($productId);
     }
+
+    public function categories(): array
+    {
+        return $this->products->categories();
+    }
 }

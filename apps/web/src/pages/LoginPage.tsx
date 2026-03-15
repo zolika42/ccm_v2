@@ -1,68 +1,69 @@
 /**
- * @fileoverview Simple login form for customer authentication.
+ * @fileoverview Simple login form bound to the shared auth state provider.
  */
 import React from 'react';
 import { FormEvent, useState } from 'react';
-import { login, logout, me } from '../api/client';
-import type { AuthUser } from '../types';
+import { useAuth } from '../auth/AuthContext';
 
 export function LoginPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [user, setUser] = useState<AuthUser | null>(null);
-  const [error, setError] = useState<string | null>(null);
-  const [loading, setLoading] = useState(false);
+  const { user, loading, error, login, logout, refresh, clearError, isAuthenticated } = useAuth();
 
   async function handleSubmit(event: FormEvent) {
     event.preventDefault();
-    setLoading(true);
-    setError(null);
+    clearError();
     try {
-      const loggedInUser = await login(email, password);
-      setUser(loggedInUser);
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'Login failed');
-    } finally {
-      setLoading(false);
+      await login(email, password);
+    } catch {
+      // Error state is already handled inside the auth provider.
     }
   }
 
   async function handleWhoAmI() {
-    setError(null);
-    try {
-      const current = await me();
-      setUser(current);
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to load session');
-      setUser(null);
-    }
+    clearError();
+    await refresh();
   }
 
   async function handleLogout() {
-    await logout();
-    setUser(null);
+    clearError();
+    try {
+      await logout();
+    } catch {
+      // Error state is already handled inside the auth provider.
+    }
   }
 
   return (
     <section className="panel">
-      <h2>Login</h2>
-      <p className="muted">Legacy-compatible login against <code>customers.ship_email</code> + <code>customer_password</code>.</p>
+      <div className="page-header">
+        <div>
+          <h2>Login</h2>
+          <p className="muted">Legacy-compatible login against <code>customers.ship_email</code> + <code>customer_password</code>.</p>
+        </div>
+        <span className={`session-pill ${isAuthenticated ? '' : 'muted-pill'}`}>
+          {isAuthenticated ? 'Authenticated' : 'Guest session'}
+        </span>
+      </div>
+
       <form onSubmit={handleSubmit} className="stack">
         <label>
           Email
-          <input value={email} onChange={(e) => setEmail(e.target.value)} type="email" />
+          <input value={email} onChange={(e) => setEmail(e.target.value)} type="email" autoComplete="username" />
         </label>
         <label>
           Password
-          <input value={password} onChange={(e) => setPassword(e.target.value)} type="password" />
+          <input value={password} onChange={(e) => setPassword(e.target.value)} type="password" autoComplete="current-password" />
         </label>
-        <div className="row">
+        <div className="row wrap-row">
           <button type="submit" disabled={loading}>{loading ? 'Logging in…' : 'Login'}</button>
-          <button type="button" onClick={handleWhoAmI}>Who am I?</button>
-          <button type="button" onClick={handleLogout}>Logout</button>
+          <button type="button" onClick={handleWhoAmI} disabled={loading}>Refresh session</button>
+          <button type="button" onClick={handleLogout} disabled={loading || !isAuthenticated}>Logout</button>
         </div>
       </form>
+
       {error && <p className="error">{error}</p>}
+      {!loading && !user ? <p className="muted">No authenticated customer session yet.</p> : null}
       {user && (
         <div className="result-card">
           <strong>{user.name || user.email}</strong>

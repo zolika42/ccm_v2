@@ -15,6 +15,7 @@ A backend tudja ezeket az endpointokat:
 - `POST /auth/login`
 - `POST /auth/logout`
 - `GET /auth/me`
+- `GET /catalog/categories`
 - `GET /catalog/products`
 - `GET /catalog/products/{productId}`
 - `GET /catalog/products/{productId}/related`
@@ -25,8 +26,8 @@ Az API két PostgreSQL kapcsolatot használ:
 
 ### Web
 A frontend tartalmaz:
-- login oldal
-- terméklista oldal
+- login oldal közös auth state providerrel
+- terméklista oldal cached query state-tel és kategória / alkategória szűréssel
 - termék részletező oldal
 - generált typed API kliens az OpenAPI spec alapján
 
@@ -53,11 +54,9 @@ Elérhetőségek:
 A `.ddev/` mappa opcionális kényelmi réteg. A source of truth továbbra is a Docker Compose.
 
 ## Következő ticketek
-- cart cookie bridge (`bid-cg`)
-- active cart read
-- add/update/remove cart items
-- checkout field mapping
-- digital library listing
+- UI parity inventory screenshotokkal (CG-003)
+- parity / UAT végigellenőrzés valódi legacy képernyőkkel
+- opcionális vizuális legacy polish, ha még kell a finomhangolás
 
 
 ## API contract

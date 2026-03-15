@@ -82,6 +82,7 @@ $router->post('/auth/login', [$authController, 'login']);
 $router->post('/auth/logout', [$authController, 'logout']);
 $router->get('/auth/me', [$authController, 'me']);
 
+$router->get('/catalog/categories', [$catalogController, 'categories']);
 $router->get('/catalog/products', [$catalogController, 'index']);
 $router->get('/catalog/products/{productId}', [$catalogController, 'show']);
 $router->get('/catalog/products/{productId}/related', [$catalogController, 'related']);

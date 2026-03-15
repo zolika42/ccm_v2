@@ -1,7 +1,7 @@
 # Developer Handbook
 
 > Generated automatically by `scripts/docs/generate-docs.mjs`. Do not hand-edit this file; update the generator instead.
-> Generated at: 2026-03-15T22:15:38.138Z
+> Generated at: 2026-03-15T23:30:31.858Z
 
 ## 1. What this repo is
 
@@ -164,6 +164,7 @@ The frontend must not hand-roll raw fetch calls for project endpoints anymore. T
 - `POST /auth/login` → `login`
 - `POST /auth/logout` → `logout`
 - `GET /auth/me` → `me`
+- `GET /catalog/categories` → `getCatalogCategories`
 - `GET /catalog/products` → `listProducts`
 - `GET /catalog/products/{productId}` → `getProduct`
 - `GET /catalog/products/{productId}/related` → `getRelatedProducts`

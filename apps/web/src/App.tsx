@@ -3,6 +3,7 @@
  */
 import React from 'react';
 import { Link, Route, Routes } from 'react-router-dom';
+import { useAuth } from './auth/AuthContext';
 import { useCart } from './cart/CartContext';
 import { CartPage } from './pages/CartPage';
 import { CheckoutPage } from './pages/CheckoutPage';
@@ -10,6 +11,21 @@ import { LibraryPage } from './pages/LibraryPage';
 import { LoginPage } from './pages/LoginPage';
 import { ProductDetailPage } from './pages/ProductDetailPage';
 import { ProductListPage } from './pages/ProductListPage';
+
+
+function SessionStatus() {
+  const { user, loading, isAuthenticated } = useAuth();
+
+  if (loading) {
+    return <span className="session-pill muted-pill">Checking session…</span>;
+  }
+
+  if (!isAuthenticated || !user) {
+    return <span className="session-pill muted-pill">Guest</span>;
+  }
+
+  return <span className="session-pill">Signed in as {user.name || user.email}</span>;
+}
 
 function CartLinkLabel() {
   const { summary, loading } = useCart();
@@ -26,13 +42,16 @@ export function App() {
       <header className="topbar">
         <div className="container topbar-inner">
           <h1 className="brand">ColumbiaGames Rewrite</h1>
-          <nav>
+          <div className="topbar-meta">
+            <SessionStatus />
+            <nav>
             <Link to="/products">Products</Link>
             <Link to="/cart"><CartLinkLabel /></Link>
             <Link to="/checkout">Checkout</Link>
             <Link to="/library">Library</Link>
             <Link to="/login">Login</Link>
-          </nav>
+            </nav>
+          </div>
         </div>
       </header>
       <main className="container page-content">

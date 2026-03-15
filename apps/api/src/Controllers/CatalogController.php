@@ -23,6 +23,11 @@ final class CatalogController
         JsonResponse::success($this->catalog->list($request->query));
     }
 
+    public function categories(): void
+    {
+        JsonResponse::success($this->catalog->categories());
+    }
+
     public function show(Request $request, array $params): void
     {
         $productId = $params['productId'] ?? '';

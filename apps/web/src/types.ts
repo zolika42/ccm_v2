@@ -8,6 +8,17 @@ export type AuthUser = {
   points: number;
 };
 
+export type CatalogSubCategory = {
+  name: string;
+  productCount: number;
+};
+
+export type CatalogCategory = {
+  name: string;
+  productCount: number;
+  subCategories: CatalogSubCategory[];
+};
+
 export type Product = {
   productId: string;
   description: string;

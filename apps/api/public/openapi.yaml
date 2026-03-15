@@ -89,6 +89,26 @@ components:
           type: boolean
         downloadableFilename:
           type: string
+    CatalogSubCategory:
+      type: object
+      required: [name, productCount]
+      properties:
+        name:
+          type: string
+        productCount:
+          type: integer
+    CatalogCategory:
+      type: object
+      required: [name, productCount, subCategories]
+      properties:
+        name:
+          type: string
+        productCount:
+          type: integer
+        subCategories:
+          type: array
+          items:
+            $ref: '#/components/schemas/CatalogSubCategory'
     CartSummary:
       type: object
       properties:
@@ -181,6 +201,13 @@ paths:
           description: Current user profile
         '401':
           description: Not authenticated
+  /catalog/categories:
+    get:
+      operationId: getCatalogCategories
+      summary: List catalog category hierarchy
+      responses:
+        '200':
+          description: Category hierarchy
   /catalog/products:
     get:
       operationId: listProducts
