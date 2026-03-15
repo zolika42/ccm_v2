@@ -10,324 +10,1256 @@
         --bg: #020617;
         --panel: rgba(15, 23, 42, 0.92);
         --panel-strong: rgba(17, 24, 39, 0.94);
+        --panel-soft: rgba(30, 41, 59, 0.86);
         --text: #e5e7eb;
         --muted: #94a3b8;
         --accent: #60a5fa;
+        --accent-soft: rgba(96, 165, 250, 0.16);
         --border: rgba(148, 163, 184, 0.24);
+        --shadow: 0 18px 40px rgba(0, 0, 0, 0.22);
       }
       * { box-sizing: border-box; }
+      html { scroll-behavior: smooth; }
       body {
         margin: 0;
-        font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
         background: linear-gradient(180deg, #020617 0%, #111827 100%);
         color: var(--text);
       }
-      a { color: var(--accent); }
-      .shell { max-width: 1280px; margin: 0 auto; padding: 32px 20px 64px; }
-      .hero, .group, .card {
+      a { color: var(--accent); text-decoration: none; }
+      a:hover { text-decoration: underline; }
+      code { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', monospace; }
+      .page-shell { max-width: 1520px; margin: 0 auto; padding: 24px 20px 64px; }
+      .hero, .group, .file-card, .sidebar-panel, .symbol-card {
         border: 1px solid var(--border);
         border-radius: 24px;
         background: var(--panel);
-        box-shadow: 0 18px 40px rgba(0, 0, 0, 0.22);
+        box-shadow: var(--shadow);
       }
-      .hero { padding: 28px; }
-      .hero h1 { margin: 0 0 10px; font-size: 2rem; }
-      .hero p { margin: 0 0 10px; line-height: 1.6; color: var(--muted); }
+      .hero { padding: 28px; margin-bottom: 24px; }
+      .hero h1 { margin: 0 0 10px; font-size: clamp(2rem, 4vw, 2.8rem); }
+      .hero p { margin: 0 0 12px; line-height: 1.6; color: var(--muted); }
       .nav-row { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 18px; }
       .nav-pill {
         display: inline-flex; align-items: center; justify-content: center; text-decoration: none;
         border-radius: 999px; border: 1px solid var(--border); padding: 8px 12px; background: rgba(30, 41, 59, 0.8);
       }
-      .nav-pill.active { background: rgba(96, 165, 250, 0.16); color: #dbeafe; }
-      .group { margin-top: 24px; padding: 20px; }
-      .group-head, .card-head {
-        display: flex; align-items: center; justify-content: space-between; gap: 12px;
+      .nav-pill.active { background: var(--accent-soft); color: #dbeafe; }
+      .layout { display: grid; grid-template-columns: minmax(260px, 320px) minmax(0, 1fr); gap: 24px; align-items: start; }
+      .sticky { position: sticky; top: 24px; }
+      .sidebar-panel { padding: 20px; }
+      .sidebar-panel h2 { margin: 0 0 8px; }
+      .small { font-size: 0.92rem; }
+      .search-input {
+        width: 100%; margin: 14px 0 18px; padding: 12px 14px; border-radius: 14px;
+        border: 1px solid var(--border); background: rgba(2, 6, 23, 0.65); color: var(--text);
       }
-      .card-grid {
-        display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 16px; margin-top: 16px;
+      .sidebar-nav { max-height: calc(100vh - 220px); overflow: auto; padding-right: 6px; }
+      .sidebar-group + .sidebar-group { margin-top: 18px; }
+      .sidebar-group h3 { margin: 0 0 8px; font-size: 0.95rem; color: #bfdbfe; }
+      .sidebar-group ul { margin: 0; padding-left: 18px; line-height: 1.45; }
+      .symbol-list { margin-top: 6px; }
+      .content { display: grid; gap: 24px; }
+      .group { padding: 20px; }
+      .group-head, .card-head, .symbol-head, .symbol-section-head {
+        display: flex; align-items: start; justify-content: space-between; gap: 12px;
       }
-      .card { background: var(--panel-strong); padding: 18px; }
-      .card h3, .group h2 { margin: 0; }
+      .group h2, .file-card h3, .symbol-card h4 { margin: 0; }
+      .file-stack { display: grid; gap: 18px; margin-top: 16px; }
+      .file-card { padding: 20px; background: var(--panel-strong); }
       .overview { line-height: 1.6; }
+      .meta-grid { display: grid; gap: 8px; margin: 14px 0; }
       .count-pill {
         display: inline-flex; align-items: center; justify-content: center; padding: 4px 10px; border-radius: 999px;
-        background: rgba(96, 165, 250, 0.15); color: #bfdbfe; font-size: 0.85rem;
+        background: var(--accent-soft); color: #bfdbfe; font-size: 0.85rem;
       }
       .muted { color: var(--muted); }
       .tiny { font-size: 0.8rem; }
+      .eyebrow { margin: 0 0 6px; color: #93c5fd; font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.08em; }
       details { margin-top: 14px; border-top: 1px solid var(--border); padding-top: 12px; }
       summary { cursor: pointer; }
-      code { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; }
-      ul { padding-left: 18px; line-height: 1.5; }
+      .symbol-section { margin-top: 20px; border-top: 1px solid var(--border); padding-top: 16px; }
+      .symbol-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 14px; margin-top: 14px; }
+      .symbol-card { background: var(--panel-soft); padding: 16px; }
+      .symbol-signature { margin: 10px 0; padding: 10px 12px; border-radius: 14px; background: rgba(2, 6, 23, 0.5); overflow: auto; }
+      .anchor-link {
+        display: inline-flex; align-items: center; justify-content: center; width: 34px; height: 34px;
+        border-radius: 999px; border: 1px solid var(--border); background: rgba(2, 6, 23, 0.45);
+      }
+      .tags-block ul { padding-left: 18px; line-height: 1.5; }
+      .is-hidden { display: none !important; }
+      @media (max-width: 980px) {
+        .layout { grid-template-columns: 1fr; }
+        .sticky { position: static; }
+        .sidebar-nav { max-height: none; }
+      }
     </style>
   </head>
   <body>
-    <main class="shell">
+    <main class="page-shell">
       <section class="hero">
         <h1>Frontend Code Reference</h1>
         <p>React/web API client code, runtime adapters, and frontend support scripts.</p>
-        <p class="muted">Generated automatically by <code>scripts/docs/generate-code-reference.mjs</code>.</p>
+        <p class="muted">Generated automatically by <code>scripts/docs/generate-code-reference.mjs</code>. Use the search box to filter files and documented symbols on this page.</p>
         <div class="nav-row">
           <a class="nav-pill" href="./index.html">Index</a>
           <a class="nav-pill" href="./backend.html">Backend Code Reference</a><span class="nav-pill active">Frontend Code Reference</span><a class="nav-pill" href="./tooling.html">Tooling Code Reference</a>
         </div>
       </section>
-      
-      <section class="group">
+      <div class="layout">
+        
+    <aside class="sidebar">
+      <div class="sidebar-panel sticky">
+        <h2>Frontend Code Reference</h2>
+        <p class="muted small">Jump through files and documented symbols without opening the source tree.</p>
+        <input id="page-search" class="search-input" type="search" placeholder="Search files, symbols, comments..." autocomplete="off" />
+        <nav class="sidebar-nav">
+          
+            <section class="sidebar-group">
+              <h3>apps/web/scripts</h3>
+              <ul>
+                
+                  <li>
+                    <a href="#apps-web-scripts-generate-api-client-mjs">generate-api-client.mjs</a>
+                    <ul class="symbol-list"><li><a href="#apps-web-scripts-generate-api-client-mjs-filename">__filename</a></li><li><a href="#apps-web-scripts-generate-api-client-mjs-dirname">__dirname</a></li><li><a href="#apps-web-scripts-generate-api-client-mjs-specpath">specPath</a></li><li><a href="#apps-web-scripts-generate-api-client-mjs-outputpath">outputPath</a></li><li><a href="#apps-web-scripts-generate-api-client-mjs-operationconfig">operationConfig</a></li><li><a href="#apps-web-scripts-generate-api-client-mjs-parseoperations">parseOperations</a></li><li><a href="#apps-web-scripts-generate-api-client-mjs-interpolatepath">interpolatePath</a></li><li><a href="#apps-web-scripts-generate-api-client-mjs-buildmethod">buildMethod</a></li><li><a href="#apps-web-scripts-generate-api-client-mjs-yaml">yaml</a></li><li><a href="#apps-web-scripts-generate-api-client-mjs-operations">operations</a></li><li><a href="#apps-web-scripts-generate-api-client-mjs-missing">missing</a></li><li><a href="#apps-web-scripts-generate-api-client-mjs-methods">methods</a></li><li><a href="#apps-web-scripts-generate-api-client-mjs-content">content</a></li><li><a href="#apps-web-scripts-generate-api-client-mjs-generatedapiclient">GeneratedApiClient</a></li><li><a href="#apps-web-scripts-generate-api-client-mjs-generatedapiclient">generatedApiClient</a></li></ul>
+                  </li>
+              </ul>
+            </section>
+            <section class="sidebar-group">
+              <h3>apps/web/src</h3>
+              <ul>
+                
+                  <li>
+                    <a href="#apps-web-src-app-tsx">App.tsx</a>
+                    <ul class="symbol-list"><li><a href="#apps-web-src-app-tsx-cartlinklabel">CartLinkLabel</a></li><li><a href="#apps-web-src-app-tsx-app">App</a></li></ul>
+                  </li>
+                  <li>
+                    <a href="#apps-web-src-main-tsx">main.tsx</a>
+                    
+                  </li>
+                  <li>
+                    <a href="#apps-web-src-types-ts">types.ts</a>
+                    
+                  </li>
+                  <li>
+                    <a href="#apps-web-src-vite-env-d-ts">vite-env.d.ts</a>
+                    
+                  </li>
+              </ul>
+            </section>
+            <section class="sidebar-group">
+              <h3>apps/web/src/api</h3>
+              <ul>
+                
+                  <li>
+                    <a href="#apps-web-src-api-client-ts">client.ts</a>
+                    <ul class="symbol-list"><li><a href="#apps-web-src-api-client-ts-login">login</a></li><li><a href="#apps-web-src-api-client-ts-me">me</a></li><li><a href="#apps-web-src-api-client-ts-logout">logout</a></li><li><a href="#apps-web-src-api-client-ts-listproducts">listProducts</a></li><li><a href="#apps-web-src-api-client-ts-getproduct">getProduct</a></li><li><a href="#apps-web-src-api-client-ts-getrelated">getRelated</a></li><li><a href="#apps-web-src-api-client-ts-getcartidentity">getCartIdentity</a></li><li><a href="#apps-web-src-api-client-ts-getcart">getCart</a></li><li><a href="#apps-web-src-api-client-ts-getcartsummary">getCartSummary</a></li><li><a href="#apps-web-src-api-client-ts-addcartitem">addCartItem</a></li><li><a href="#apps-web-src-api-client-ts-updatecartitem">updateCartItem</a></li><li><a href="#apps-web-src-api-client-ts-removecartitem">removeCartItem</a></li><li><a href="#apps-web-src-api-client-ts-getcheckoutsummary">getCheckoutSummary</a></li><li><a href="#apps-web-src-api-client-ts-validatecheckout">validateCheckout</a></li><li><a href="#apps-web-src-api-client-ts-submitcheckout">submitCheckout</a></li><li><a href="#apps-web-src-api-client-ts-getlibrary">getLibrary</a></li></ul>
+                  </li>
+                  <li>
+                    <a href="#apps-web-src-api-generated-ts">generated.ts</a>
+                    <ul class="symbol-list"><li><a href="#apps-web-src-api-generated-ts-generatedapiclient">GeneratedApiClient</a></li><li><a href="#apps-web-src-api-generated-ts-generatedapiclient">generatedApiClient</a></li></ul>
+                  </li>
+                  <li>
+                    <a href="#apps-web-src-api-runtime-ts">runtime.ts</a>
+                    <ul class="symbol-list"><li><a href="#apps-web-src-api-runtime-ts-api-base">API_BASE</a></li><li><a href="#apps-web-src-api-runtime-ts-buildurl">buildUrl</a></li><li><a href="#apps-web-src-api-runtime-ts-extracterrormessage">extractErrorMessage</a></li><li><a href="#apps-web-src-api-runtime-ts-buildinit">buildInit</a></li><li><a href="#apps-web-src-api-runtime-ts-requesttext">requestText</a></li></ul>
+                  </li>
+              </ul>
+            </section>
+            <section class="sidebar-group">
+              <h3>apps/web/src/cart</h3>
+              <ul>
+                
+                  <li>
+                    <a href="#apps-web-src-cart-cartcontext-tsx">CartContext.tsx</a>
+                    <ul class="symbol-list"><li><a href="#apps-web-src-cart-cartcontext-tsx-cartcontext">CartContext</a></li><li><a href="#apps-web-src-cart-cartcontext-tsx-cartprovider">CartProvider</a></li><li><a href="#apps-web-src-cart-cartcontext-tsx-usecart">useCart</a></li></ul>
+                  </li>
+              </ul>
+            </section>
+            <section class="sidebar-group">
+              <h3>apps/web/src/pages</h3>
+              <ul>
+                
+                  <li>
+                    <a href="#apps-web-src-pages-cartpage-tsx">CartPage.tsx</a>
+                    <ul class="symbol-list"><li><a href="#apps-web-src-pages-cartpage-tsx-cartpage">CartPage</a></li></ul>
+                  </li>
+                  <li>
+                    <a href="#apps-web-src-pages-checkoutpage-tsx">CheckoutPage.tsx</a>
+                    <ul class="symbol-list"><li><a href="#apps-web-src-pages-checkoutpage-tsx-fieldlabel">fieldLabel</a></li><li><a href="#apps-web-src-pages-checkoutpage-tsx-checkoutpage">CheckoutPage</a></li></ul>
+                  </li>
+                  <li>
+                    <a href="#apps-web-src-pages-librarypage-tsx">LibraryPage.tsx</a>
+                    <ul class="symbol-list"><li><a href="#apps-web-src-pages-librarypage-tsx-librarypage">LibraryPage</a></li></ul>
+                  </li>
+                  <li>
+                    <a href="#apps-web-src-pages-loginpage-tsx">LoginPage.tsx</a>
+                    <ul class="symbol-list"><li><a href="#apps-web-src-pages-loginpage-tsx-loginpage">LoginPage</a></li></ul>
+                  </li>
+                  <li>
+                    <a href="#apps-web-src-pages-productdetailpage-tsx">ProductDetailPage.tsx</a>
+                    <ul class="symbol-list"><li><a href="#apps-web-src-pages-productdetailpage-tsx-productdetailpage">ProductDetailPage</a></li></ul>
+                  </li>
+                  <li>
+                    <a href="#apps-web-src-pages-productlistpage-tsx">ProductListPage.tsx</a>
+                    <ul class="symbol-list"><li><a href="#apps-web-src-pages-productlistpage-tsx-productlistpage">ProductListPage</a></li></ul>
+                  </li>
+              </ul>
+            </section>
+        </nav>
+      </div>
+    </aside>
+        <div class="content" id="search-scope">
+          
+      <section class="group searchable" data-search="apps/web/scripts">
         <div class="group-head">
           <h2>apps/web/scripts</h2>
           <span class="count-pill">1 file(s)</span>
         </div>
-        <div class="card-grid">
+        <div class="file-stack">
           
-            <article class="card">
+            <article class="file-card searchable" id="apps-web-scripts-generate-api-client-mjs" data-search="apps/web/scripts/generate-api-client.mjs Regenerates the typed frontend API client from the published OpenAPI contract. AUTO-GENERATED FILE. DO NOT EDIT MANUALLY. Source: apps/api/public/openapi.yaml Generator: apps/web/scripts/generate-api-client.mjs parseOperations interpolatePath buildMethod node:fs node:path node:url ./runtime">
               <div class="card-head">
-                <h3><code>apps/web/scripts/generate-api-client.mjs</code></h3>
-                <span class="count-pill">5.3 KB</span>
+                <div>
+                  <p class="eyebrow">MJS · 5.3 KB</p>
+                  <h3><code>apps/web/scripts/generate-api-client.mjs</code></h3>
+                </div>
+                <a class="anchor-link" href="#apps-web-scripts-generate-api-client-mjs">#</a>
               </div>
               <p class="overview">Regenerates the typed frontend API client from the published OpenAPI contract.</p>
-              <p><strong>Declared symbols:</strong> <code>parseOperations</code>, <code>interpolatePath</code>, <code>buildMethod</code></p>
-              <p><strong>Dependencies:</strong> <code>node:fs</code>, <code>node:path</code>, <code>node:url</code>, <code>./runtime</code></p>
+              <div class="meta-grid">
+                <p><strong>Detected symbols:</strong> <code>parseOperations</code>, <code>interpolatePath</code>, <code>buildMethod</code></p>
+                <p><strong>Dependencies:</strong> <code>node:fs</code>, <code>node:path</code>, <code>node:url</code>, <code>./runtime</code></p>
+                <p class="muted tiny">Snapshot timestamp: 2026-03-15T10:09:58.000Z</p>
+              </div>
               <details>
                 <summary>Comment highlights</summary>
                 <ul><li>AUTO-GENERATED FILE. DO NOT EDIT MANUALLY. Source: apps/api/public/openapi.yaml Generator: apps/web/scripts/generate-api-client.mjs</li></ul>
               </details>
-              <p class="muted tiny">Snapshot timestamp: 2026-03-15T10:09:58.000Z</p>
+              <div class="symbol-section">
+                <div class="symbol-section-head">
+                  <h4>Documented symbols</h4>
+                  <span class="count-pill">15</span>
+                </div>
+                <div class="symbol-grid">
+    <section class="symbol-card searchable" id="apps-web-scripts-generate-api-client-mjs-filename" data-search="const __filename No dedicated symbol docblock found; inherits file intent: Regenerates the typed frontend API client from the published OpenAPI contract. const __filename = ">
+      <div class="symbol-head">
+        <div>
+          <p class="eyebrow">const · line 8</p>
+          <h4><code>__filename</code></h4>
+        </div>
+        <a class="anchor-link" href="#apps-web-scripts-generate-api-client-mjs-filename">#</a>
+      </div>
+      <p class="symbol-signature"><code>const __filename =</code></p>
+      <p class="overview">No dedicated symbol docblock found; inherits file intent: Regenerates the typed frontend API client from the published OpenAPI contract.</p>
+      
+    </section>
+    <section class="symbol-card searchable" id="apps-web-scripts-generate-api-client-mjs-dirname" data-search="const __dirname No dedicated symbol docblock found; inherits file intent: Regenerates the typed frontend API client from the published OpenAPI contract. const __dirname = ">
+      <div class="symbol-head">
+        <div>
+          <p class="eyebrow">const · line 9</p>
+          <h4><code>__dirname</code></h4>
+        </div>
+        <a class="anchor-link" href="#apps-web-scripts-generate-api-client-mjs-dirname">#</a>
+      </div>
+      <p class="symbol-signature"><code>const __dirname =</code></p>
+      <p class="overview">No dedicated symbol docblock found; inherits file intent: Regenerates the typed frontend API client from the published OpenAPI contract.</p>
+      
+    </section>
+    <section class="symbol-card searchable" id="apps-web-scripts-generate-api-client-mjs-specpath" data-search="const specPath No dedicated symbol docblock found; inherits file intent: Regenerates the typed frontend API client from the published OpenAPI contract. const specPath = ">
+      <div class="symbol-head">
+        <div>
+          <p class="eyebrow">const · line 10</p>
+          <h4><code>specPath</code></h4>
+        </div>
+        <a class="anchor-link" href="#apps-web-scripts-generate-api-client-mjs-specpath">#</a>
+      </div>
+      <p class="symbol-signature"><code>const specPath =</code></p>
+      <p class="overview">No dedicated symbol docblock found; inherits file intent: Regenerates the typed frontend API client from the published OpenAPI contract.</p>
+      
+    </section>
+    <section class="symbol-card searchable" id="apps-web-scripts-generate-api-client-mjs-outputpath" data-search="const outputPath No dedicated symbol docblock found; inherits file intent: Regenerates the typed frontend API client from the published OpenAPI contract. const outputPath = ">
+      <div class="symbol-head">
+        <div>
+          <p class="eyebrow">const · line 11</p>
+          <h4><code>outputPath</code></h4>
+        </div>
+        <a class="anchor-link" href="#apps-web-scripts-generate-api-client-mjs-outputpath">#</a>
+      </div>
+      <p class="symbol-signature"><code>const outputPath =</code></p>
+      <p class="overview">No dedicated symbol docblock found; inherits file intent: Regenerates the typed frontend API client from the published OpenAPI contract.</p>
+      
+    </section>
+    <section class="symbol-card searchable" id="apps-web-scripts-generate-api-client-mjs-operationconfig" data-search="const operationConfig No dedicated symbol docblock found; inherits file intent: Regenerates the typed frontend API client from the published OpenAPI contract. const operationConfig = ">
+      <div class="symbol-head">
+        <div>
+          <p class="eyebrow">const · line 13</p>
+          <h4><code>operationConfig</code></h4>
+        </div>
+        <a class="anchor-link" href="#apps-web-scripts-generate-api-client-mjs-operationconfig">#</a>
+      </div>
+      <p class="symbol-signature"><code>const operationConfig =</code></p>
+      <p class="overview">No dedicated symbol docblock found; inherits file intent: Regenerates the typed frontend API client from the published OpenAPI contract.</p>
+      
+    </section>
+    <section class="symbol-card searchable" id="apps-web-scripts-generate-api-client-mjs-parseoperations" data-search="function parseOperations No dedicated symbol docblock found; inherits file intent: Regenerates the typed frontend API client from the published OpenAPI contract. function parseOperations( ">
+      <div class="symbol-head">
+        <div>
+          <p class="eyebrow">function · line 45</p>
+          <h4><code>parseOperations</code></h4>
+        </div>
+        <a class="anchor-link" href="#apps-web-scripts-generate-api-client-mjs-parseoperations">#</a>
+      </div>
+      <p class="symbol-signature"><code>function parseOperations(</code></p>
+      <p class="overview">No dedicated symbol docblock found; inherits file intent: Regenerates the typed frontend API client from the published OpenAPI contract.</p>
+      
+    </section>
+    <section class="symbol-card searchable" id="apps-web-scripts-generate-api-client-mjs-interpolatepath" data-search="function interpolatePath No dedicated symbol docblock found; inherits file intent: Regenerates the typed frontend API client from the published OpenAPI contract. function interpolatePath( ">
+      <div class="symbol-head">
+        <div>
+          <p class="eyebrow">function · line 74</p>
+          <h4><code>interpolatePath</code></h4>
+        </div>
+        <a class="anchor-link" href="#apps-web-scripts-generate-api-client-mjs-interpolatepath">#</a>
+      </div>
+      <p class="symbol-signature"><code>function interpolatePath(</code></p>
+      <p class="overview">No dedicated symbol docblock found; inherits file intent: Regenerates the typed frontend API client from the published OpenAPI contract.</p>
+      
+    </section>
+    <section class="symbol-card searchable" id="apps-web-scripts-generate-api-client-mjs-buildmethod" data-search="function buildMethod No dedicated symbol docblock found; inherits file intent: Regenerates the typed frontend API client from the published OpenAPI contract. function buildMethod( ">
+      <div class="symbol-head">
+        <div>
+          <p class="eyebrow">function · line 78</p>
+          <h4><code>buildMethod</code></h4>
+        </div>
+        <a class="anchor-link" href="#apps-web-scripts-generate-api-client-mjs-buildmethod">#</a>
+      </div>
+      <p class="symbol-signature"><code>function buildMethod(</code></p>
+      <p class="overview">No dedicated symbol docblock found; inherits file intent: Regenerates the typed frontend API client from the published OpenAPI contract.</p>
+      
+    </section>
+    <section class="symbol-card searchable" id="apps-web-scripts-generate-api-client-mjs-yaml" data-search="const yaml No dedicated symbol docblock found; inherits file intent: Regenerates the typed frontend API client from the published OpenAPI contract. const yaml = ">
+      <div class="symbol-head">
+        <div>
+          <p class="eyebrow">const · line 104</p>
+          <h4><code>yaml</code></h4>
+        </div>
+        <a class="anchor-link" href="#apps-web-scripts-generate-api-client-mjs-yaml">#</a>
+      </div>
+      <p class="symbol-signature"><code>const yaml =</code></p>
+      <p class="overview">No dedicated symbol docblock found; inherits file intent: Regenerates the typed frontend API client from the published OpenAPI contract.</p>
+      
+    </section>
+    <section class="symbol-card searchable" id="apps-web-scripts-generate-api-client-mjs-operations" data-search="const operations No dedicated symbol docblock found; inherits file intent: Regenerates the typed frontend API client from the published OpenAPI contract. const operations = ">
+      <div class="symbol-head">
+        <div>
+          <p class="eyebrow">const · line 105</p>
+          <h4><code>operations</code></h4>
+        </div>
+        <a class="anchor-link" href="#apps-web-scripts-generate-api-client-mjs-operations">#</a>
+      </div>
+      <p class="symbol-signature"><code>const operations =</code></p>
+      <p class="overview">No dedicated symbol docblock found; inherits file intent: Regenerates the typed frontend API client from the published OpenAPI contract.</p>
+      
+    </section>
+    <section class="symbol-card searchable" id="apps-web-scripts-generate-api-client-mjs-missing" data-search="const missing No dedicated symbol docblock found; inherits file intent: Regenerates the typed frontend API client from the published OpenAPI contract. const missing = ">
+      <div class="symbol-head">
+        <div>
+          <p class="eyebrow">const · line 110</p>
+          <h4><code>missing</code></h4>
+        </div>
+        <a class="anchor-link" href="#apps-web-scripts-generate-api-client-mjs-missing">#</a>
+      </div>
+      <p class="symbol-signature"><code>const missing =</code></p>
+      <p class="overview">No dedicated symbol docblock found; inherits file intent: Regenerates the typed frontend API client from the published OpenAPI contract.</p>
+      
+    </section>
+    <section class="symbol-card searchable" id="apps-web-scripts-generate-api-client-mjs-methods" data-search="const methods No dedicated symbol docblock found; inherits file intent: Regenerates the typed frontend API client from the published OpenAPI contract. const methods = ">
+      <div class="symbol-head">
+        <div>
+          <p class="eyebrow">const · line 115</p>
+          <h4><code>methods</code></h4>
+        </div>
+        <a class="anchor-link" href="#apps-web-scripts-generate-api-client-mjs-methods">#</a>
+      </div>
+      <p class="symbol-signature"><code>const methods =</code></p>
+      <p class="overview">No dedicated symbol docblock found; inherits file intent: Regenerates the typed frontend API client from the published OpenAPI contract.</p>
+      
+    </section>
+    <section class="symbol-card searchable" id="apps-web-scripts-generate-api-client-mjs-content" data-search="const content No dedicated symbol docblock found; inherits file intent: Regenerates the typed frontend API client from the published OpenAPI contract. const content = ">
+      <div class="symbol-head">
+        <div>
+          <p class="eyebrow">const · line 117</p>
+          <h4><code>content</code></h4>
+        </div>
+        <a class="anchor-link" href="#apps-web-scripts-generate-api-client-mjs-content">#</a>
+      </div>
+      <p class="symbol-signature"><code>const content =</code></p>
+      <p class="overview">No dedicated symbol docblock found; inherits file intent: Regenerates the typed frontend API client from the published OpenAPI contract.</p>
+      
+    </section>
+    <section class="symbol-card searchable" id="apps-web-scripts-generate-api-client-mjs-generatedapiclient" data-search="class GeneratedApiClient No dedicated symbol docblock found; inherits file intent: Regenerates the typed frontend API client from the published OpenAPI contract. export class GeneratedApiClient ">
+      <div class="symbol-head">
+        <div>
+          <p class="eyebrow">class · line 137</p>
+          <h4><code>GeneratedApiClient</code></h4>
+        </div>
+        <a class="anchor-link" href="#apps-web-scripts-generate-api-client-mjs-generatedapiclient">#</a>
+      </div>
+      <p class="symbol-signature"><code>export class GeneratedApiClient</code></p>
+      <p class="overview">No dedicated symbol docblock found; inherits file intent: Regenerates the typed frontend API client from the published OpenAPI contract.</p>
+      
+    </section>
+    <section class="symbol-card searchable" id="apps-web-scripts-generate-api-client-mjs-generatedapiclient" data-search="const generatedApiClient No dedicated symbol docblock found; inherits file intent: Regenerates the typed frontend API client from the published OpenAPI contract. export const generatedApiClient = ">
+      <div class="symbol-head">
+        <div>
+          <p class="eyebrow">const · line 141</p>
+          <h4><code>generatedApiClient</code></h4>
+        </div>
+        <a class="anchor-link" href="#apps-web-scripts-generate-api-client-mjs-generatedapiclient">#</a>
+      </div>
+      <p class="symbol-signature"><code>export const generatedApiClient =</code></p>
+      <p class="overview">No dedicated symbol docblock found; inherits file intent: Regenerates the typed frontend API client from the published OpenAPI contract.</p>
+      
+    </section></div>
+              </div>
             </article>
         </div>
       </section>
-      <section class="group">
+      <section class="group searchable" data-search="apps/web/src">
         <div class="group-head">
           <h2>apps/web/src</h2>
           <span class="count-pill">4 file(s)</span>
         </div>
-        <div class="card-grid">
+        <div class="file-stack">
           
-            <article class="card">
+            <article class="file-card searchable" id="apps-web-src-app-tsx" data-search="apps/web/src/App.tsx Application shell: top navigation and route table for the React frontend.  App CartLinkLabel react react-router-dom ./cart/CartContext ./pages/CartPage ./pages/CheckoutPage ./pages/LibraryPage ./pages/LoginPage ./pages/ProductDetailPage ./pages/ProductListPage">
               <div class="card-head">
-                <h3><code>apps/web/src/App.tsx</code></h3>
-                <span class="count-pill">1.8 KB</span>
+                <div>
+                  <p class="eyebrow">TSX · 1.8 KB</p>
+                  <h3><code>apps/web/src/App.tsx</code></h3>
+                </div>
+                <a class="anchor-link" href="#apps-web-src-app-tsx">#</a>
               </div>
               <p class="overview">Application shell: top navigation and route table for the React frontend.</p>
-              <p><strong>Declared symbols:</strong> <code>App</code>, <code>CartLinkLabel</code></p>
-              <p><strong>Dependencies:</strong> <code>react</code>, <code>react-router-dom</code>, <code>./cart/CartContext</code>, <code>./pages/CartPage</code>, <code>./pages/CheckoutPage</code>, <code>./pages/LibraryPage</code>, <code>./pages/LoginPage</code>, <code>./pages/ProductDetailPage</code>, <code>./pages/ProductListPage</code></p>
+              <div class="meta-grid">
+                <p><strong>Detected symbols:</strong> <code>App</code>, <code>CartLinkLabel</code></p>
+                <p><strong>Dependencies:</strong> <code>react</code>, <code>react-router-dom</code>, <code>./cart/CartContext</code>, <code>./pages/CartPage</code>, <code>./pages/CheckoutPage</code>, <code>./pages/LibraryPage</code>, <code>./pages/LoginPage</code>, <code>./pages/ProductDetailPage</code>, <code>./pages/ProductListPage</code></p>
+                <p class="muted tiny">Snapshot timestamp: 2026-03-15T09:46:57.000Z</p>
+              </div>
               <details>
                 <summary>Comment highlights</summary>
                 <p class="muted">No additional comment blocks were extracted from this file.</p>
               </details>
-              <p class="muted tiny">Snapshot timestamp: 2026-03-15T09:46:57.000Z</p>
+              <div class="symbol-section">
+                <div class="symbol-section-head">
+                  <h4>Documented symbols</h4>
+                  <span class="count-pill">2</span>
+                </div>
+                <div class="symbol-grid">
+    <section class="symbol-card searchable" id="apps-web-src-app-tsx-cartlinklabel" data-search="function CartLinkLabel No dedicated symbol docblock found; inherits file intent: Application shell: top navigation and route table for the React frontend. function CartLinkLabel( ">
+      <div class="symbol-head">
+        <div>
+          <p class="eyebrow">function · line 14</p>
+          <h4><code>CartLinkLabel</code></h4>
+        </div>
+        <a class="anchor-link" href="#apps-web-src-app-tsx-cartlinklabel">#</a>
+      </div>
+      <p class="symbol-signature"><code>function CartLinkLabel(</code></p>
+      <p class="overview">No dedicated symbol docblock found; inherits file intent: Application shell: top navigation and route table for the React frontend.</p>
+      
+    </section>
+    <section class="symbol-card searchable" id="apps-web-src-app-tsx-app" data-search="function App No dedicated symbol docblock found; inherits file intent: Application shell: top navigation and route table for the React frontend. export function App( ">
+      <div class="symbol-head">
+        <div>
+          <p class="eyebrow">function · line 23</p>
+          <h4><code>App</code></h4>
+        </div>
+        <a class="anchor-link" href="#apps-web-src-app-tsx-app">#</a>
+      </div>
+      <p class="symbol-signature"><code>export function App(</code></p>
+      <p class="overview">No dedicated symbol docblock found; inherits file intent: Application shell: top navigation and route table for the React frontend.</p>
+      
+    </section></div>
+              </div>
             </article>
-            <article class="card">
+            <article class="file-card searchable" id="apps-web-src-main-tsx" data-search="apps/web/src/main.tsx React frontend bootstrap: router + global providers mount here.   react react-dom/client react-router-dom ./App ./cart/CartContext">
               <div class="card-head">
-                <h3><code>apps/web/src/main.tsx</code></h3>
-                <span class="count-pill">0.5 KB</span>
+                <div>
+                  <p class="eyebrow">TSX · 0.5 KB</p>
+                  <h3><code>apps/web/src/main.tsx</code></h3>
+                </div>
+                <a class="anchor-link" href="#apps-web-src-main-tsx">#</a>
               </div>
               <p class="overview">React frontend bootstrap: router + global providers mount here.</p>
-              
-              <p><strong>Dependencies:</strong> <code>react</code>, <code>react-dom/client</code>, <code>react-router-dom</code>, <code>./App</code>, <code>./cart/CartContext</code></p>
+              <div class="meta-grid">
+                
+                <p><strong>Dependencies:</strong> <code>react</code>, <code>react-dom/client</code>, <code>react-router-dom</code>, <code>./App</code>, <code>./cart/CartContext</code></p>
+                <p class="muted tiny">Snapshot timestamp: 2026-03-15T09:46:57.000Z</p>
+              </div>
               <details>
                 <summary>Comment highlights</summary>
                 <p class="muted">No additional comment blocks were extracted from this file.</p>
               </details>
-              <p class="muted tiny">Snapshot timestamp: 2026-03-15T09:46:57.000Z</p>
+              <div class="symbol-section">
+                <div class="symbol-section-head">
+                  <h4>Documented symbols</h4>
+                  <span class="count-pill">0</span>
+                </div>
+                <p class="muted">No class/function-level doc block was paired with a declaration in this file yet.</p>
+              </div>
             </article>
-            <article class="card">
+            <article class="file-card searchable" id="apps-web-src-types-ts" data-search="apps/web/src/types.ts Shared TypeScript domain types used across frontend pages and API clients.   ">
               <div class="card-head">
-                <h3><code>apps/web/src/types.ts</code></h3>
-                <span class="count-pill">5.5 KB</span>
+                <div>
+                  <p class="eyebrow">TS · 5.5 KB</p>
+                  <h3><code>apps/web/src/types.ts</code></h3>
+                </div>
+                <a class="anchor-link" href="#apps-web-src-types-ts">#</a>
               </div>
               <p class="overview">Shared TypeScript domain types used across frontend pages and API clients.</p>
-              
-              
+              <div class="meta-grid">
+                
+                
+                <p class="muted tiny">Snapshot timestamp: 2026-03-15T09:46:57.000Z</p>
+              </div>
               <details>
                 <summary>Comment highlights</summary>
                 <p class="muted">No additional comment blocks were extracted from this file.</p>
               </details>
-              <p class="muted tiny">Snapshot timestamp: 2026-03-15T09:46:57.000Z</p>
+              <div class="symbol-section">
+                <div class="symbol-section-head">
+                  <h4>Documented symbols</h4>
+                  <span class="count-pill">0</span>
+                </div>
+                <p class="muted">No class/function-level doc block was paired with a declaration in this file yet.</p>
+              </div>
             </article>
-            <article class="card">
+            <article class="file-card searchable" id="apps-web-src-vite-env-d-ts" data-search="apps/web/src/vite-env.d.ts Vite type declarations for TypeScript builds.   ">
               <div class="card-head">
-                <h3><code>apps/web/src/vite-env.d.ts</code></h3>
-                <span class="count-pill">0.1 KB</span>
+                <div>
+                  <p class="eyebrow">TS · 0.1 KB</p>
+                  <h3><code>apps/web/src/vite-env.d.ts</code></h3>
+                </div>
+                <a class="anchor-link" href="#apps-web-src-vite-env-d-ts">#</a>
               </div>
               <p class="overview">Vite type declarations for TypeScript builds.</p>
-              
-              
+              <div class="meta-grid">
+                
+                
+                <p class="muted tiny">Snapshot timestamp: 2026-03-15T09:46:57.000Z</p>
+              </div>
               <details>
                 <summary>Comment highlights</summary>
                 <p class="muted">No additional comment blocks were extracted from this file.</p>
               </details>
-              <p class="muted tiny">Snapshot timestamp: 2026-03-15T09:46:57.000Z</p>
+              <div class="symbol-section">
+                <div class="symbol-section-head">
+                  <h4>Documented symbols</h4>
+                  <span class="count-pill">0</span>
+                </div>
+                <p class="muted">No class/function-level doc block was paired with a declaration in this file yet.</p>
+              </div>
             </article>
         </div>
       </section>
-      <section class="group">
+      <section class="group searchable" data-search="apps/web/src/api">
         <div class="group-head">
           <h2>apps/web/src/api</h2>
           <span class="count-pill">3 file(s)</span>
         </div>
-        <div class="card-grid">
+        <div class="file-stack">
           
-            <article class="card">
+            <article class="file-card searchable" id="apps-web-src-api-client-ts" data-search="apps/web/src/api/client.ts Ergonomic frontend API wrapper that exposes app-friendly calls on top of the generated client.  login me logout listProducts getProduct getRelated getCartIdentity getCart getCartSummary addCartItem updateCartItem removeCartItem getCheckoutSummary validateCheckout submitCheckout getLibrary ./generated">
               <div class="card-head">
-                <h3><code>apps/web/src/api/client.ts</code></h3>
-                <span class="count-pill">2.4 KB</span>
+                <div>
+                  <p class="eyebrow">TS · 2.4 KB</p>
+                  <h3><code>apps/web/src/api/client.ts</code></h3>
+                </div>
+                <a class="anchor-link" href="#apps-web-src-api-client-ts">#</a>
               </div>
               <p class="overview">Ergonomic frontend API wrapper that exposes app-friendly calls on top of the generated client.</p>
-              <p><strong>Declared symbols:</strong> <code>login</code>, <code>me</code>, <code>logout</code>, <code>listProducts</code>, <code>getProduct</code>, <code>getRelated</code>, <code>getCartIdentity</code>, <code>getCart</code>, <code>getCartSummary</code>, <code>addCartItem</code>, <code>updateCartItem</code>, <code>removeCartItem</code></p>
-              <p><strong>Dependencies:</strong> <code>./generated</code></p>
+              <div class="meta-grid">
+                <p><strong>Detected symbols:</strong> <code>login</code>, <code>me</code>, <code>logout</code>, <code>listProducts</code>, <code>getProduct</code>, <code>getRelated</code>, <code>getCartIdentity</code>, <code>getCart</code>, <code>getCartSummary</code>, <code>addCartItem</code>, <code>updateCartItem</code>, <code>removeCartItem</code>, <code>getCheckoutSummary</code>, <code>validateCheckout</code>, <code>submitCheckout</code>, <code>getLibrary</code></p>
+                <p><strong>Dependencies:</strong> <code>./generated</code></p>
+                <p class="muted tiny">Snapshot timestamp: 2026-03-15T10:09:58.000Z</p>
+              </div>
               <details>
                 <summary>Comment highlights</summary>
                 <p class="muted">No additional comment blocks were extracted from this file.</p>
               </details>
-              <p class="muted tiny">Snapshot timestamp: 2026-03-15T10:09:58.000Z</p>
+              <div class="symbol-section">
+                <div class="symbol-section-head">
+                  <h4>Documented symbols</h4>
+                  <span class="count-pill">16</span>
+                </div>
+                <div class="symbol-grid">
+    <section class="symbol-card searchable" id="apps-web-src-api-client-ts-login" data-search="function login No dedicated symbol docblock found; inherits file intent: Ergonomic frontend API wrapper that exposes app-friendly calls on top of the generated client. export async function login( ">
+      <div class="symbol-head">
+        <div>
+          <p class="eyebrow">function · line 13</p>
+          <h4><code>login</code></h4>
+        </div>
+        <a class="anchor-link" href="#apps-web-src-api-client-ts-login">#</a>
+      </div>
+      <p class="symbol-signature"><code>export async function login(</code></p>
+      <p class="overview">No dedicated symbol docblock found; inherits file intent: Ergonomic frontend API wrapper that exposes app-friendly calls on top of the generated client.</p>
+      
+    </section>
+    <section class="symbol-card searchable" id="apps-web-src-api-client-ts-me" data-search="function me No dedicated symbol docblock found; inherits file intent: Ergonomic frontend API wrapper that exposes app-friendly calls on top of the generated client. export async function me( ">
+      <div class="symbol-head">
+        <div>
+          <p class="eyebrow">function · line 18</p>
+          <h4><code>me</code></h4>
+        </div>
+        <a class="anchor-link" href="#apps-web-src-api-client-ts-me">#</a>
+      </div>
+      <p class="symbol-signature"><code>export async function me(</code></p>
+      <p class="overview">No dedicated symbol docblock found; inherits file intent: Ergonomic frontend API wrapper that exposes app-friendly calls on top of the generated client.</p>
+      
+    </section>
+    <section class="symbol-card searchable" id="apps-web-src-api-client-ts-logout" data-search="function logout No dedicated symbol docblock found; inherits file intent: Ergonomic frontend API wrapper that exposes app-friendly calls on top of the generated client. export async function logout( ">
+      <div class="symbol-head">
+        <div>
+          <p class="eyebrow">function · line 23</p>
+          <h4><code>logout</code></h4>
+        </div>
+        <a class="anchor-link" href="#apps-web-src-api-client-ts-logout">#</a>
+      </div>
+      <p class="symbol-signature"><code>export async function logout(</code></p>
+      <p class="overview">No dedicated symbol docblock found; inherits file intent: Ergonomic frontend API wrapper that exposes app-friendly calls on top of the generated client.</p>
+      
+    </section>
+    <section class="symbol-card searchable" id="apps-web-src-api-client-ts-listproducts" data-search="function listProducts No dedicated symbol docblock found; inherits file intent: Ergonomic frontend API wrapper that exposes app-friendly calls on top of the generated client. export async function listProducts( ">
+      <div class="symbol-head">
+        <div>
+          <p class="eyebrow">function · line 27</p>
+          <h4><code>listProducts</code></h4>
+        </div>
+        <a class="anchor-link" href="#apps-web-src-api-client-ts-listproducts">#</a>
+      </div>
+      <p class="symbol-signature"><code>export async function listProducts(</code></p>
+      <p class="overview">No dedicated symbol docblock found; inherits file intent: Ergonomic frontend API wrapper that exposes app-friendly calls on top of the generated client.</p>
+      
+    </section>
+    <section class="symbol-card searchable" id="apps-web-src-api-client-ts-getproduct" data-search="function getProduct No dedicated symbol docblock found; inherits file intent: Ergonomic frontend API wrapper that exposes app-friendly calls on top of the generated client. export async function getProduct( ">
+      <div class="symbol-head">
+        <div>
+          <p class="eyebrow">function · line 31</p>
+          <h4><code>getProduct</code></h4>
+        </div>
+        <a class="anchor-link" href="#apps-web-src-api-client-ts-getproduct">#</a>
+      </div>
+      <p class="symbol-signature"><code>export async function getProduct(</code></p>
+      <p class="overview">No dedicated symbol docblock found; inherits file intent: Ergonomic frontend API wrapper that exposes app-friendly calls on top of the generated client.</p>
+      
+    </section>
+    <section class="symbol-card searchable" id="apps-web-src-api-client-ts-getrelated" data-search="function getRelated No dedicated symbol docblock found; inherits file intent: Ergonomic frontend API wrapper that exposes app-friendly calls on top of the generated client. export async function getRelated( ">
+      <div class="symbol-head">
+        <div>
+          <p class="eyebrow">function · line 35</p>
+          <h4><code>getRelated</code></h4>
+        </div>
+        <a class="anchor-link" href="#apps-web-src-api-client-ts-getrelated">#</a>
+      </div>
+      <p class="symbol-signature"><code>export async function getRelated(</code></p>
+      <p class="overview">No dedicated symbol docblock found; inherits file intent: Ergonomic frontend API wrapper that exposes app-friendly calls on top of the generated client.</p>
+      
+    </section>
+    <section class="symbol-card searchable" id="apps-web-src-api-client-ts-getcartidentity" data-search="function getCartIdentity No dedicated symbol docblock found; inherits file intent: Ergonomic frontend API wrapper that exposes app-friendly calls on top of the generated client. export async function getCartIdentity( ">
+      <div class="symbol-head">
+        <div>
+          <p class="eyebrow">function · line 39</p>
+          <h4><code>getCartIdentity</code></h4>
+        </div>
+        <a class="anchor-link" href="#apps-web-src-api-client-ts-getcartidentity">#</a>
+      </div>
+      <p class="symbol-signature"><code>export async function getCartIdentity(</code></p>
+      <p class="overview">No dedicated symbol docblock found; inherits file intent: Ergonomic frontend API wrapper that exposes app-friendly calls on top of the generated client.</p>
+      
+    </section>
+    <section class="symbol-card searchable" id="apps-web-src-api-client-ts-getcart" data-search="function getCart No dedicated symbol docblock found; inherits file intent: Ergonomic frontend API wrapper that exposes app-friendly calls on top of the generated client. export async function getCart( ">
+      <div class="symbol-head">
+        <div>
+          <p class="eyebrow">function · line 43</p>
+          <h4><code>getCart</code></h4>
+        </div>
+        <a class="anchor-link" href="#apps-web-src-api-client-ts-getcart">#</a>
+      </div>
+      <p class="symbol-signature"><code>export async function getCart(</code></p>
+      <p class="overview">No dedicated symbol docblock found; inherits file intent: Ergonomic frontend API wrapper that exposes app-friendly calls on top of the generated client.</p>
+      
+    </section>
+    <section class="symbol-card searchable" id="apps-web-src-api-client-ts-getcartsummary" data-search="function getCartSummary No dedicated symbol docblock found; inherits file intent: Ergonomic frontend API wrapper that exposes app-friendly calls on top of the generated client. export async function getCartSummary( ">
+      <div class="symbol-head">
+        <div>
+          <p class="eyebrow">function · line 47</p>
+          <h4><code>getCartSummary</code></h4>
+        </div>
+        <a class="anchor-link" href="#apps-web-src-api-client-ts-getcartsummary">#</a>
+      </div>
+      <p class="symbol-signature"><code>export async function getCartSummary(</code></p>
+      <p class="overview">No dedicated symbol docblock found; inherits file intent: Ergonomic frontend API wrapper that exposes app-friendly calls on top of the generated client.</p>
+      
+    </section>
+    <section class="symbol-card searchable" id="apps-web-src-api-client-ts-addcartitem" data-search="function addCartItem No dedicated symbol docblock found; inherits file intent: Ergonomic frontend API wrapper that exposes app-friendly calls on top of the generated client. export async function addCartItem( ">
+      <div class="symbol-head">
+        <div>
+          <p class="eyebrow">function · line 51</p>
+          <h4><code>addCartItem</code></h4>
+        </div>
+        <a class="anchor-link" href="#apps-web-src-api-client-ts-addcartitem">#</a>
+      </div>
+      <p class="symbol-signature"><code>export async function addCartItem(</code></p>
+      <p class="overview">No dedicated symbol docblock found; inherits file intent: Ergonomic frontend API wrapper that exposes app-friendly calls on top of the generated client.</p>
+      
+    </section>
+    <section class="symbol-card searchable" id="apps-web-src-api-client-ts-updatecartitem" data-search="function updateCartItem No dedicated symbol docblock found; inherits file intent: Ergonomic frontend API wrapper that exposes app-friendly calls on top of the generated client. export async function updateCartItem( ">
+      <div class="symbol-head">
+        <div>
+          <p class="eyebrow">function · line 55</p>
+          <h4><code>updateCartItem</code></h4>
+        </div>
+        <a class="anchor-link" href="#apps-web-src-api-client-ts-updatecartitem">#</a>
+      </div>
+      <p class="symbol-signature"><code>export async function updateCartItem(</code></p>
+      <p class="overview">No dedicated symbol docblock found; inherits file intent: Ergonomic frontend API wrapper that exposes app-friendly calls on top of the generated client.</p>
+      
+    </section>
+    <section class="symbol-card searchable" id="apps-web-src-api-client-ts-removecartitem" data-search="function removeCartItem No dedicated symbol docblock found; inherits file intent: Ergonomic frontend API wrapper that exposes app-friendly calls on top of the generated client. export async function removeCartItem( ">
+      <div class="symbol-head">
+        <div>
+          <p class="eyebrow">function · line 59</p>
+          <h4><code>removeCartItem</code></h4>
+        </div>
+        <a class="anchor-link" href="#apps-web-src-api-client-ts-removecartitem">#</a>
+      </div>
+      <p class="symbol-signature"><code>export async function removeCartItem(</code></p>
+      <p class="overview">No dedicated symbol docblock found; inherits file intent: Ergonomic frontend API wrapper that exposes app-friendly calls on top of the generated client.</p>
+      
+    </section>
+    <section class="symbol-card searchable" id="apps-web-src-api-client-ts-getcheckoutsummary" data-search="function getCheckoutSummary No dedicated symbol docblock found; inherits file intent: Ergonomic frontend API wrapper that exposes app-friendly calls on top of the generated client. export async function getCheckoutSummary( ">
+      <div class="symbol-head">
+        <div>
+          <p class="eyebrow">function · line 63</p>
+          <h4><code>getCheckoutSummary</code></h4>
+        </div>
+        <a class="anchor-link" href="#apps-web-src-api-client-ts-getcheckoutsummary">#</a>
+      </div>
+      <p class="symbol-signature"><code>export async function getCheckoutSummary(</code></p>
+      <p class="overview">No dedicated symbol docblock found; inherits file intent: Ergonomic frontend API wrapper that exposes app-friendly calls on top of the generated client.</p>
+      
+    </section>
+    <section class="symbol-card searchable" id="apps-web-src-api-client-ts-validatecheckout" data-search="function validateCheckout No dedicated symbol docblock found; inherits file intent: Ergonomic frontend API wrapper that exposes app-friendly calls on top of the generated client. export async function validateCheckout( ">
+      <div class="symbol-head">
+        <div>
+          <p class="eyebrow">function · line 67</p>
+          <h4><code>validateCheckout</code></h4>
+        </div>
+        <a class="anchor-link" href="#apps-web-src-api-client-ts-validatecheckout">#</a>
+      </div>
+      <p class="symbol-signature"><code>export async function validateCheckout(</code></p>
+      <p class="overview">No dedicated symbol docblock found; inherits file intent: Ergonomic frontend API wrapper that exposes app-friendly calls on top of the generated client.</p>
+      
+    </section>
+    <section class="symbol-card searchable" id="apps-web-src-api-client-ts-submitcheckout" data-search="function submitCheckout No dedicated symbol docblock found; inherits file intent: Ergonomic frontend API wrapper that exposes app-friendly calls on top of the generated client. export async function submitCheckout( ">
+      <div class="symbol-head">
+        <div>
+          <p class="eyebrow">function · line 71</p>
+          <h4><code>submitCheckout</code></h4>
+        </div>
+        <a class="anchor-link" href="#apps-web-src-api-client-ts-submitcheckout">#</a>
+      </div>
+      <p class="symbol-signature"><code>export async function submitCheckout(</code></p>
+      <p class="overview">No dedicated symbol docblock found; inherits file intent: Ergonomic frontend API wrapper that exposes app-friendly calls on top of the generated client.</p>
+      
+    </section>
+    <section class="symbol-card searchable" id="apps-web-src-api-client-ts-getlibrary" data-search="function getLibrary No dedicated symbol docblock found; inherits file intent: Ergonomic frontend API wrapper that exposes app-friendly calls on top of the generated client. export async function getLibrary( ">
+      <div class="symbol-head">
+        <div>
+          <p class="eyebrow">function · line 81</p>
+          <h4><code>getLibrary</code></h4>
+        </div>
+        <a class="anchor-link" href="#apps-web-src-api-client-ts-getlibrary">#</a>
+      </div>
+      <p class="symbol-signature"><code>export async function getLibrary(</code></p>
+      <p class="overview">No dedicated symbol docblock found; inherits file intent: Ergonomic frontend API wrapper that exposes app-friendly calls on top of the generated client.</p>
+      
+    </section></div>
+              </div>
             </article>
-            <article class="card">
+            <article class="file-card searchable" id="apps-web-src-api-generated-ts" data-search="apps/web/src/api/generated.ts AUTO-GENERATED FILE. DO NOT EDIT MANUALLY. AUTO-GENERATED FILE. DO NOT EDIT MANUALLY. Source: apps/api/public/openapi.yaml Generator: apps/web/scripts/generate-api-client.mjs GeneratedApiClient generatedApiClient ./runtime">
               <div class="card-head">
-                <h3><code>apps/web/src/api/generated.ts</code></h3>
-                <span class="count-pill">4.5 KB</span>
+                <div>
+                  <p class="eyebrow">TS · 4.5 KB</p>
+                  <h3><code>apps/web/src/api/generated.ts</code></h3>
+                </div>
+                <a class="anchor-link" href="#apps-web-src-api-generated-ts">#</a>
               </div>
               <p class="overview">AUTO-GENERATED FILE. DO NOT EDIT MANUALLY.</p>
-              <p><strong>Declared symbols:</strong> <code>GeneratedApiClient</code>, <code>generatedApiClient</code></p>
-              <p><strong>Dependencies:</strong> <code>./runtime</code></p>
+              <div class="meta-grid">
+                <p><strong>Detected symbols:</strong> <code>GeneratedApiClient</code>, <code>generatedApiClient</code></p>
+                <p><strong>Dependencies:</strong> <code>./runtime</code></p>
+                <p class="muted tiny">Snapshot timestamp: 2026-03-15T09:51:20.000Z</p>
+              </div>
               <details>
                 <summary>Comment highlights</summary>
                 <ul><li>AUTO-GENERATED FILE. DO NOT EDIT MANUALLY. Source: apps/api/public/openapi.yaml Generator: apps/web/scripts/generate-api-client.mjs</li></ul>
               </details>
-              <p class="muted tiny">Snapshot timestamp: 2026-03-15T09:51:20.000Z</p>
+              <div class="symbol-section">
+                <div class="symbol-section-head">
+                  <h4>Documented symbols</h4>
+                  <span class="count-pill">2</span>
+                </div>
+                <div class="symbol-grid">
+    <section class="symbol-card searchable" id="apps-web-src-api-generated-ts-generatedapiclient" data-search="class GeneratedApiClient No dedicated symbol docblock found; inherits file intent: AUTO-GENERATED FILE. DO NOT EDIT MANUALLY. export class GeneratedApiClient ">
+      <div class="symbol-head">
+        <div>
+          <p class="eyebrow">class · line 21</p>
+          <h4><code>GeneratedApiClient</code></h4>
+        </div>
+        <a class="anchor-link" href="#apps-web-src-api-generated-ts-generatedapiclient">#</a>
+      </div>
+      <p class="symbol-signature"><code>export class GeneratedApiClient</code></p>
+      <p class="overview">No dedicated symbol docblock found; inherits file intent: AUTO-GENERATED FILE. DO NOT EDIT MANUALLY.</p>
+      
+    </section>
+    <section class="symbol-card searchable" id="apps-web-src-api-generated-ts-generatedapiclient" data-search="const generatedApiClient No dedicated symbol docblock found; inherits file intent: AUTO-GENERATED FILE. DO NOT EDIT MANUALLY. export const generatedApiClient = ">
+      <div class="symbol-head">
+        <div>
+          <p class="eyebrow">const · line 95</p>
+          <h4><code>generatedApiClient</code></h4>
+        </div>
+        <a class="anchor-link" href="#apps-web-src-api-generated-ts-generatedapiclient">#</a>
+      </div>
+      <p class="symbol-signature"><code>export const generatedApiClient =</code></p>
+      <p class="overview">No dedicated symbol docblock found; inherits file intent: AUTO-GENERATED FILE. DO NOT EDIT MANUALLY.</p>
+      
+    </section></div>
+              </div>
             </article>
-            <article class="card">
+            <article class="file-card searchable" id="apps-web-src-api-runtime-ts" data-search="apps/web/src/api/runtime.ts Shared fetch/runtime helpers used by the generated and ergonomic frontend API clients.  extractErrorMessage requestText buildUrl buildInit ../types">
               <div class="card-head">
-                <h3><code>apps/web/src/api/runtime.ts</code></h3>
-                <span class="count-pill">2.3 KB</span>
+                <div>
+                  <p class="eyebrow">TS · 2.3 KB</p>
+                  <h3><code>apps/web/src/api/runtime.ts</code></h3>
+                </div>
+                <a class="anchor-link" href="#apps-web-src-api-runtime-ts">#</a>
               </div>
               <p class="overview">Shared fetch/runtime helpers used by the generated and ergonomic frontend API clients.</p>
-              <p><strong>Declared symbols:</strong> <code>extractErrorMessage</code>, <code>requestText</code>, <code>buildUrl</code>, <code>buildInit</code></p>
-              <p><strong>Dependencies:</strong> <code>../types</code></p>
+              <div class="meta-grid">
+                <p><strong>Detected symbols:</strong> <code>extractErrorMessage</code>, <code>requestText</code>, <code>buildUrl</code>, <code>buildInit</code></p>
+                <p><strong>Dependencies:</strong> <code>../types</code></p>
+                <p class="muted tiny">Snapshot timestamp: 2026-03-15T10:09:58.000Z</p>
+              </div>
               <details>
                 <summary>Comment highlights</summary>
                 <p class="muted">No additional comment blocks were extracted from this file.</p>
               </details>
-              <p class="muted tiny">Snapshot timestamp: 2026-03-15T10:09:58.000Z</p>
+              <div class="symbol-section">
+                <div class="symbol-section-head">
+                  <h4>Documented symbols</h4>
+                  <span class="count-pill">5</span>
+                </div>
+                <div class="symbol-grid">
+    <section class="symbol-card searchable" id="apps-web-src-api-runtime-ts-api-base" data-search="const API_BASE No dedicated symbol docblock found; inherits file intent: Shared fetch/runtime helpers used by the generated and ergonomic frontend API clients. const API_BASE = ">
+      <div class="symbol-head">
+        <div>
+          <p class="eyebrow">const · line 6</p>
+          <h4><code>API_BASE</code></h4>
+        </div>
+        <a class="anchor-link" href="#apps-web-src-api-runtime-ts-api-base">#</a>
+      </div>
+      <p class="symbol-signature"><code>const API_BASE =</code></p>
+      <p class="overview">No dedicated symbol docblock found; inherits file intent: Shared fetch/runtime helpers used by the generated and ergonomic frontend API clients.</p>
+      
+    </section>
+    <section class="symbol-card searchable" id="apps-web-src-api-runtime-ts-buildurl" data-search="function buildUrl No dedicated symbol docblock found; inherits file intent: Shared fetch/runtime helpers used by the generated and ergonomic frontend API clients. function buildUrl( ">
+      <div class="symbol-head">
+        <div>
+          <p class="eyebrow">function · line 16</p>
+          <h4><code>buildUrl</code></h4>
+        </div>
+        <a class="anchor-link" href="#apps-web-src-api-runtime-ts-buildurl">#</a>
+      </div>
+      <p class="symbol-signature"><code>function buildUrl(</code></p>
+      <p class="overview">No dedicated symbol docblock found; inherits file intent: Shared fetch/runtime helpers used by the generated and ergonomic frontend API clients.</p>
+      
+    </section>
+    <section class="symbol-card searchable" id="apps-web-src-api-runtime-ts-extracterrormessage" data-search="function extractErrorMessage No dedicated symbol docblock found; inherits file intent: Shared fetch/runtime helpers used by the generated and ergonomic frontend API clients. export function extractErrorMessage( ">
+      <div class="symbol-head">
+        <div>
+          <p class="eyebrow">function · line 28</p>
+          <h4><code>extractErrorMessage</code></h4>
+        </div>
+        <a class="anchor-link" href="#apps-web-src-api-runtime-ts-extracterrormessage">#</a>
+      </div>
+      <p class="symbol-signature"><code>export function extractErrorMessage(</code></p>
+      <p class="overview">No dedicated symbol docblock found; inherits file intent: Shared fetch/runtime helpers used by the generated and ergonomic frontend API clients.</p>
+      
+    </section>
+    <section class="symbol-card searchable" id="apps-web-src-api-runtime-ts-buildinit" data-search="function buildInit No dedicated symbol docblock found; inherits file intent: Shared fetch/runtime helpers used by the generated and ergonomic frontend API clients. function buildInit( ">
+      <div class="symbol-head">
+        <div>
+          <p class="eyebrow">function · line 32</p>
+          <h4><code>buildInit</code></h4>
+        </div>
+        <a class="anchor-link" href="#apps-web-src-api-runtime-ts-buildinit">#</a>
+      </div>
+      <p class="symbol-signature"><code>function buildInit(</code></p>
+      <p class="overview">No dedicated symbol docblock found; inherits file intent: Shared fetch/runtime helpers used by the generated and ergonomic frontend API clients.</p>
+      
+    </section>
+    <section class="symbol-card searchable" id="apps-web-src-api-runtime-ts-requesttext" data-search="function requestText No dedicated symbol docblock found; inherits file intent: Shared fetch/runtime helpers used by the generated and ergonomic frontend API clients. export async function requestText( ">
+      <div class="symbol-head">
+        <div>
+          <p class="eyebrow">function · line 66</p>
+          <h4><code>requestText</code></h4>
+        </div>
+        <a class="anchor-link" href="#apps-web-src-api-runtime-ts-requesttext">#</a>
+      </div>
+      <p class="symbol-signature"><code>export async function requestText(</code></p>
+      <p class="overview">No dedicated symbol docblock found; inherits file intent: Shared fetch/runtime helpers used by the generated and ergonomic frontend API clients.</p>
+      
+    </section></div>
+              </div>
             </article>
         </div>
       </section>
-      <section class="group">
+      <section class="group searchable" data-search="apps/web/src/cart">
         <div class="group-head">
           <h2>apps/web/src/cart</h2>
           <span class="count-pill">1 file(s)</span>
         </div>
-        <div class="card-grid">
+        <div class="file-stack">
           
-            <article class="card">
+            <article class="file-card searchable" id="apps-web-src-cart-cartcontext-tsx" data-search="apps/web/src/cart/CartContext.tsx React context that keeps the header cart summary in sync with backend cart state.  CartProvider useCart react ../api/client ../types">
               <div class="card-head">
-                <h3><code>apps/web/src/cart/CartContext.tsx</code></h3>
-                <span class="count-pill">1.3 KB</span>
+                <div>
+                  <p class="eyebrow">TSX · 1.3 KB</p>
+                  <h3><code>apps/web/src/cart/CartContext.tsx</code></h3>
+                </div>
+                <a class="anchor-link" href="#apps-web-src-cart-cartcontext-tsx">#</a>
               </div>
               <p class="overview">React context that keeps the header cart summary in sync with backend cart state.</p>
-              <p><strong>Declared symbols:</strong> <code>CartProvider</code>, <code>useCart</code></p>
-              <p><strong>Dependencies:</strong> <code>react</code>, <code>../api/client</code>, <code>../types</code></p>
+              <div class="meta-grid">
+                <p><strong>Detected symbols:</strong> <code>CartProvider</code>, <code>useCart</code></p>
+                <p><strong>Dependencies:</strong> <code>react</code>, <code>../api/client</code>, <code>../types</code></p>
+                <p class="muted tiny">Snapshot timestamp: 2026-03-15T09:46:57.000Z</p>
+              </div>
               <details>
                 <summary>Comment highlights</summary>
                 <p class="muted">No additional comment blocks were extracted from this file.</p>
               </details>
-              <p class="muted tiny">Snapshot timestamp: 2026-03-15T09:46:57.000Z</p>
+              <div class="symbol-section">
+                <div class="symbol-section-head">
+                  <h4>Documented symbols</h4>
+                  <span class="count-pill">3</span>
+                </div>
+                <div class="symbol-grid">
+    <section class="symbol-card searchable" id="apps-web-src-cart-cartcontext-tsx-cartcontext" data-search="const CartContext No dedicated symbol docblock found; inherits file intent: React context that keeps the header cart summary in sync with backend cart state. const CartContext = ">
+      <div class="symbol-head">
+        <div>
+          <p class="eyebrow">const · line 15</p>
+          <h4><code>CartContext</code></h4>
+        </div>
+        <a class="anchor-link" href="#apps-web-src-cart-cartcontext-tsx-cartcontext">#</a>
+      </div>
+      <p class="symbol-signature"><code>const CartContext =</code></p>
+      <p class="overview">No dedicated symbol docblock found; inherits file intent: React context that keeps the header cart summary in sync with backend cart state.</p>
+      
+    </section>
+    <section class="symbol-card searchable" id="apps-web-src-cart-cartcontext-tsx-cartprovider" data-search="function CartProvider No dedicated symbol docblock found; inherits file intent: React context that keeps the header cart summary in sync with backend cart state. export function CartProvider( ">
+      <div class="symbol-head">
+        <div>
+          <p class="eyebrow">function · line 17</p>
+          <h4><code>CartProvider</code></h4>
+        </div>
+        <a class="anchor-link" href="#apps-web-src-cart-cartcontext-tsx-cartprovider">#</a>
+      </div>
+      <p class="symbol-signature"><code>export function CartProvider(</code></p>
+      <p class="overview">No dedicated symbol docblock found; inherits file intent: React context that keeps the header cart summary in sync with backend cart state.</p>
+      
+    </section>
+    <section class="symbol-card searchable" id="apps-web-src-cart-cartcontext-tsx-usecart" data-search="function useCart No dedicated symbol docblock found; inherits file intent: React context that keeps the header cart summary in sync with backend cart state. export function useCart( ">
+      <div class="symbol-head">
+        <div>
+          <p class="eyebrow">function · line 41</p>
+          <h4><code>useCart</code></h4>
+        </div>
+        <a class="anchor-link" href="#apps-web-src-cart-cartcontext-tsx-usecart">#</a>
+      </div>
+      <p class="symbol-signature"><code>export function useCart(</code></p>
+      <p class="overview">No dedicated symbol docblock found; inherits file intent: React context that keeps the header cart summary in sync with backend cart state.</p>
+      
+    </section></div>
+              </div>
             </article>
         </div>
       </section>
-      <section class="group">
+      <section class="group searchable" data-search="apps/web/src/pages">
         <div class="group-head">
           <h2>apps/web/src/pages</h2>
           <span class="count-pill">6 file(s)</span>
         </div>
-        <div class="card-grid">
+        <div class="file-stack">
           
-            <article class="card">
+            <article class="file-card searchable" id="apps-web-src-pages-cartpage-tsx" data-search="apps/web/src/pages/CartPage.tsx Cart UI for inspecting items, changing quantities, and navigating to checkout.  CartPage loadCart changeQuantity remove react react-router-dom ../api/client ../cart/CartContext ../types">
               <div class="card-head">
-                <h3><code>apps/web/src/pages/CartPage.tsx</code></h3>
-                <span class="count-pill">4.6 KB</span>
+                <div>
+                  <p class="eyebrow">TSX · 4.6 KB</p>
+                  <h3><code>apps/web/src/pages/CartPage.tsx</code></h3>
+                </div>
+                <a class="anchor-link" href="#apps-web-src-pages-cartpage-tsx">#</a>
               </div>
               <p class="overview">Cart UI for inspecting items, changing quantities, and navigating to checkout.</p>
-              <p><strong>Declared symbols:</strong> <code>CartPage</code>, <code>loadCart</code>, <code>changeQuantity</code>, <code>remove</code></p>
-              <p><strong>Dependencies:</strong> <code>react</code>, <code>react-router-dom</code>, <code>../api/client</code>, <code>../cart/CartContext</code>, <code>../types</code></p>
+              <div class="meta-grid">
+                <p><strong>Detected symbols:</strong> <code>CartPage</code>, <code>loadCart</code>, <code>changeQuantity</code>, <code>remove</code></p>
+                <p><strong>Dependencies:</strong> <code>react</code>, <code>react-router-dom</code>, <code>../api/client</code>, <code>../cart/CartContext</code>, <code>../types</code></p>
+                <p class="muted tiny">Snapshot timestamp: 2026-03-15T09:46:57.000Z</p>
+              </div>
               <details>
                 <summary>Comment highlights</summary>
                 <p class="muted">No additional comment blocks were extracted from this file.</p>
               </details>
-              <p class="muted tiny">Snapshot timestamp: 2026-03-15T09:46:57.000Z</p>
+              <div class="symbol-section">
+                <div class="symbol-section-head">
+                  <h4>Documented symbols</h4>
+                  <span class="count-pill">1</span>
+                </div>
+                <div class="symbol-grid">
+    <section class="symbol-card searchable" id="apps-web-src-pages-cartpage-tsx-cartpage" data-search="function CartPage No dedicated symbol docblock found; inherits file intent: Cart UI for inspecting items, changing quantities, and navigating to checkout. export function CartPage( ">
+      <div class="symbol-head">
+        <div>
+          <p class="eyebrow">function · line 11</p>
+          <h4><code>CartPage</code></h4>
+        </div>
+        <a class="anchor-link" href="#apps-web-src-pages-cartpage-tsx-cartpage">#</a>
+      </div>
+      <p class="symbol-signature"><code>export function CartPage(</code></p>
+      <p class="overview">No dedicated symbol docblock found; inherits file intent: Cart UI for inspecting items, changing quantities, and navigating to checkout.</p>
+      
+    </section></div>
+              </div>
             </article>
-            <article class="card">
+            <article class="file-card searchable" id="apps-web-src-pages-checkoutpage-tsx" data-search="apps/web/src/pages/CheckoutPage.tsx Checkout UI for summary, validation feedback, and order submission.  CheckoutPage fieldLabel loadSummary runValidation submitOrder react react-router-dom ../api/client ../types">
               <div class="card-head">
-                <h3><code>apps/web/src/pages/CheckoutPage.tsx</code></h3>
-                <span class="count-pill">11.8 KB</span>
+                <div>
+                  <p class="eyebrow">TSX · 11.8 KB</p>
+                  <h3><code>apps/web/src/pages/CheckoutPage.tsx</code></h3>
+                </div>
+                <a class="anchor-link" href="#apps-web-src-pages-checkoutpage-tsx">#</a>
               </div>
               <p class="overview">Checkout UI for summary, validation feedback, and order submission.</p>
-              <p><strong>Declared symbols:</strong> <code>CheckoutPage</code>, <code>fieldLabel</code>, <code>loadSummary</code>, <code>runValidation</code>, <code>submitOrder</code></p>
-              <p><strong>Dependencies:</strong> <code>react</code>, <code>react-router-dom</code>, <code>../api/client</code>, <code>../types</code></p>
+              <div class="meta-grid">
+                <p><strong>Detected symbols:</strong> <code>CheckoutPage</code>, <code>fieldLabel</code>, <code>loadSummary</code>, <code>runValidation</code>, <code>submitOrder</code></p>
+                <p><strong>Dependencies:</strong> <code>react</code>, <code>react-router-dom</code>, <code>../api/client</code>, <code>../types</code></p>
+                <p class="muted tiny">Snapshot timestamp: 2026-03-15T09:46:57.000Z</p>
+              </div>
               <details>
                 <summary>Comment highlights</summary>
                 <p class="muted">No additional comment blocks were extracted from this file.</p>
               </details>
-              <p class="muted tiny">Snapshot timestamp: 2026-03-15T09:46:57.000Z</p>
+              <div class="symbol-section">
+                <div class="symbol-section-head">
+                  <h4>Documented symbols</h4>
+                  <span class="count-pill">2</span>
+                </div>
+                <div class="symbol-grid">
+    <section class="symbol-card searchable" id="apps-web-src-pages-checkoutpage-tsx-fieldlabel" data-search="function fieldLabel No dedicated symbol docblock found; inherits file intent: Checkout UI for summary, validation feedback, and order submission. function fieldLabel( ">
+      <div class="symbol-head">
+        <div>
+          <p class="eyebrow">function · line 39</p>
+          <h4><code>fieldLabel</code></h4>
+        </div>
+        <a class="anchor-link" href="#apps-web-src-pages-checkoutpage-tsx-fieldlabel">#</a>
+      </div>
+      <p class="symbol-signature"><code>function fieldLabel(</code></p>
+      <p class="overview">No dedicated symbol docblock found; inherits file intent: Checkout UI for summary, validation feedback, and order submission.</p>
+      
+    </section>
+    <section class="symbol-card searchable" id="apps-web-src-pages-checkoutpage-tsx-checkoutpage" data-search="function CheckoutPage No dedicated symbol docblock found; inherits file intent: Checkout UI for summary, validation feedback, and order submission. export function CheckoutPage( ">
+      <div class="symbol-head">
+        <div>
+          <p class="eyebrow">function · line 43</p>
+          <h4><code>CheckoutPage</code></h4>
+        </div>
+        <a class="anchor-link" href="#apps-web-src-pages-checkoutpage-tsx-checkoutpage">#</a>
+      </div>
+      <p class="symbol-signature"><code>export function CheckoutPage(</code></p>
+      <p class="overview">No dedicated symbol docblock found; inherits file intent: Checkout UI for summary, validation feedback, and order submission.</p>
+      
+    </section></div>
+              </div>
             </article>
-            <article class="card">
+            <article class="file-card searchable" id="apps-web-src-pages-librarypage-tsx" data-search="apps/web/src/pages/LibraryPage.tsx Authenticated digital library screen for owned downloadable products.  LibraryPage loadLibrary react react-router-dom ../api/client ../types">
               <div class="card-head">
-                <h3><code>apps/web/src/pages/LibraryPage.tsx</code></h3>
-                <span class="count-pill">4.3 KB</span>
+                <div>
+                  <p class="eyebrow">TSX · 4.3 KB</p>
+                  <h3><code>apps/web/src/pages/LibraryPage.tsx</code></h3>
+                </div>
+                <a class="anchor-link" href="#apps-web-src-pages-librarypage-tsx">#</a>
               </div>
               <p class="overview">Authenticated digital library screen for owned downloadable products.</p>
-              <p><strong>Declared symbols:</strong> <code>LibraryPage</code>, <code>loadLibrary</code></p>
-              <p><strong>Dependencies:</strong> <code>react</code>, <code>react-router-dom</code>, <code>../api/client</code>, <code>../types</code></p>
+              <div class="meta-grid">
+                <p><strong>Detected symbols:</strong> <code>LibraryPage</code>, <code>loadLibrary</code></p>
+                <p><strong>Dependencies:</strong> <code>react</code>, <code>react-router-dom</code>, <code>../api/client</code>, <code>../types</code></p>
+                <p class="muted tiny">Snapshot timestamp: 2026-03-15T09:46:57.000Z</p>
+              </div>
               <details>
                 <summary>Comment highlights</summary>
                 <p class="muted">No additional comment blocks were extracted from this file.</p>
               </details>
-              <p class="muted tiny">Snapshot timestamp: 2026-03-15T09:46:57.000Z</p>
+              <div class="symbol-section">
+                <div class="symbol-section-head">
+                  <h4>Documented symbols</h4>
+                  <span class="count-pill">1</span>
+                </div>
+                <div class="symbol-grid">
+    <section class="symbol-card searchable" id="apps-web-src-pages-librarypage-tsx-librarypage" data-search="function LibraryPage No dedicated symbol docblock found; inherits file intent: Authenticated digital library screen for owned downloadable products. export function LibraryPage( ">
+      <div class="symbol-head">
+        <div>
+          <p class="eyebrow">function · line 10</p>
+          <h4><code>LibraryPage</code></h4>
+        </div>
+        <a class="anchor-link" href="#apps-web-src-pages-librarypage-tsx-librarypage">#</a>
+      </div>
+      <p class="symbol-signature"><code>export function LibraryPage(</code></p>
+      <p class="overview">No dedicated symbol docblock found; inherits file intent: Authenticated digital library screen for owned downloadable products.</p>
+      
+    </section></div>
+              </div>
             </article>
-            <article class="card">
+            <article class="file-card searchable" id="apps-web-src-pages-loginpage-tsx" data-search="apps/web/src/pages/LoginPage.tsx Simple login form for customer authentication.  LoginPage handleSubmit handleWhoAmI handleLogout react ../api/client ../types">
               <div class="card-head">
-                <h3><code>apps/web/src/pages/LoginPage.tsx</code></h3>
-                <span class="count-pill">2.3 KB</span>
+                <div>
+                  <p class="eyebrow">TSX · 2.3 KB</p>
+                  <h3><code>apps/web/src/pages/LoginPage.tsx</code></h3>
+                </div>
+                <a class="anchor-link" href="#apps-web-src-pages-loginpage-tsx">#</a>
               </div>
               <p class="overview">Simple login form for customer authentication.</p>
-              <p><strong>Declared symbols:</strong> <code>LoginPage</code>, <code>handleSubmit</code>, <code>handleWhoAmI</code>, <code>handleLogout</code></p>
-              <p><strong>Dependencies:</strong> <code>react</code>, <code>../api/client</code>, <code>../types</code></p>
+              <div class="meta-grid">
+                <p><strong>Detected symbols:</strong> <code>LoginPage</code>, <code>handleSubmit</code>, <code>handleWhoAmI</code>, <code>handleLogout</code></p>
+                <p><strong>Dependencies:</strong> <code>react</code>, <code>../api/client</code>, <code>../types</code></p>
+                <p class="muted tiny">Snapshot timestamp: 2026-03-15T09:46:57.000Z</p>
+              </div>
               <details>
                 <summary>Comment highlights</summary>
                 <p class="muted">No additional comment blocks were extracted from this file.</p>
               </details>
-              <p class="muted tiny">Snapshot timestamp: 2026-03-15T09:46:57.000Z</p>
+              <div class="symbol-section">
+                <div class="symbol-section-head">
+                  <h4>Documented symbols</h4>
+                  <span class="count-pill">1</span>
+                </div>
+                <div class="symbol-grid">
+    <section class="symbol-card searchable" id="apps-web-src-pages-loginpage-tsx-loginpage" data-search="function LoginPage No dedicated symbol docblock found; inherits file intent: Simple login form for customer authentication. export function LoginPage( ">
+      <div class="symbol-head">
+        <div>
+          <p class="eyebrow">function · line 9</p>
+          <h4><code>LoginPage</code></h4>
+        </div>
+        <a class="anchor-link" href="#apps-web-src-pages-loginpage-tsx-loginpage">#</a>
+      </div>
+      <p class="symbol-signature"><code>export function LoginPage(</code></p>
+      <p class="overview">No dedicated symbol docblock found; inherits file intent: Simple login form for customer authentication.</p>
+      
+    </section></div>
+              </div>
             </article>
-            <article class="card">
+            <article class="file-card searchable" id="apps-web-src-pages-productdetailpage-tsx" data-search="apps/web/src/pages/ProductDetailPage.tsx Product detail page with related products and add-to-cart action.  ProductDetailPage load handleAddToCart react react-router-dom ../api/client ../cart/CartContext ../types">
               <div class="card-head">
-                <h3><code>apps/web/src/pages/ProductDetailPage.tsx</code></h3>
-                <span class="count-pill">3.6 KB</span>
+                <div>
+                  <p class="eyebrow">TSX · 3.6 KB</p>
+                  <h3><code>apps/web/src/pages/ProductDetailPage.tsx</code></h3>
+                </div>
+                <a class="anchor-link" href="#apps-web-src-pages-productdetailpage-tsx">#</a>
               </div>
               <p class="overview">Product detail page with related products and add-to-cart action.</p>
-              <p><strong>Declared symbols:</strong> <code>ProductDetailPage</code>, <code>load</code>, <code>handleAddToCart</code></p>
-              <p><strong>Dependencies:</strong> <code>react</code>, <code>react-router-dom</code>, <code>../api/client</code>, <code>../cart/CartContext</code>, <code>../types</code></p>
+              <div class="meta-grid">
+                <p><strong>Detected symbols:</strong> <code>ProductDetailPage</code>, <code>load</code>, <code>handleAddToCart</code></p>
+                <p><strong>Dependencies:</strong> <code>react</code>, <code>react-router-dom</code>, <code>../api/client</code>, <code>../cart/CartContext</code>, <code>../types</code></p>
+                <p class="muted tiny">Snapshot timestamp: 2026-03-15T09:46:57.000Z</p>
+              </div>
               <details>
                 <summary>Comment highlights</summary>
                 <p class="muted">No additional comment blocks were extracted from this file.</p>
               </details>
-              <p class="muted tiny">Snapshot timestamp: 2026-03-15T09:46:57.000Z</p>
+              <div class="symbol-section">
+                <div class="symbol-section-head">
+                  <h4>Documented symbols</h4>
+                  <span class="count-pill">1</span>
+                </div>
+                <div class="symbol-grid">
+    <section class="symbol-card searchable" id="apps-web-src-pages-productdetailpage-tsx-productdetailpage" data-search="function ProductDetailPage No dedicated symbol docblock found; inherits file intent: Product detail page with related products and add-to-cart action. export function ProductDetailPage( ">
+      <div class="symbol-head">
+        <div>
+          <p class="eyebrow">function · line 11</p>
+          <h4><code>ProductDetailPage</code></h4>
+        </div>
+        <a class="anchor-link" href="#apps-web-src-pages-productdetailpage-tsx-productdetailpage">#</a>
+      </div>
+      <p class="symbol-signature"><code>export function ProductDetailPage(</code></p>
+      <p class="overview">No dedicated symbol docblock found; inherits file intent: Product detail page with related products and add-to-cart action.</p>
+      
+    </section></div>
+              </div>
             </article>
-            <article class="card">
+            <article class="file-card searchable" id="apps-web-src-pages-productlistpage-tsx" data-search="apps/web/src/pages/ProductListPage.tsx Product catalog list page used as the storefront landing view.  ProductListPage load handleAddToCart react react-router-dom ../api/client ../cart/CartContext ../types">
               <div class="card-head">
-                <h3><code>apps/web/src/pages/ProductListPage.tsx</code></h3>
-                <span class="count-pill">3.1 KB</span>
+                <div>
+                  <p class="eyebrow">TSX · 3.1 KB</p>
+                  <h3><code>apps/web/src/pages/ProductListPage.tsx</code></h3>
+                </div>
+                <a class="anchor-link" href="#apps-web-src-pages-productlistpage-tsx">#</a>
               </div>
               <p class="overview">Product catalog list page used as the storefront landing view.</p>
-              <p><strong>Declared symbols:</strong> <code>ProductListPage</code>, <code>load</code>, <code>handleAddToCart</code></p>
-              <p><strong>Dependencies:</strong> <code>react</code>, <code>react-router-dom</code>, <code>../api/client</code>, <code>../cart/CartContext</code>, <code>../types</code></p>
+              <div class="meta-grid">
+                <p><strong>Detected symbols:</strong> <code>ProductListPage</code>, <code>load</code>, <code>handleAddToCart</code></p>
+                <p><strong>Dependencies:</strong> <code>react</code>, <code>react-router-dom</code>, <code>../api/client</code>, <code>../cart/CartContext</code>, <code>../types</code></p>
+                <p class="muted tiny">Snapshot timestamp: 2026-03-15T09:46:57.000Z</p>
+              </div>
               <details>
                 <summary>Comment highlights</summary>
                 <p class="muted">No additional comment blocks were extracted from this file.</p>
               </details>
-              <p class="muted tiny">Snapshot timestamp: 2026-03-15T09:46:57.000Z</p>
+              <div class="symbol-section">
+                <div class="symbol-section-head">
+                  <h4>Documented symbols</h4>
+                  <span class="count-pill">1</span>
+                </div>
+                <div class="symbol-grid">
+    <section class="symbol-card searchable" id="apps-web-src-pages-productlistpage-tsx-productlistpage" data-search="function ProductListPage No dedicated symbol docblock found; inherits file intent: Product catalog list page used as the storefront landing view. export function ProductListPage( ">
+      <div class="symbol-head">
+        <div>
+          <p class="eyebrow">function · line 11</p>
+          <h4><code>ProductListPage</code></h4>
+        </div>
+        <a class="anchor-link" href="#apps-web-src-pages-productlistpage-tsx-productlistpage">#</a>
+      </div>
+      <p class="symbol-signature"><code>export function ProductListPage(</code></p>
+      <p class="overview">No dedicated symbol docblock found; inherits file intent: Product catalog list page used as the storefront landing view.</p>
+      
+    </section></div>
+              </div>
             </article>
         </div>
       </section>
+        </div>
+      </div>
     </main>
+    <script>
+      const searchInput = document.getElementById('page-search');
+      const searchable = Array.from(document.querySelectorAll('.searchable'));
+      if (searchInput) {
+        searchInput.addEventListener('input', () => {
+          const query = searchInput.value.trim().toLowerCase();
+          searchable.forEach((element) => {
+            const haystack = (element.getAttribute('data-search') || '').toLowerCase();
+            element.classList.toggle('is-hidden', query && !haystack.includes(query));
+          });
+        });
+      }
+    </script>
   </body>
 </html>

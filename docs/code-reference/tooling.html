@@ -10,171 +10,1181 @@
         --bg: #020617;
         --panel: rgba(15, 23, 42, 0.92);
         --panel-strong: rgba(17, 24, 39, 0.94);
+        --panel-soft: rgba(30, 41, 59, 0.86);
         --text: #e5e7eb;
         --muted: #94a3b8;
         --accent: #60a5fa;
+        --accent-soft: rgba(96, 165, 250, 0.16);
         --border: rgba(148, 163, 184, 0.24);
+        --shadow: 0 18px 40px rgba(0, 0, 0, 0.22);
       }
       * { box-sizing: border-box; }
+      html { scroll-behavior: smooth; }
       body {
         margin: 0;
-        font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
         background: linear-gradient(180deg, #020617 0%, #111827 100%);
         color: var(--text);
       }
-      a { color: var(--accent); }
-      .shell { max-width: 1280px; margin: 0 auto; padding: 32px 20px 64px; }
-      .hero, .group, .card {
+      a { color: var(--accent); text-decoration: none; }
+      a:hover { text-decoration: underline; }
+      code { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', monospace; }
+      .page-shell { max-width: 1520px; margin: 0 auto; padding: 24px 20px 64px; }
+      .hero, .group, .file-card, .sidebar-panel, .symbol-card {
         border: 1px solid var(--border);
         border-radius: 24px;
         background: var(--panel);
-        box-shadow: 0 18px 40px rgba(0, 0, 0, 0.22);
+        box-shadow: var(--shadow);
       }
-      .hero { padding: 28px; }
-      .hero h1 { margin: 0 0 10px; font-size: 2rem; }
-      .hero p { margin: 0 0 10px; line-height: 1.6; color: var(--muted); }
+      .hero { padding: 28px; margin-bottom: 24px; }
+      .hero h1 { margin: 0 0 10px; font-size: clamp(2rem, 4vw, 2.8rem); }
+      .hero p { margin: 0 0 12px; line-height: 1.6; color: var(--muted); }
       .nav-row { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 18px; }
       .nav-pill {
         display: inline-flex; align-items: center; justify-content: center; text-decoration: none;
         border-radius: 999px; border: 1px solid var(--border); padding: 8px 12px; background: rgba(30, 41, 59, 0.8);
       }
-      .nav-pill.active { background: rgba(96, 165, 250, 0.16); color: #dbeafe; }
-      .group { margin-top: 24px; padding: 20px; }
-      .group-head, .card-head {
-        display: flex; align-items: center; justify-content: space-between; gap: 12px;
+      .nav-pill.active { background: var(--accent-soft); color: #dbeafe; }
+      .layout { display: grid; grid-template-columns: minmax(260px, 320px) minmax(0, 1fr); gap: 24px; align-items: start; }
+      .sticky { position: sticky; top: 24px; }
+      .sidebar-panel { padding: 20px; }
+      .sidebar-panel h2 { margin: 0 0 8px; }
+      .small { font-size: 0.92rem; }
+      .search-input {
+        width: 100%; margin: 14px 0 18px; padding: 12px 14px; border-radius: 14px;
+        border: 1px solid var(--border); background: rgba(2, 6, 23, 0.65); color: var(--text);
       }
-      .card-grid {
-        display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 16px; margin-top: 16px;
+      .sidebar-nav { max-height: calc(100vh - 220px); overflow: auto; padding-right: 6px; }
+      .sidebar-group + .sidebar-group { margin-top: 18px; }
+      .sidebar-group h3 { margin: 0 0 8px; font-size: 0.95rem; color: #bfdbfe; }
+      .sidebar-group ul { margin: 0; padding-left: 18px; line-height: 1.45; }
+      .symbol-list { margin-top: 6px; }
+      .content { display: grid; gap: 24px; }
+      .group { padding: 20px; }
+      .group-head, .card-head, .symbol-head, .symbol-section-head {
+        display: flex; align-items: start; justify-content: space-between; gap: 12px;
       }
-      .card { background: var(--panel-strong); padding: 18px; }
-      .card h3, .group h2 { margin: 0; }
+      .group h2, .file-card h3, .symbol-card h4 { margin: 0; }
+      .file-stack { display: grid; gap: 18px; margin-top: 16px; }
+      .file-card { padding: 20px; background: var(--panel-strong); }
       .overview { line-height: 1.6; }
+      .meta-grid { display: grid; gap: 8px; margin: 14px 0; }
       .count-pill {
         display: inline-flex; align-items: center; justify-content: center; padding: 4px 10px; border-radius: 999px;
-        background: rgba(96, 165, 250, 0.15); color: #bfdbfe; font-size: 0.85rem;
+        background: var(--accent-soft); color: #bfdbfe; font-size: 0.85rem;
       }
       .muted { color: var(--muted); }
       .tiny { font-size: 0.8rem; }
+      .eyebrow { margin: 0 0 6px; color: #93c5fd; font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.08em; }
       details { margin-top: 14px; border-top: 1px solid var(--border); padding-top: 12px; }
       summary { cursor: pointer; }
-      code { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; }
-      ul { padding-left: 18px; line-height: 1.5; }
+      .symbol-section { margin-top: 20px; border-top: 1px solid var(--border); padding-top: 16px; }
+      .symbol-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 14px; margin-top: 14px; }
+      .symbol-card { background: var(--panel-soft); padding: 16px; }
+      .symbol-signature { margin: 10px 0; padding: 10px 12px; border-radius: 14px; background: rgba(2, 6, 23, 0.5); overflow: auto; }
+      .anchor-link {
+        display: inline-flex; align-items: center; justify-content: center; width: 34px; height: 34px;
+        border-radius: 999px; border: 1px solid var(--border); background: rgba(2, 6, 23, 0.45);
+      }
+      .tags-block ul { padding-left: 18px; line-height: 1.5; }
+      .is-hidden { display: none !important; }
+      @media (max-width: 980px) {
+        .layout { grid-template-columns: 1fr; }
+        .sticky { position: static; }
+        .sidebar-nav { max-height: none; }
+      }
     </style>
   </head>
   <body>
-    <main class="shell">
+    <main class="page-shell">
       <section class="hero">
         <h1>Tooling Code Reference</h1>
         <p>Restore/smoke/documentation automation that keeps the developer workflow reproducible.</p>
-        <p class="muted">Generated automatically by <code>scripts/docs/generate-code-reference.mjs</code>.</p>
+        <p class="muted">Generated automatically by <code>scripts/docs/generate-code-reference.mjs</code>. Use the search box to filter files and documented symbols on this page.</p>
         <div class="nav-row">
           <a class="nav-pill" href="./index.html">Index</a>
           <a class="nav-pill" href="./backend.html">Backend Code Reference</a><a class="nav-pill" href="./frontend.html">Frontend Code Reference</a><span class="nav-pill active">Tooling Code Reference</span>
         </div>
       </section>
-      
-      <section class="group">
+      <div class="layout">
+        
+    <aside class="sidebar">
+      <div class="sidebar-panel sticky">
+        <h2>Tooling Code Reference</h2>
+        <p class="muted small">Jump through files and documented symbols without opening the source tree.</p>
+        <input id="page-search" class="search-input" type="search" placeholder="Search files, symbols, comments..." autocomplete="off" />
+        <nav class="sidebar-nav">
+          
+            <section class="sidebar-group">
+              <h3>scripts/db</h3>
+              <ul>
+                
+                  <li>
+                    <a href="#scripts-db-restore-legacy-sh">restore-legacy.sh</a>
+                    <ul class="symbol-list"><li><a href="#scripts-db-restore-legacy-sh-psql-exec">psql_exec</a></li><li><a href="#scripts-db-restore-legacy-sh-filter-sql-dump">filter_sql_dump</a></li><li><a href="#scripts-db-restore-legacy-sh-stream-sql">stream_sql</a></li></ul>
+                  </li>
+                  <li>
+                    <a href="#scripts-db-smoke-api-sh">smoke-api.sh</a>
+                    
+                  </li>
+                  <li>
+                    <a href="#scripts-db-verify-legacy-sh">verify-legacy.sh</a>
+                    <ul class="symbol-list"><li><a href="#scripts-db-verify-legacy-sh-check-sql">check_sql</a></li><li><a href="#scripts-db-verify-legacy-sh-require-equals">require_equals</a></li><li><a href="#scripts-db-verify-legacy-sh-require-table">require_table</a></li><li><a href="#scripts-db-verify-legacy-sh-require-function">require_function</a></li></ul>
+                  </li>
+              </ul>
+            </section>
+            <section class="sidebar-group">
+              <h3>scripts/docs</h3>
+              <ul>
+                
+                  <li>
+                    <a href="#scripts-docs-generate-code-reference-mjs">generate-code-reference.mjs</a>
+                    <ul class="symbol-list"><li><a href="#scripts-docs-generate-code-reference-mjs-filename">__filename</a></li><li><a href="#scripts-docs-generate-code-reference-mjs-dirname">__dirname</a></li><li><a href="#scripts-docs-generate-code-reference-mjs-root">root</a></li><li><a href="#scripts-docs-generate-code-reference-mjs-outputdir">outputDir</a></li><li><a href="#scripts-docs-generate-code-reference-mjs-sections">sections</a></li><li><a href="#scripts-docs-generate-code-reference-mjs-allowedextensions">allowedExtensions</a></li><li><a href="#scripts-docs-generate-code-reference-mjs-walk">walk</a></li><li><a href="#scripts-docs-generate-code-reference-mjs-ensuredir">ensureDir</a></li><li><a href="#scripts-docs-generate-code-reference-mjs-readtext">readText</a></li><li><a href="#scripts-docs-generate-code-reference-mjs-escapehtml">escapeHtml</a></li><li><a href="#scripts-docs-generate-code-reference-mjs-slugify">slugify</a></li><li><a href="#scripts-docs-generate-code-reference-mjs-buildlineindex">buildLineIndex</a></li><li><a href="#scripts-docs-generate-code-reference-mjs-indextoline">indexToLine</a></li><li><a href="#scripts-docs-generate-code-reference-mjs-extractfileoverview">extractFileOverview</a></li><li><a href="#scripts-docs-generate-code-reference-mjs-normalizedoclines">normalizeDocLines</a></li><li><a href="#scripts-docs-generate-code-reference-mjs-summarizedoclines">summarizeDocLines</a></li><li><a href="#scripts-docs-generate-code-reference-mjs-extractcommenthighlights">extractCommentHighlights</a></li><li><a href="#scripts-docs-generate-code-reference-mjs-extractdependencies">extractDependencies</a></li><li><a href="#scripts-docs-generate-code-reference-mjs-extractgenericsymbols">extractGenericSymbols</a></li><li><a href="#scripts-docs-generate-code-reference-mjs-declarationpatterns">declarationPatterns</a></li><li><a href="#scripts-docs-generate-code-reference-mjs-symbolkindfromdeclaration">symbolKindFromDeclaration</a></li><li><a href="#scripts-docs-generate-code-reference-mjs-nearestlinecomment">nearestLineComment</a></li><li><a href="#scripts-docs-generate-code-reference-mjs-mergesymbolrecords">mergeSymbolRecords</a></li><li><a href="#scripts-docs-generate-code-reference-mjs-findfallbacksymbols">findFallbackSymbols</a></li><li><a href="#scripts-docs-generate-code-reference-mjs-parsedocblockdetails">parseDocBlockDetails</a></li><li><a href="#scripts-docs-generate-code-reference-mjs-declarationdetails">declarationDetails</a></li><li><a href="#scripts-docs-generate-code-reference-mjs-finddocsymbols">findDocSymbols</a></li><li><a href="#scripts-docs-generate-code-reference-mjs-collectentries">collectEntries</a></li><li><a href="#scripts-docs-generate-code-reference-mjs-groupentries">groupEntries</a></li><li><a href="#scripts-docs-generate-code-reference-mjs-sectionnavigation">sectionNavigation</a></li><li><a href="#scripts-docs-generate-code-reference-mjs-rendersymboltag">renderSymbolTag</a></li><li><a href="#scripts-docs-generate-code-reference-mjs-rendersymbol">renderSymbol</a></li><li><a href="#scripts-docs-generate-code-reference-mjs-rendersidebar">renderSidebar</a></li><li><a href="#scripts-docs-generate-code-reference-mjs-rendersection">renderSection</a></li><li><a href="#scripts-docs-generate-code-reference-mjs-renderindex">renderIndex</a></li><li><a href="#scripts-docs-generate-code-reference-mjs-sectionsummaries">sectionSummaries</a></li><li><a href="#scripts-docs-generate-code-reference-mjs-indexpath">indexPath</a></li></ul>
+                  </li>
+                  <li>
+                    <a href="#scripts-docs-generate-docs-mjs">generate-docs.mjs</a>
+                    <ul class="symbol-list"><li><a href="#scripts-docs-generate-docs-mjs-filename">__filename</a></li><li><a href="#scripts-docs-generate-docs-mjs-dirname">__dirname</a></li><li><a href="#scripts-docs-generate-docs-mjs-root">root</a></li><li><a href="#scripts-docs-generate-docs-mjs-makefilepath">makefilePath</a></li><li><a href="#scripts-docs-generate-docs-mjs-webpackagepath">webPackagePath</a></li><li><a href="#scripts-docs-generate-docs-mjs-openapipath">openapiPath</a></li><li><a href="#scripts-docs-generate-docs-mjs-handbookpath">handbookPath</a></li><li><a href="#scripts-docs-generate-docs-mjs-docsindexpath">docsIndexPath</a></li><li><a href="#scripts-docs-generate-docs-mjs-readjson">readJson</a></li><li><a href="#scripts-docs-generate-docs-mjs-parsemaketargets">parseMakeTargets</a></li><li><a href="#scripts-docs-generate-docs-mjs-parseopenapiendpoints">parseOpenapiEndpoints</a></li><li><a href="#scripts-docs-generate-docs-mjs-bulletlist">bulletList</a></li><li><a href="#scripts-docs-generate-docs-mjs-maketargets">makeTargets</a></li><li><a href="#scripts-docs-generate-docs-mjs-webpackage">webPackage</a></li><li><a href="#scripts-docs-generate-docs-mjs-webscripts">webScripts</a></li><li><a href="#scripts-docs-generate-docs-mjs-endpoints">endpoints</a></li><li><a href="#scripts-docs-generate-docs-mjs-generatedat">generatedAt</a></li><li><a href="#scripts-docs-generate-docs-mjs-handbook">handbook</a></li><li><a href="#scripts-docs-generate-docs-mjs-docsindex">docsIndex</a></li></ul>
+                  </li>
+                  <li>
+                    <a href="#scripts-docs-verify-source-comments-mjs">verify-source-comments.mjs</a>
+                    <ul class="symbol-list"><li><a href="#scripts-docs-verify-source-comments-mjs-filename">__filename</a></li><li><a href="#scripts-docs-verify-source-comments-mjs-dirname">__dirname</a></li><li><a href="#scripts-docs-verify-source-comments-mjs-root">root</a></li><li><a href="#scripts-docs-verify-source-comments-mjs-includeroots">includeRoots</a></li><li><a href="#scripts-docs-verify-source-comments-mjs-allowedextensions">allowedExtensions</a></li><li><a href="#scripts-docs-verify-source-comments-mjs-failures">failures</a></li><li><a href="#scripts-docs-verify-source-comments-mjs-walk">walk</a></li></ul>
+                  </li>
+              </ul>
+            </section>
+        </nav>
+      </div>
+    </aside>
+        <div class="content" id="search-scope">
+          
+      <section class="group searchable" data-search="scripts/db">
         <div class="group-head">
           <h2>scripts/db</h2>
           <span class="count-pill">3 file(s)</span>
         </div>
-        <div class="card-grid">
+        <div class="file-stack">
           
-            <article class="card">
+            <article class="file-card searchable" id="scripts-db-restore-legacy-sh" data-search="scripts/db/restore-legacy.sh Restores the legacy CCM and Columbia Games PostgreSQL dumps into the local development databases.  psql_exec filter_sql_dump stream_sql ">
               <div class="card-head">
-                <h3><code>scripts/db/restore-legacy.sh</code></h3>
-                <span class="count-pill">3.5 KB</span>
+                <div>
+                  <p class="eyebrow">SH · 3.5 KB</p>
+                  <h3><code>scripts/db/restore-legacy.sh</code></h3>
+                </div>
+                <a class="anchor-link" href="#scripts-db-restore-legacy-sh">#</a>
               </div>
               <p class="overview">Restores the legacy CCM and Columbia Games PostgreSQL dumps into the local development databases.</p>
-              <p><strong>Declared symbols:</strong> <code>psql_exec</code>, <code>filter_sql_dump</code>, <code>stream_sql</code></p>
-              
+              <div class="meta-grid">
+                <p><strong>Detected symbols:</strong> <code>psql_exec</code>, <code>filter_sql_dump</code>, <code>stream_sql</code></p>
+                
+                <p class="muted tiny">Snapshot timestamp: 2026-03-15T10:09:58.000Z</p>
+              </div>
               <details>
                 <summary>Comment highlights</summary>
                 <p class="muted">No additional comment blocks were extracted from this file.</p>
               </details>
-              <p class="muted tiny">Snapshot timestamp: 2026-03-15T10:09:58.000Z</p>
+              <div class="symbol-section">
+                <div class="symbol-section-head">
+                  <h4>Documented symbols</h4>
+                  <span class="count-pill">3</span>
+                </div>
+                <div class="symbol-grid">
+    <section class="symbol-card searchable" id="scripts-db-restore-legacy-sh-psql-exec" data-search="function psql_exec No nearby shell comment was found for this function. psql_exec() { ">
+      <div class="symbol-head">
+        <div>
+          <p class="eyebrow">function · line 33</p>
+          <h4><code>psql_exec</code></h4>
+        </div>
+        <a class="anchor-link" href="#scripts-db-restore-legacy-sh-psql-exec">#</a>
+      </div>
+      <p class="symbol-signature"><code>psql_exec() {</code></p>
+      <p class="overview">No nearby shell comment was found for this function.</p>
+      
+    </section>
+    <section class="symbol-card searchable" id="scripts-db-restore-legacy-sh-filter-sql-dump" data-search="function filter_sql_dump No nearby shell comment was found for this function. filter_sql_dump() { ">
+      <div class="symbol-head">
+        <div>
+          <p class="eyebrow">function · line 37</p>
+          <h4><code>filter_sql_dump</code></h4>
+        </div>
+        <a class="anchor-link" href="#scripts-db-restore-legacy-sh-filter-sql-dump">#</a>
+      </div>
+      <p class="symbol-signature"><code>filter_sql_dump() {</code></p>
+      <p class="overview">No nearby shell comment was found for this function.</p>
+      
+    </section>
+    <section class="symbol-card searchable" id="scripts-db-restore-legacy-sh-stream-sql" data-search="function stream_sql No nearby shell comment was found for this function. stream_sql() { ">
+      <div class="symbol-head">
+        <div>
+          <p class="eyebrow">function · line 95</p>
+          <h4><code>stream_sql</code></h4>
+        </div>
+        <a class="anchor-link" href="#scripts-db-restore-legacy-sh-stream-sql">#</a>
+      </div>
+      <p class="symbol-signature"><code>stream_sql() {</code></p>
+      <p class="overview">No nearby shell comment was found for this function.</p>
+      
+    </section></div>
+              </div>
             </article>
-            <article class="card">
+            <article class="file-card searchable" id="scripts-db-smoke-api-sh" data-search="scripts/db/smoke-api.sh Exercises the critical API flows after restore so regressions surface immediately.   ">
               <div class="card-head">
-                <h3><code>scripts/db/smoke-api.sh</code></h3>
-                <span class="count-pill">7.5 KB</span>
+                <div>
+                  <p class="eyebrow">SH · 7.5 KB</p>
+                  <h3><code>scripts/db/smoke-api.sh</code></h3>
+                </div>
+                <a class="anchor-link" href="#scripts-db-smoke-api-sh">#</a>
               </div>
               <p class="overview">Exercises the critical API flows after restore so regressions surface immediately.</p>
-              
-              
+              <div class="meta-grid">
+                
+                
+                <p class="muted tiny">Snapshot timestamp: 2026-03-15T10:09:58.000Z</p>
+              </div>
               <details>
                 <summary>Comment highlights</summary>
                 <p class="muted">No additional comment blocks were extracted from this file.</p>
               </details>
-              <p class="muted tiny">Snapshot timestamp: 2026-03-15T10:09:58.000Z</p>
+              <div class="symbol-section">
+                <div class="symbol-section-head">
+                  <h4>Documented symbols</h4>
+                  <span class="count-pill">0</span>
+                </div>
+                <p class="muted">No class/function-level doc block was paired with a declaration in this file yet.</p>
+              </div>
             </article>
-            <article class="card">
+            <article class="file-card searchable" id="scripts-db-verify-legacy-sh" data-search="scripts/db/verify-legacy.sh Verifies that the expected legacy tables and functions exist before application smoke tests run.  check_sql require_equals require_table require_function ">
               <div class="card-head">
-                <h3><code>scripts/db/verify-legacy.sh</code></h3>
-                <span class="count-pill">1.8 KB</span>
+                <div>
+                  <p class="eyebrow">SH · 1.8 KB</p>
+                  <h3><code>scripts/db/verify-legacy.sh</code></h3>
+                </div>
+                <a class="anchor-link" href="#scripts-db-verify-legacy-sh">#</a>
               </div>
               <p class="overview">Verifies that the expected legacy tables and functions exist before application smoke tests run.</p>
-              <p><strong>Declared symbols:</strong> <code>check_sql</code>, <code>require_equals</code>, <code>require_table</code>, <code>require_function</code></p>
-              
+              <div class="meta-grid">
+                <p><strong>Detected symbols:</strong> <code>check_sql</code>, <code>require_equals</code>, <code>require_table</code>, <code>require_function</code></p>
+                
+                <p class="muted tiny">Snapshot timestamp: 2026-03-15T10:09:58.000Z</p>
+              </div>
               <details>
                 <summary>Comment highlights</summary>
                 <p class="muted">No additional comment blocks were extracted from this file.</p>
               </details>
-              <p class="muted tiny">Snapshot timestamp: 2026-03-15T10:09:58.000Z</p>
+              <div class="symbol-section">
+                <div class="symbol-section-head">
+                  <h4>Documented symbols</h4>
+                  <span class="count-pill">4</span>
+                </div>
+                <div class="symbol-grid">
+    <section class="symbol-card searchable" id="scripts-db-verify-legacy-sh-check-sql" data-search="function check_sql No nearby shell comment was found for this function. check_sql() { ">
+      <div class="symbol-head">
+        <div>
+          <p class="eyebrow">function · line 13</p>
+          <h4><code>check_sql</code></h4>
+        </div>
+        <a class="anchor-link" href="#scripts-db-verify-legacy-sh-check-sql">#</a>
+      </div>
+      <p class="symbol-signature"><code>check_sql() {</code></p>
+      <p class="overview">No nearby shell comment was found for this function.</p>
+      
+    </section>
+    <section class="symbol-card searchable" id="scripts-db-verify-legacy-sh-require-equals" data-search="function require_equals No nearby shell comment was found for this function. require_equals() { ">
+      <div class="symbol-head">
+        <div>
+          <p class="eyebrow">function · line 19</p>
+          <h4><code>require_equals</code></h4>
+        </div>
+        <a class="anchor-link" href="#scripts-db-verify-legacy-sh-require-equals">#</a>
+      </div>
+      <p class="symbol-signature"><code>require_equals() {</code></p>
+      <p class="overview">No nearby shell comment was found for this function.</p>
+      
+    </section>
+    <section class="symbol-card searchable" id="scripts-db-verify-legacy-sh-require-table" data-search="function require_table No nearby shell comment was found for this function. require_table() { ">
+      <div class="symbol-head">
+        <div>
+          <p class="eyebrow">function · line 30</p>
+          <h4><code>require_table</code></h4>
+        </div>
+        <a class="anchor-link" href="#scripts-db-verify-legacy-sh-require-table">#</a>
+      </div>
+      <p class="symbol-signature"><code>require_table() {</code></p>
+      <p class="overview">No nearby shell comment was found for this function.</p>
+      
+    </section>
+    <section class="symbol-card searchable" id="scripts-db-verify-legacy-sh-require-function" data-search="function require_function No nearby shell comment was found for this function. require_function() { ">
+      <div class="symbol-head">
+        <div>
+          <p class="eyebrow">function · line 38</p>
+          <h4><code>require_function</code></h4>
+        </div>
+        <a class="anchor-link" href="#scripts-db-verify-legacy-sh-require-function">#</a>
+      </div>
+      <p class="symbol-signature"><code>require_function() {</code></p>
+      <p class="overview">No nearby shell comment was found for this function.</p>
+      
+    </section></div>
+              </div>
             </article>
         </div>
       </section>
-      <section class="group">
+      <section class="group searchable" data-search="scripts/docs">
         <div class="group-head">
           <h2>scripts/docs</h2>
           <span class="count-pill">3 file(s)</span>
         </div>
-        <div class="card-grid">
+        <div class="file-stack">
           
-            <article class="card">
+            <article class="file-card searchable" id="scripts-docs-generate-code-reference-mjs" data-search="scripts/docs/generate-code-reference.mjs Generates searchable HTML code-reference pages with file-level and symbol-level views for frontend, backend, and tooling sources.  walk ensureDir readText escapeHtml slugify buildLineIndex indexToLine extractFileOverview normalizeDocLines summarizeDocLines extractCommentHighlights extractDependencies extractGenericSymbols declarationPatterns symbolKindFromDeclaration nearestLineComment mergeSymbolRecords findFallbackSymbols parseDocBlockDetails declarationDetails node:fs node:path node:url">
               <div class="card-head">
-                <h3><code>scripts/docs/generate-code-reference.mjs</code></h3>
-                <span class="count-pill">14.4 KB</span>
+                <div>
+                  <p class="eyebrow">MJS · 29.5 KB</p>
+                  <h3><code>scripts/docs/generate-code-reference.mjs</code></h3>
+                </div>
+                <a class="anchor-link" href="#scripts-docs-generate-code-reference-mjs">#</a>
               </div>
-              <p class="overview">Generates a browsable HTML code reference from top-of-file source comments so frontend/backend intent is easy to inspect without opening every source file manually.</p>
-              <p><strong>Declared symbols:</strong> <code>walk</code>, <code>escapeHtml</code>, <code>readText</code>, <code>extractFileOverview</code>, <code>extractCommentHighlights</code>, <code>extractSymbols</code>, <code>extractDependencies</code>, <code>collectEntries</code>, <code>groupEntries</code>, <code>sectionNavigation</code>, <code>renderSection</code>, <code>renderIndex</code></p>
-              <p><strong>Dependencies:</strong> <code>node:fs</code>, <code>node:path</code>, <code>node:url</code></p>
+              <p class="overview">Generates searchable HTML code-reference pages with file-level and symbol-level views for frontend, backend, and tooling sources.</p>
+              <div class="meta-grid">
+                <p><strong>Detected symbols:</strong> <code>walk</code>, <code>ensureDir</code>, <code>readText</code>, <code>escapeHtml</code>, <code>slugify</code>, <code>buildLineIndex</code>, <code>indexToLine</code>, <code>extractFileOverview</code>, <code>normalizeDocLines</code>, <code>summarizeDocLines</code>, <code>extractCommentHighlights</code>, <code>extractDependencies</code>, <code>extractGenericSymbols</code>, <code>declarationPatterns</code>, <code>symbolKindFromDeclaration</code>, <code>nearestLineComment</code>, <code>mergeSymbolRecords</code>, <code>findFallbackSymbols</code>, <code>parseDocBlockDetails</code>, <code>declarationDetails</code></p>
+                <p><strong>Dependencies:</strong> <code>node:fs</code>, <code>node:path</code>, <code>node:url</code></p>
+                <p class="muted tiny">Snapshot timestamp: 2026-03-15T09:20:26.000Z</p>
+              </div>
               <details>
                 <summary>Comment highlights</summary>
                 <p class="muted">No additional comment blocks were extracted from this file.</p>
               </details>
-              <p class="muted tiny">Snapshot timestamp: 2026-03-15T10:09:56.000Z</p>
+              <div class="symbol-section">
+                <div class="symbol-section-head">
+                  <h4>Documented symbols</h4>
+                  <span class="count-pill">37</span>
+                </div>
+                <div class="symbol-grid">
+    <section class="symbol-card searchable" id="scripts-docs-generate-code-reference-mjs-filename" data-search="const __filename No dedicated symbol docblock found; inherits file intent: Generates searchable HTML code-reference pages with file-level and symbol-level views for frontend, backend, and tooling sources. const __filename = ">
+      <div class="symbol-head">
+        <div>
+          <p class="eyebrow">const · line 8</p>
+          <h4><code>__filename</code></h4>
+        </div>
+        <a class="anchor-link" href="#scripts-docs-generate-code-reference-mjs-filename">#</a>
+      </div>
+      <p class="symbol-signature"><code>const __filename =</code></p>
+      <p class="overview">No dedicated symbol docblock found; inherits file intent: Generates searchable HTML code-reference pages with file-level and symbol-level views for frontend, backend, and tooling sources.</p>
+      
+    </section>
+    <section class="symbol-card searchable" id="scripts-docs-generate-code-reference-mjs-dirname" data-search="const __dirname No dedicated symbol docblock found; inherits file intent: Generates searchable HTML code-reference pages with file-level and symbol-level views for frontend, backend, and tooling sources. const __dirname = ">
+      <div class="symbol-head">
+        <div>
+          <p class="eyebrow">const · line 9</p>
+          <h4><code>__dirname</code></h4>
+        </div>
+        <a class="anchor-link" href="#scripts-docs-generate-code-reference-mjs-dirname">#</a>
+      </div>
+      <p class="symbol-signature"><code>const __dirname =</code></p>
+      <p class="overview">No dedicated symbol docblock found; inherits file intent: Generates searchable HTML code-reference pages with file-level and symbol-level views for frontend, backend, and tooling sources.</p>
+      
+    </section>
+    <section class="symbol-card searchable" id="scripts-docs-generate-code-reference-mjs-root" data-search="const root No dedicated symbol docblock found; inherits file intent: Generates searchable HTML code-reference pages with file-level and symbol-level views for frontend, backend, and tooling sources. const root = ">
+      <div class="symbol-head">
+        <div>
+          <p class="eyebrow">const · line 10</p>
+          <h4><code>root</code></h4>
+        </div>
+        <a class="anchor-link" href="#scripts-docs-generate-code-reference-mjs-root">#</a>
+      </div>
+      <p class="symbol-signature"><code>const root =</code></p>
+      <p class="overview">No dedicated symbol docblock found; inherits file intent: Generates searchable HTML code-reference pages with file-level and symbol-level views for frontend, backend, and tooling sources.</p>
+      
+    </section>
+    <section class="symbol-card searchable" id="scripts-docs-generate-code-reference-mjs-outputdir" data-search="const outputDir No dedicated symbol docblock found; inherits file intent: Generates searchable HTML code-reference pages with file-level and symbol-level views for frontend, backend, and tooling sources. const outputDir = ">
+      <div class="symbol-head">
+        <div>
+          <p class="eyebrow">const · line 11</p>
+          <h4><code>outputDir</code></h4>
+        </div>
+        <a class="anchor-link" href="#scripts-docs-generate-code-reference-mjs-outputdir">#</a>
+      </div>
+      <p class="symbol-signature"><code>const outputDir =</code></p>
+      <p class="overview">No dedicated symbol docblock found; inherits file intent: Generates searchable HTML code-reference pages with file-level and symbol-level views for frontend, backend, and tooling sources.</p>
+      
+    </section>
+    <section class="symbol-card searchable" id="scripts-docs-generate-code-reference-mjs-sections" data-search="const sections No dedicated symbol docblock found; inherits file intent: Generates searchable HTML code-reference pages with file-level and symbol-level views for frontend, backend, and tooling sources. const sections = ">
+      <div class="symbol-head">
+        <div>
+          <p class="eyebrow">const · line 13</p>
+          <h4><code>sections</code></h4>
+        </div>
+        <a class="anchor-link" href="#scripts-docs-generate-code-reference-mjs-sections">#</a>
+      </div>
+      <p class="symbol-signature"><code>const sections =</code></p>
+      <p class="overview">No dedicated symbol docblock found; inherits file intent: Generates searchable HTML code-reference pages with file-level and symbol-level views for frontend, backend, and tooling sources.</p>
+      
+    </section>
+    <section class="symbol-card searchable" id="scripts-docs-generate-code-reference-mjs-allowedextensions" data-search="const allowedExtensions No dedicated symbol docblock found; inherits file intent: Generates searchable HTML code-reference pages with file-level and symbol-level views for frontend, backend, and tooling sources. const allowedExtensions = ">
+      <div class="symbol-head">
+        <div>
+          <p class="eyebrow">const · line 34</p>
+          <h4><code>allowedExtensions</code></h4>
+        </div>
+        <a class="anchor-link" href="#scripts-docs-generate-code-reference-mjs-allowedextensions">#</a>
+      </div>
+      <p class="symbol-signature"><code>const allowedExtensions =</code></p>
+      <p class="overview">No dedicated symbol docblock found; inherits file intent: Generates searchable HTML code-reference pages with file-level and symbol-level views for frontend, backend, and tooling sources.</p>
+      
+    </section>
+    <section class="symbol-card searchable" id="scripts-docs-generate-code-reference-mjs-walk" data-search="function walk No dedicated symbol docblock found; inherits file intent: Generates searchable HTML code-reference pages with file-level and symbol-level views for frontend, backend, and tooling sources. function walk( ">
+      <div class="symbol-head">
+        <div>
+          <p class="eyebrow">function · line 36</p>
+          <h4><code>walk</code></h4>
+        </div>
+        <a class="anchor-link" href="#scripts-docs-generate-code-reference-mjs-walk">#</a>
+      </div>
+      <p class="symbol-signature"><code>function walk(</code></p>
+      <p class="overview">No dedicated symbol docblock found; inherits file intent: Generates searchable HTML code-reference pages with file-level and symbol-level views for frontend, backend, and tooling sources.</p>
+      
+    </section>
+    <section class="symbol-card searchable" id="scripts-docs-generate-code-reference-mjs-ensuredir" data-search="function ensureDir No dedicated symbol docblock found; inherits file intent: Generates searchable HTML code-reference pages with file-level and symbol-level views for frontend, backend, and tooling sources. function ensureDir( ">
+      <div class="symbol-head">
+        <div>
+          <p class="eyebrow">function · line 57</p>
+          <h4><code>ensureDir</code></h4>
+        </div>
+        <a class="anchor-link" href="#scripts-docs-generate-code-reference-mjs-ensuredir">#</a>
+      </div>
+      <p class="symbol-signature"><code>function ensureDir(</code></p>
+      <p class="overview">No dedicated symbol docblock found; inherits file intent: Generates searchable HTML code-reference pages with file-level and symbol-level views for frontend, backend, and tooling sources.</p>
+      
+    </section>
+    <section class="symbol-card searchable" id="scripts-docs-generate-code-reference-mjs-readtext" data-search="function readText No dedicated symbol docblock found; inherits file intent: Generates searchable HTML code-reference pages with file-level and symbol-level views for frontend, backend, and tooling sources. function readText( ">
+      <div class="symbol-head">
+        <div>
+          <p class="eyebrow">function · line 61</p>
+          <h4><code>readText</code></h4>
+        </div>
+        <a class="anchor-link" href="#scripts-docs-generate-code-reference-mjs-readtext">#</a>
+      </div>
+      <p class="symbol-signature"><code>function readText(</code></p>
+      <p class="overview">No dedicated symbol docblock found; inherits file intent: Generates searchable HTML code-reference pages with file-level and symbol-level views for frontend, backend, and tooling sources.</p>
+      
+    </section>
+    <section class="symbol-card searchable" id="scripts-docs-generate-code-reference-mjs-escapehtml" data-search="function escapeHtml No dedicated symbol docblock found; inherits file intent: Generates searchable HTML code-reference pages with file-level and symbol-level views for frontend, backend, and tooling sources. function escapeHtml( ">
+      <div class="symbol-head">
+        <div>
+          <p class="eyebrow">function · line 65</p>
+          <h4><code>escapeHtml</code></h4>
+        </div>
+        <a class="anchor-link" href="#scripts-docs-generate-code-reference-mjs-escapehtml">#</a>
+      </div>
+      <p class="symbol-signature"><code>function escapeHtml(</code></p>
+      <p class="overview">No dedicated symbol docblock found; inherits file intent: Generates searchable HTML code-reference pages with file-level and symbol-level views for frontend, backend, and tooling sources.</p>
+      
+    </section>
+    <section class="symbol-card searchable" id="scripts-docs-generate-code-reference-mjs-slugify" data-search="function slugify No dedicated symbol docblock found; inherits file intent: Generates searchable HTML code-reference pages with file-level and symbol-level views for frontend, backend, and tooling sources. function slugify( ">
+      <div class="symbol-head">
+        <div>
+          <p class="eyebrow">function · line 74</p>
+          <h4><code>slugify</code></h4>
+        </div>
+        <a class="anchor-link" href="#scripts-docs-generate-code-reference-mjs-slugify">#</a>
+      </div>
+      <p class="symbol-signature"><code>function slugify(</code></p>
+      <p class="overview">No dedicated symbol docblock found; inherits file intent: Generates searchable HTML code-reference pages with file-level and symbol-level views for frontend, backend, and tooling sources.</p>
+      
+    </section>
+    <section class="symbol-card searchable" id="scripts-docs-generate-code-reference-mjs-buildlineindex" data-search="function buildLineIndex No dedicated symbol docblock found; inherits file intent: Generates searchable HTML code-reference pages with file-level and symbol-level views for frontend, backend, and tooling sources. function buildLineIndex( ">
+      <div class="symbol-head">
+        <div>
+          <p class="eyebrow">function · line 81</p>
+          <h4><code>buildLineIndex</code></h4>
+        </div>
+        <a class="anchor-link" href="#scripts-docs-generate-code-reference-mjs-buildlineindex">#</a>
+      </div>
+      <p class="symbol-signature"><code>function buildLineIndex(</code></p>
+      <p class="overview">No dedicated symbol docblock found; inherits file intent: Generates searchable HTML code-reference pages with file-level and symbol-level views for frontend, backend, and tooling sources.</p>
+      
+    </section>
+    <section class="symbol-card searchable" id="scripts-docs-generate-code-reference-mjs-indextoline" data-search="function indexToLine No dedicated symbol docblock found; inherits file intent: Generates searchable HTML code-reference pages with file-level and symbol-level views for frontend, backend, and tooling sources. function indexToLine( ">
+      <div class="symbol-head">
+        <div>
+          <p class="eyebrow">function · line 91</p>
+          <h4><code>indexToLine</code></h4>
+        </div>
+        <a class="anchor-link" href="#scripts-docs-generate-code-reference-mjs-indextoline">#</a>
+      </div>
+      <p class="symbol-signature"><code>function indexToLine(</code></p>
+      <p class="overview">No dedicated symbol docblock found; inherits file intent: Generates searchable HTML code-reference pages with file-level and symbol-level views for frontend, backend, and tooling sources.</p>
+      
+    </section>
+    <section class="symbol-card searchable" id="scripts-docs-generate-code-reference-mjs-extractfileoverview" data-search="function extractFileOverview No dedicated symbol docblock found; inherits file intent: Generates searchable HTML code-reference pages with file-level and symbol-level views for frontend, backend, and tooling sources. function extractFileOverview( ">
+      <div class="symbol-head">
+        <div>
+          <p class="eyebrow">function · line 108</p>
+          <h4><code>extractFileOverview</code></h4>
+        </div>
+        <a class="anchor-link" href="#scripts-docs-generate-code-reference-mjs-extractfileoverview">#</a>
+      </div>
+      <p class="symbol-signature"><code>function extractFileOverview(</code></p>
+      <p class="overview">No dedicated symbol docblock found; inherits file intent: Generates searchable HTML code-reference pages with file-level and symbol-level views for frontend, backend, and tooling sources.</p>
+      
+    </section>
+    <section class="symbol-card searchable" id="scripts-docs-generate-code-reference-mjs-normalizedoclines" data-search="function normalizeDocLines No dedicated symbol docblock found; inherits file intent: Generates searchable HTML code-reference pages with file-level and symbol-level views for frontend, backend, and tooling sources. function normalizeDocLines( ">
+      <div class="symbol-head">
+        <div>
+          <p class="eyebrow">function · line 133</p>
+          <h4><code>normalizeDocLines</code></h4>
+        </div>
+        <a class="anchor-link" href="#scripts-docs-generate-code-reference-mjs-normalizedoclines">#</a>
+      </div>
+      <p class="symbol-signature"><code>function normalizeDocLines(</code></p>
+      <p class="overview">No dedicated symbol docblock found; inherits file intent: Generates searchable HTML code-reference pages with file-level and symbol-level views for frontend, backend, and tooling sources.</p>
+      
+    </section>
+    <section class="symbol-card searchable" id="scripts-docs-generate-code-reference-mjs-summarizedoclines" data-search="function summarizeDocLines No dedicated symbol docblock found; inherits file intent: Generates searchable HTML code-reference pages with file-level and symbol-level views for frontend, backend, and tooling sources. function summarizeDocLines( ">
+      <div class="symbol-head">
+        <div>
+          <p class="eyebrow">function · line 140</p>
+          <h4><code>summarizeDocLines</code></h4>
+        </div>
+        <a class="anchor-link" href="#scripts-docs-generate-code-reference-mjs-summarizedoclines">#</a>
+      </div>
+      <p class="symbol-signature"><code>function summarizeDocLines(</code></p>
+      <p class="overview">No dedicated symbol docblock found; inherits file intent: Generates searchable HTML code-reference pages with file-level and symbol-level views for frontend, backend, and tooling sources.</p>
+      
+    </section>
+    <section class="symbol-card searchable" id="scripts-docs-generate-code-reference-mjs-extractcommenthighlights" data-search="function extractCommentHighlights No dedicated symbol docblock found; inherits file intent: Generates searchable HTML code-reference pages with file-level and symbol-level views for frontend, backend, and tooling sources. function extractCommentHighlights( ">
+      <div class="symbol-head">
+        <div>
+          <p class="eyebrow">function · line 153</p>
+          <h4><code>extractCommentHighlights</code></h4>
+        </div>
+        <a class="anchor-link" href="#scripts-docs-generate-code-reference-mjs-extractcommenthighlights">#</a>
+      </div>
+      <p class="symbol-signature"><code>function extractCommentHighlights(</code></p>
+      <p class="overview">No dedicated symbol docblock found; inherits file intent: Generates searchable HTML code-reference pages with file-level and symbol-level views for frontend, backend, and tooling sources.</p>
+      
+    </section>
+    <section class="symbol-card searchable" id="scripts-docs-generate-code-reference-mjs-extractdependencies" data-search="function extractDependencies No dedicated symbol docblock found; inherits file intent: Generates searchable HTML code-reference pages with file-level and symbol-level views for frontend, backend, and tooling sources. function extractDependencies( ">
+      <div class="symbol-head">
+        <div>
+          <p class="eyebrow">function · line 176</p>
+          <h4><code>extractDependencies</code></h4>
+        </div>
+        <a class="anchor-link" href="#scripts-docs-generate-code-reference-mjs-extractdependencies">#</a>
+      </div>
+      <p class="symbol-signature"><code>function extractDependencies(</code></p>
+      <p class="overview">No dedicated symbol docblock found; inherits file intent: Generates searchable HTML code-reference pages with file-level and symbol-level views for frontend, backend, and tooling sources.</p>
+      
+    </section>
+    <section class="symbol-card searchable" id="scripts-docs-generate-code-reference-mjs-extractgenericsymbols" data-search="function extractGenericSymbols No dedicated symbol docblock found; inherits file intent: Generates searchable HTML code-reference pages with file-level and symbol-level views for frontend, backend, and tooling sources. function extractGenericSymbols( ">
+      <div class="symbol-head">
+        <div>
+          <p class="eyebrow">function · line 195</p>
+          <h4><code>extractGenericSymbols</code></h4>
+        </div>
+        <a class="anchor-link" href="#scripts-docs-generate-code-reference-mjs-extractgenericsymbols">#</a>
+      </div>
+      <p class="symbol-signature"><code>function extractGenericSymbols(</code></p>
+      <p class="overview">No dedicated symbol docblock found; inherits file intent: Generates searchable HTML code-reference pages with file-level and symbol-level views for frontend, backend, and tooling sources.</p>
+      
+    </section>
+    <section class="symbol-card searchable" id="scripts-docs-generate-code-reference-mjs-declarationpatterns" data-search="function declarationPatterns No dedicated symbol docblock found; inherits file intent: Generates searchable HTML code-reference pages with file-level and symbol-level views for frontend, backend, and tooling sources. function declarationPatterns( ">
+      <div class="symbol-head">
+        <div>
+          <p class="eyebrow">function · line 236</p>
+          <h4><code>declarationPatterns</code></h4>
+        </div>
+        <a class="anchor-link" href="#scripts-docs-generate-code-reference-mjs-declarationpatterns">#</a>
+      </div>
+      <p class="symbol-signature"><code>function declarationPatterns(</code></p>
+      <p class="overview">No dedicated symbol docblock found; inherits file intent: Generates searchable HTML code-reference pages with file-level and symbol-level views for frontend, backend, and tooling sources.</p>
+      
+    </section>
+    <section class="symbol-card searchable" id="scripts-docs-generate-code-reference-mjs-symbolkindfromdeclaration" data-search="function symbolKindFromDeclaration No dedicated symbol docblock found; inherits file intent: Generates searchable HTML code-reference pages with file-level and symbol-level views for frontend, backend, and tooling sources. function symbolKindFromDeclaration( ">
+      <div class="symbol-head">
+        <div>
+          <p class="eyebrow">function · line 256</p>
+          <h4><code>symbolKindFromDeclaration</code></h4>
+        </div>
+        <a class="anchor-link" href="#scripts-docs-generate-code-reference-mjs-symbolkindfromdeclaration">#</a>
+      </div>
+      <p class="symbol-signature"><code>function symbolKindFromDeclaration(</code></p>
+      <p class="overview">No dedicated symbol docblock found; inherits file intent: Generates searchable HTML code-reference pages with file-level and symbol-level views for frontend, backend, and tooling sources.</p>
+      
+    </section>
+    <section class="symbol-card searchable" id="scripts-docs-generate-code-reference-mjs-nearestlinecomment" data-search="function nearestLineComment No dedicated symbol docblock found; inherits file intent: Generates searchable HTML code-reference pages with file-level and symbol-level views for frontend, backend, and tooling sources. function nearestLineComment( ">
+      <div class="symbol-head">
+        <div>
+          <p class="eyebrow">function · line 261</p>
+          <h4><code>nearestLineComment</code></h4>
+        </div>
+        <a class="anchor-link" href="#scripts-docs-generate-code-reference-mjs-nearestlinecomment">#</a>
+      </div>
+      <p class="symbol-signature"><code>function nearestLineComment(</code></p>
+      <p class="overview">No dedicated symbol docblock found; inherits file intent: Generates searchable HTML code-reference pages with file-level and symbol-level views for frontend, backend, and tooling sources.</p>
+      
+    </section>
+    <section class="symbol-card searchable" id="scripts-docs-generate-code-reference-mjs-mergesymbolrecords" data-search="function mergeSymbolRecords No dedicated symbol docblock found; inherits file intent: Generates searchable HTML code-reference pages with file-level and symbol-level views for frontend, backend, and tooling sources. function mergeSymbolRecords( ">
+      <div class="symbol-head">
+        <div>
+          <p class="eyebrow">function · line 279</p>
+          <h4><code>mergeSymbolRecords</code></h4>
+        </div>
+        <a class="anchor-link" href="#scripts-docs-generate-code-reference-mjs-mergesymbolrecords">#</a>
+      </div>
+      <p class="symbol-signature"><code>function mergeSymbolRecords(</code></p>
+      <p class="overview">No dedicated symbol docblock found; inherits file intent: Generates searchable HTML code-reference pages with file-level and symbol-level views for frontend, backend, and tooling sources.</p>
+      
+    </section>
+    <section class="symbol-card searchable" id="scripts-docs-generate-code-reference-mjs-findfallbacksymbols" data-search="function findFallbackSymbols No dedicated symbol docblock found; inherits file intent: Generates searchable HTML code-reference pages with file-level and symbol-level views for frontend, backend, and tooling sources. function findFallbackSymbols( ">
+      <div class="symbol-head">
+        <div>
+          <p class="eyebrow">function · line 292</p>
+          <h4><code>findFallbackSymbols</code></h4>
+        </div>
+        <a class="anchor-link" href="#scripts-docs-generate-code-reference-mjs-findfallbacksymbols">#</a>
+      </div>
+      <p class="symbol-signature"><code>function findFallbackSymbols(</code></p>
+      <p class="overview">No dedicated symbol docblock found; inherits file intent: Generates searchable HTML code-reference pages with file-level and symbol-level views for frontend, backend, and tooling sources.</p>
+      
+    </section>
+    <section class="symbol-card searchable" id="scripts-docs-generate-code-reference-mjs-parsedocblockdetails" data-search="function parseDocBlockDetails No dedicated symbol docblock found; inherits file intent: Generates searchable HTML code-reference pages with file-level and symbol-level views for frontend, backend, and tooling sources. function parseDocBlockDetails( ">
+      <div class="symbol-head">
+        <div>
+          <p class="eyebrow">function · line 320</p>
+          <h4><code>parseDocBlockDetails</code></h4>
+        </div>
+        <a class="anchor-link" href="#scripts-docs-generate-code-reference-mjs-parsedocblockdetails">#</a>
+      </div>
+      <p class="symbol-signature"><code>function parseDocBlockDetails(</code></p>
+      <p class="overview">No dedicated symbol docblock found; inherits file intent: Generates searchable HTML code-reference pages with file-level and symbol-level views for frontend, backend, and tooling sources.</p>
+      
+    </section>
+    <section class="symbol-card searchable" id="scripts-docs-generate-code-reference-mjs-declarationdetails" data-search="function declarationDetails No dedicated symbol docblock found; inherits file intent: Generates searchable HTML code-reference pages with file-level and symbol-level views for frontend, backend, and tooling sources. function declarationDetails( ">
+      <div class="symbol-head">
+        <div>
+          <p class="eyebrow">function · line 333</p>
+          <h4><code>declarationDetails</code></h4>
+        </div>
+        <a class="anchor-link" href="#scripts-docs-generate-code-reference-mjs-declarationdetails">#</a>
+      </div>
+      <p class="symbol-signature"><code>function declarationDetails(</code></p>
+      <p class="overview">No dedicated symbol docblock found; inherits file intent: Generates searchable HTML code-reference pages with file-level and symbol-level views for frontend, backend, and tooling sources.</p>
+      
+    </section>
+    <section class="symbol-card searchable" id="scripts-docs-generate-code-reference-mjs-finddocsymbols" data-search="function findDocSymbols No dedicated symbol docblock found; inherits file intent: Generates searchable HTML code-reference pages with file-level and symbol-level views for frontend, backend, and tooling sources. function findDocSymbols( ">
+      <div class="symbol-head">
+        <div>
+          <p class="eyebrow">function · line 363</p>
+          <h4><code>findDocSymbols</code></h4>
+        </div>
+        <a class="anchor-link" href="#scripts-docs-generate-code-reference-mjs-finddocsymbols">#</a>
+      </div>
+      <p class="symbol-signature"><code>function findDocSymbols(</code></p>
+      <p class="overview">No dedicated symbol docblock found; inherits file intent: Generates searchable HTML code-reference pages with file-level and symbol-level views for frontend, backend, and tooling sources.</p>
+      
+    </section>
+    <section class="symbol-card searchable" id="scripts-docs-generate-code-reference-mjs-collectentries" data-search="function collectEntries No dedicated symbol docblock found; inherits file intent: Generates searchable HTML code-reference pages with file-level and symbol-level views for frontend, backend, and tooling sources. function collectEntries( ">
+      <div class="symbol-head">
+        <div>
+          <p class="eyebrow">function · line 434</p>
+          <h4><code>collectEntries</code></h4>
+        </div>
+        <a class="anchor-link" href="#scripts-docs-generate-code-reference-mjs-collectentries">#</a>
+      </div>
+      <p class="symbol-signature"><code>function collectEntries(</code></p>
+      <p class="overview">No dedicated symbol docblock found; inherits file intent: Generates searchable HTML code-reference pages with file-level and symbol-level views for frontend, backend, and tooling sources.</p>
+      
+    </section>
+    <section class="symbol-card searchable" id="scripts-docs-generate-code-reference-mjs-groupentries" data-search="function groupEntries No dedicated symbol docblock found; inherits file intent: Generates searchable HTML code-reference pages with file-level and symbol-level views for frontend, backend, and tooling sources. function groupEntries( ">
+      <div class="symbol-head">
+        <div>
+          <p class="eyebrow">function · line 464</p>
+          <h4><code>groupEntries</code></h4>
+        </div>
+        <a class="anchor-link" href="#scripts-docs-generate-code-reference-mjs-groupentries">#</a>
+      </div>
+      <p class="symbol-signature"><code>function groupEntries(</code></p>
+      <p class="overview">No dedicated symbol docblock found; inherits file intent: Generates searchable HTML code-reference pages with file-level and symbol-level views for frontend, backend, and tooling sources.</p>
+      
+    </section>
+    <section class="symbol-card searchable" id="scripts-docs-generate-code-reference-mjs-sectionnavigation" data-search="function sectionNavigation No dedicated symbol docblock found; inherits file intent: Generates searchable HTML code-reference pages with file-level and symbol-level views for frontend, backend, and tooling sources. function sectionNavigation( ">
+      <div class="symbol-head">
+        <div>
+          <p class="eyebrow">function · line 477</p>
+          <h4><code>sectionNavigation</code></h4>
+        </div>
+        <a class="anchor-link" href="#scripts-docs-generate-code-reference-mjs-sectionnavigation">#</a>
+      </div>
+      <p class="symbol-signature"><code>function sectionNavigation(</code></p>
+      <p class="overview">No dedicated symbol docblock found; inherits file intent: Generates searchable HTML code-reference pages with file-level and symbol-level views for frontend, backend, and tooling sources.</p>
+      
+    </section>
+    <section class="symbol-card searchable" id="scripts-docs-generate-code-reference-mjs-rendersymboltag" data-search="function renderSymbolTag No dedicated symbol docblock found; inherits file intent: Generates searchable HTML code-reference pages with file-level and symbol-level views for frontend, backend, and tooling sources. function renderSymbolTag( ">
+      <div class="symbol-head">
+        <div>
+          <p class="eyebrow">function · line 485</p>
+          <h4><code>renderSymbolTag</code></h4>
+        </div>
+        <a class="anchor-link" href="#scripts-docs-generate-code-reference-mjs-rendersymboltag">#</a>
+      </div>
+      <p class="symbol-signature"><code>function renderSymbolTag(</code></p>
+      <p class="overview">No dedicated symbol docblock found; inherits file intent: Generates searchable HTML code-reference pages with file-level and symbol-level views for frontend, backend, and tooling sources.</p>
+      
+    </section>
+    <section class="symbol-card searchable" id="scripts-docs-generate-code-reference-mjs-rendersymbol" data-search="function renderSymbol No dedicated symbol docblock found; inherits file intent: Generates searchable HTML code-reference pages with file-level and symbol-level views for frontend, backend, and tooling sources. function renderSymbol( ">
+      <div class="symbol-head">
+        <div>
+          <p class="eyebrow">function · line 489</p>
+          <h4><code>renderSymbol</code></h4>
+        </div>
+        <a class="anchor-link" href="#scripts-docs-generate-code-reference-mjs-rendersymbol">#</a>
+      </div>
+      <p class="symbol-signature"><code>function renderSymbol(</code></p>
+      <p class="overview">No dedicated symbol docblock found; inherits file intent: Generates searchable HTML code-reference pages with file-level and symbol-level views for frontend, backend, and tooling sources.</p>
+      
+    </section>
+    <section class="symbol-card searchable" id="scripts-docs-generate-code-reference-mjs-rendersidebar" data-search="function renderSidebar No dedicated symbol docblock found; inherits file intent: Generates searchable HTML code-reference pages with file-level and symbol-level views for frontend, backend, and tooling sources. function renderSidebar( ">
+      <div class="symbol-head">
+        <div>
+          <p class="eyebrow">function · line 505</p>
+          <h4><code>renderSidebar</code></h4>
+        </div>
+        <a class="anchor-link" href="#scripts-docs-generate-code-reference-mjs-rendersidebar">#</a>
+      </div>
+      <p class="symbol-signature"><code>function renderSidebar(</code></p>
+      <p class="overview">No dedicated symbol docblock found; inherits file intent: Generates searchable HTML code-reference pages with file-level and symbol-level views for frontend, backend, and tooling sources.</p>
+      
+    </section>
+    <section class="symbol-card searchable" id="scripts-docs-generate-code-reference-mjs-rendersection" data-search="function renderSection No dedicated symbol docblock found; inherits file intent: Generates searchable HTML code-reference pages with file-level and symbol-level views for frontend, backend, and tooling sources. function renderSection( ">
+      <div class="symbol-head">
+        <div>
+          <p class="eyebrow">function · line 529</p>
+          <h4><code>renderSection</code></h4>
+        </div>
+        <a class="anchor-link" href="#scripts-docs-generate-code-reference-mjs-rendersection">#</a>
+      </div>
+      <p class="symbol-signature"><code>function renderSection(</code></p>
+      <p class="overview">No dedicated symbol docblock found; inherits file intent: Generates searchable HTML code-reference pages with file-level and symbol-level views for frontend, backend, and tooling sources.</p>
+      
+    </section>
+    <section class="symbol-card searchable" id="scripts-docs-generate-code-reference-mjs-renderindex" data-search="function renderIndex No dedicated symbol docblock found; inherits file intent: Generates searchable HTML code-reference pages with file-level and symbol-level views for frontend, backend, and tooling sources. function renderIndex( ">
+      <div class="symbol-head">
+        <div>
+          <p class="eyebrow">function · line 702</p>
+          <h4><code>renderIndex</code></h4>
+        </div>
+        <a class="anchor-link" href="#scripts-docs-generate-code-reference-mjs-renderindex">#</a>
+      </div>
+      <p class="symbol-signature"><code>function renderIndex(</code></p>
+      <p class="overview">No dedicated symbol docblock found; inherits file intent: Generates searchable HTML code-reference pages with file-level and symbol-level views for frontend, backend, and tooling sources.</p>
+      
+    </section>
+    <section class="symbol-card searchable" id="scripts-docs-generate-code-reference-mjs-sectionsummaries" data-search="const sectionSummaries No dedicated symbol docblock found; inherits file intent: Generates searchable HTML code-reference pages with file-level and symbol-level views for frontend, backend, and tooling sources. const sectionSummaries = ">
+      <div class="symbol-head">
+        <div>
+          <p class="eyebrow">const · line 772</p>
+          <h4><code>sectionSummaries</code></h4>
+        </div>
+        <a class="anchor-link" href="#scripts-docs-generate-code-reference-mjs-sectionsummaries">#</a>
+      </div>
+      <p class="symbol-signature"><code>const sectionSummaries =</code></p>
+      <p class="overview">No dedicated symbol docblock found; inherits file intent: Generates searchable HTML code-reference pages with file-level and symbol-level views for frontend, backend, and tooling sources.</p>
+      
+    </section>
+    <section class="symbol-card searchable" id="scripts-docs-generate-code-reference-mjs-indexpath" data-search="const indexPath No dedicated symbol docblock found; inherits file intent: Generates searchable HTML code-reference pages with file-level and symbol-level views for frontend, backend, and tooling sources. const indexPath = ">
+      <div class="symbol-head">
+        <div>
+          <p class="eyebrow">const · line 789</p>
+          <h4><code>indexPath</code></h4>
+        </div>
+        <a class="anchor-link" href="#scripts-docs-generate-code-reference-mjs-indexpath">#</a>
+      </div>
+      <p class="symbol-signature"><code>const indexPath =</code></p>
+      <p class="overview">No dedicated symbol docblock found; inherits file intent: Generates searchable HTML code-reference pages with file-level and symbol-level views for frontend, backend, and tooling sources.</p>
+      
+    </section></div>
+              </div>
             </article>
-            <article class="card">
+            <article class="file-card searchable" id="scripts-docs-generate-docs-mjs" data-search="scripts/docs/generate-docs.mjs Regenerates the developer handbook from the current repository state so docs stay aligned with the codebase.  readJson parseMakeTargets parseOpenapiEndpoints bulletList node:fs node:path node:url">
               <div class="card-head">
-                <h3><code>scripts/docs/generate-docs.mjs</code></h3>
-                <span class="count-pill">11.5 KB</span>
+                <div>
+                  <p class="eyebrow">MJS · 11.5 KB</p>
+                  <h3><code>scripts/docs/generate-docs.mjs</code></h3>
+                </div>
+                <a class="anchor-link" href="#scripts-docs-generate-docs-mjs">#</a>
               </div>
               <p class="overview">Regenerates the developer handbook from the current repository state so docs stay aligned with the codebase.</p>
-              <p><strong>Declared symbols:</strong> <code>readJson</code>, <code>parseMakeTargets</code>, <code>parseOpenapiEndpoints</code>, <code>bulletList</code></p>
-              <p><strong>Dependencies:</strong> <code>node:fs</code>, <code>node:path</code>, <code>node:url</code></p>
+              <div class="meta-grid">
+                <p><strong>Detected symbols:</strong> <code>readJson</code>, <code>parseMakeTargets</code>, <code>parseOpenapiEndpoints</code>, <code>bulletList</code></p>
+                <p><strong>Dependencies:</strong> <code>node:fs</code>, <code>node:path</code>, <code>node:url</code></p>
+                <p class="muted tiny">Snapshot timestamp: 2026-03-15T09:49:21.000Z</p>
+              </div>
               <details>
                 <summary>Comment highlights</summary>
                 <p class="muted">No additional comment blocks were extracted from this file.</p>
               </details>
-              <p class="muted tiny">Snapshot timestamp: 2026-03-15T09:49:21.000Z</p>
+              <div class="symbol-section">
+                <div class="symbol-section-head">
+                  <h4>Documented symbols</h4>
+                  <span class="count-pill">19</span>
+                </div>
+                <div class="symbol-grid">
+    <section class="symbol-card searchable" id="scripts-docs-generate-docs-mjs-filename" data-search="const __filename No dedicated symbol docblock found; inherits file intent: Regenerates the developer handbook from the current repository state so docs stay aligned with the codebase. const __filename = ">
+      <div class="symbol-head">
+        <div>
+          <p class="eyebrow">const · line 8</p>
+          <h4><code>__filename</code></h4>
+        </div>
+        <a class="anchor-link" href="#scripts-docs-generate-docs-mjs-filename">#</a>
+      </div>
+      <p class="symbol-signature"><code>const __filename =</code></p>
+      <p class="overview">No dedicated symbol docblock found; inherits file intent: Regenerates the developer handbook from the current repository state so docs stay aligned with the codebase.</p>
+      
+    </section>
+    <section class="symbol-card searchable" id="scripts-docs-generate-docs-mjs-dirname" data-search="const __dirname No dedicated symbol docblock found; inherits file intent: Regenerates the developer handbook from the current repository state so docs stay aligned with the codebase. const __dirname = ">
+      <div class="symbol-head">
+        <div>
+          <p class="eyebrow">const · line 9</p>
+          <h4><code>__dirname</code></h4>
+        </div>
+        <a class="anchor-link" href="#scripts-docs-generate-docs-mjs-dirname">#</a>
+      </div>
+      <p class="symbol-signature"><code>const __dirname =</code></p>
+      <p class="overview">No dedicated symbol docblock found; inherits file intent: Regenerates the developer handbook from the current repository state so docs stay aligned with the codebase.</p>
+      
+    </section>
+    <section class="symbol-card searchable" id="scripts-docs-generate-docs-mjs-root" data-search="const root No dedicated symbol docblock found; inherits file intent: Regenerates the developer handbook from the current repository state so docs stay aligned with the codebase. const root = ">
+      <div class="symbol-head">
+        <div>
+          <p class="eyebrow">const · line 10</p>
+          <h4><code>root</code></h4>
+        </div>
+        <a class="anchor-link" href="#scripts-docs-generate-docs-mjs-root">#</a>
+      </div>
+      <p class="symbol-signature"><code>const root =</code></p>
+      <p class="overview">No dedicated symbol docblock found; inherits file intent: Regenerates the developer handbook from the current repository state so docs stay aligned with the codebase.</p>
+      
+    </section>
+    <section class="symbol-card searchable" id="scripts-docs-generate-docs-mjs-makefilepath" data-search="const makefilePath No dedicated symbol docblock found; inherits file intent: Regenerates the developer handbook from the current repository state so docs stay aligned with the codebase. const makefilePath = ">
+      <div class="symbol-head">
+        <div>
+          <p class="eyebrow">const · line 12</p>
+          <h4><code>makefilePath</code></h4>
+        </div>
+        <a class="anchor-link" href="#scripts-docs-generate-docs-mjs-makefilepath">#</a>
+      </div>
+      <p class="symbol-signature"><code>const makefilePath =</code></p>
+      <p class="overview">No dedicated symbol docblock found; inherits file intent: Regenerates the developer handbook from the current repository state so docs stay aligned with the codebase.</p>
+      
+    </section>
+    <section class="symbol-card searchable" id="scripts-docs-generate-docs-mjs-webpackagepath" data-search="const webPackagePath No dedicated symbol docblock found; inherits file intent: Regenerates the developer handbook from the current repository state so docs stay aligned with the codebase. const webPackagePath = ">
+      <div class="symbol-head">
+        <div>
+          <p class="eyebrow">const · line 13</p>
+          <h4><code>webPackagePath</code></h4>
+        </div>
+        <a class="anchor-link" href="#scripts-docs-generate-docs-mjs-webpackagepath">#</a>
+      </div>
+      <p class="symbol-signature"><code>const webPackagePath =</code></p>
+      <p class="overview">No dedicated symbol docblock found; inherits file intent: Regenerates the developer handbook from the current repository state so docs stay aligned with the codebase.</p>
+      
+    </section>
+    <section class="symbol-card searchable" id="scripts-docs-generate-docs-mjs-openapipath" data-search="const openapiPath No dedicated symbol docblock found; inherits file intent: Regenerates the developer handbook from the current repository state so docs stay aligned with the codebase. const openapiPath = ">
+      <div class="symbol-head">
+        <div>
+          <p class="eyebrow">const · line 14</p>
+          <h4><code>openapiPath</code></h4>
+        </div>
+        <a class="anchor-link" href="#scripts-docs-generate-docs-mjs-openapipath">#</a>
+      </div>
+      <p class="symbol-signature"><code>const openapiPath =</code></p>
+      <p class="overview">No dedicated symbol docblock found; inherits file intent: Regenerates the developer handbook from the current repository state so docs stay aligned with the codebase.</p>
+      
+    </section>
+    <section class="symbol-card searchable" id="scripts-docs-generate-docs-mjs-handbookpath" data-search="const handbookPath No dedicated symbol docblock found; inherits file intent: Regenerates the developer handbook from the current repository state so docs stay aligned with the codebase. const handbookPath = ">
+      <div class="symbol-head">
+        <div>
+          <p class="eyebrow">const · line 15</p>
+          <h4><code>handbookPath</code></h4>
+        </div>
+        <a class="anchor-link" href="#scripts-docs-generate-docs-mjs-handbookpath">#</a>
+      </div>
+      <p class="symbol-signature"><code>const handbookPath =</code></p>
+      <p class="overview">No dedicated symbol docblock found; inherits file intent: Regenerates the developer handbook from the current repository state so docs stay aligned with the codebase.</p>
+      
+    </section>
+    <section class="symbol-card searchable" id="scripts-docs-generate-docs-mjs-docsindexpath" data-search="const docsIndexPath No dedicated symbol docblock found; inherits file intent: Regenerates the developer handbook from the current repository state so docs stay aligned with the codebase. const docsIndexPath = ">
+      <div class="symbol-head">
+        <div>
+          <p class="eyebrow">const · line 16</p>
+          <h4><code>docsIndexPath</code></h4>
+        </div>
+        <a class="anchor-link" href="#scripts-docs-generate-docs-mjs-docsindexpath">#</a>
+      </div>
+      <p class="symbol-signature"><code>const docsIndexPath =</code></p>
+      <p class="overview">No dedicated symbol docblock found; inherits file intent: Regenerates the developer handbook from the current repository state so docs stay aligned with the codebase.</p>
+      
+    </section>
+    <section class="symbol-card searchable" id="scripts-docs-generate-docs-mjs-readjson" data-search="function readJson No dedicated symbol docblock found; inherits file intent: Regenerates the developer handbook from the current repository state so docs stay aligned with the codebase. function readJson( ">
+      <div class="symbol-head">
+        <div>
+          <p class="eyebrow">function · line 18</p>
+          <h4><code>readJson</code></h4>
+        </div>
+        <a class="anchor-link" href="#scripts-docs-generate-docs-mjs-readjson">#</a>
+      </div>
+      <p class="symbol-signature"><code>function readJson(</code></p>
+      <p class="overview">No dedicated symbol docblock found; inherits file intent: Regenerates the developer handbook from the current repository state so docs stay aligned with the codebase.</p>
+      
+    </section>
+    <section class="symbol-card searchable" id="scripts-docs-generate-docs-mjs-parsemaketargets" data-search="function parseMakeTargets No dedicated symbol docblock found; inherits file intent: Regenerates the developer handbook from the current repository state so docs stay aligned with the codebase. function parseMakeTargets( ">
+      <div class="symbol-head">
+        <div>
+          <p class="eyebrow">function · line 22</p>
+          <h4><code>parseMakeTargets</code></h4>
+        </div>
+        <a class="anchor-link" href="#scripts-docs-generate-docs-mjs-parsemaketargets">#</a>
+      </div>
+      <p class="symbol-signature"><code>function parseMakeTargets(</code></p>
+      <p class="overview">No dedicated symbol docblock found; inherits file intent: Regenerates the developer handbook from the current repository state so docs stay aligned with the codebase.</p>
+      
+    </section>
+    <section class="symbol-card searchable" id="scripts-docs-generate-docs-mjs-parseopenapiendpoints" data-search="function parseOpenapiEndpoints No dedicated symbol docblock found; inherits file intent: Regenerates the developer handbook from the current repository state so docs stay aligned with the codebase. function parseOpenapiEndpoints( ">
+      <div class="symbol-head">
+        <div>
+          <p class="eyebrow">function · line 31</p>
+          <h4><code>parseOpenapiEndpoints</code></h4>
+        </div>
+        <a class="anchor-link" href="#scripts-docs-generate-docs-mjs-parseopenapiendpoints">#</a>
+      </div>
+      <p class="symbol-signature"><code>function parseOpenapiEndpoints(</code></p>
+      <p class="overview">No dedicated symbol docblock found; inherits file intent: Regenerates the developer handbook from the current repository state so docs stay aligned with the codebase.</p>
+      
+    </section>
+    <section class="symbol-card searchable" id="scripts-docs-generate-docs-mjs-bulletlist" data-search="function bulletList No dedicated symbol docblock found; inherits file intent: Regenerates the developer handbook from the current repository state so docs stay aligned with the codebase. function bulletList( ">
+      <div class="symbol-head">
+        <div>
+          <p class="eyebrow">function · line 60</p>
+          <h4><code>bulletList</code></h4>
+        </div>
+        <a class="anchor-link" href="#scripts-docs-generate-docs-mjs-bulletlist">#</a>
+      </div>
+      <p class="symbol-signature"><code>function bulletList(</code></p>
+      <p class="overview">No dedicated symbol docblock found; inherits file intent: Regenerates the developer handbook from the current repository state so docs stay aligned with the codebase.</p>
+      
+    </section>
+    <section class="symbol-card searchable" id="scripts-docs-generate-docs-mjs-maketargets" data-search="const makeTargets No dedicated symbol docblock found; inherits file intent: Regenerates the developer handbook from the current repository state so docs stay aligned with the codebase. const makeTargets = ">
+      <div class="symbol-head">
+        <div>
+          <p class="eyebrow">const · line 64</p>
+          <h4><code>makeTargets</code></h4>
+        </div>
+        <a class="anchor-link" href="#scripts-docs-generate-docs-mjs-maketargets">#</a>
+      </div>
+      <p class="symbol-signature"><code>const makeTargets =</code></p>
+      <p class="overview">No dedicated symbol docblock found; inherits file intent: Regenerates the developer handbook from the current repository state so docs stay aligned with the codebase.</p>
+      
+    </section>
+    <section class="symbol-card searchable" id="scripts-docs-generate-docs-mjs-webpackage" data-search="const webPackage No dedicated symbol docblock found; inherits file intent: Regenerates the developer handbook from the current repository state so docs stay aligned with the codebase. const webPackage = ">
+      <div class="symbol-head">
+        <div>
+          <p class="eyebrow">const · line 65</p>
+          <h4><code>webPackage</code></h4>
+        </div>
+        <a class="anchor-link" href="#scripts-docs-generate-docs-mjs-webpackage">#</a>
+      </div>
+      <p class="symbol-signature"><code>const webPackage =</code></p>
+      <p class="overview">No dedicated symbol docblock found; inherits file intent: Regenerates the developer handbook from the current repository state so docs stay aligned with the codebase.</p>
+      
+    </section>
+    <section class="symbol-card searchable" id="scripts-docs-generate-docs-mjs-webscripts" data-search="const webScripts No dedicated symbol docblock found; inherits file intent: Regenerates the developer handbook from the current repository state so docs stay aligned with the codebase. const webScripts = ">
+      <div class="symbol-head">
+        <div>
+          <p class="eyebrow">const · line 66</p>
+          <h4><code>webScripts</code></h4>
+        </div>
+        <a class="anchor-link" href="#scripts-docs-generate-docs-mjs-webscripts">#</a>
+      </div>
+      <p class="symbol-signature"><code>const webScripts =</code></p>
+      <p class="overview">No dedicated symbol docblock found; inherits file intent: Regenerates the developer handbook from the current repository state so docs stay aligned with the codebase.</p>
+      
+    </section>
+    <section class="symbol-card searchable" id="scripts-docs-generate-docs-mjs-endpoints" data-search="const endpoints No dedicated symbol docblock found; inherits file intent: Regenerates the developer handbook from the current repository state so docs stay aligned with the codebase. const endpoints = ">
+      <div class="symbol-head">
+        <div>
+          <p class="eyebrow">const · line 67</p>
+          <h4><code>endpoints</code></h4>
+        </div>
+        <a class="anchor-link" href="#scripts-docs-generate-docs-mjs-endpoints">#</a>
+      </div>
+      <p class="symbol-signature"><code>const endpoints =</code></p>
+      <p class="overview">No dedicated symbol docblock found; inherits file intent: Regenerates the developer handbook from the current repository state so docs stay aligned with the codebase.</p>
+      
+    </section>
+    <section class="symbol-card searchable" id="scripts-docs-generate-docs-mjs-generatedat" data-search="const generatedAt No dedicated symbol docblock found; inherits file intent: Regenerates the developer handbook from the current repository state so docs stay aligned with the codebase. const generatedAt = ">
+      <div class="symbol-head">
+        <div>
+          <p class="eyebrow">const · line 68</p>
+          <h4><code>generatedAt</code></h4>
+        </div>
+        <a class="anchor-link" href="#scripts-docs-generate-docs-mjs-generatedat">#</a>
+      </div>
+      <p class="symbol-signature"><code>const generatedAt =</code></p>
+      <p class="overview">No dedicated symbol docblock found; inherits file intent: Regenerates the developer handbook from the current repository state so docs stay aligned with the codebase.</p>
+      
+    </section>
+    <section class="symbol-card searchable" id="scripts-docs-generate-docs-mjs-handbook" data-search="const handbook No dedicated symbol docblock found; inherits file intent: Regenerates the developer handbook from the current repository state so docs stay aligned with the codebase. const handbook = ">
+      <div class="symbol-head">
+        <div>
+          <p class="eyebrow">const · line 70</p>
+          <h4><code>handbook</code></h4>
+        </div>
+        <a class="anchor-link" href="#scripts-docs-generate-docs-mjs-handbook">#</a>
+      </div>
+      <p class="symbol-signature"><code>const handbook =</code></p>
+      <p class="overview">No dedicated symbol docblock found; inherits file intent: Regenerates the developer handbook from the current repository state so docs stay aligned with the codebase.</p>
+      
+    </section>
+    <section class="symbol-card searchable" id="scripts-docs-generate-docs-mjs-docsindex" data-search="const docsIndex No dedicated symbol docblock found; inherits file intent: Regenerates the developer handbook from the current repository state so docs stay aligned with the codebase. const docsIndex = ">
+      <div class="symbol-head">
+        <div>
+          <p class="eyebrow">const · line 72</p>
+          <h4><code>docsIndex</code></h4>
+        </div>
+        <a class="anchor-link" href="#scripts-docs-generate-docs-mjs-docsindex">#</a>
+      </div>
+      <p class="symbol-signature"><code>const docsIndex =</code></p>
+      <p class="overview">No dedicated symbol docblock found; inherits file intent: Regenerates the developer handbook from the current repository state so docs stay aligned with the codebase.</p>
+      
+    </section></div>
+              </div>
             </article>
-            <article class="card">
+            <article class="file-card searchable" id="scripts-docs-verify-source-comments-mjs" data-search="scripts/docs/verify-source-comments.mjs Verifies that first-party source files carry an intent comment at the top so code-reference generation stays meaningful.  walk node:fs node:path node:url">
               <div class="card-head">
-                <h3><code>scripts/docs/verify-source-comments.mjs</code></h3>
-                <span class="count-pill">1.7 KB</span>
+                <div>
+                  <p class="eyebrow">MJS · 1.7 KB</p>
+                  <h3><code>scripts/docs/verify-source-comments.mjs</code></h3>
+                </div>
+                <a class="anchor-link" href="#scripts-docs-verify-source-comments-mjs">#</a>
               </div>
               <p class="overview">Verifies that first-party source files carry an intent comment at the top so code-reference generation stays meaningful.</p>
-              <p><strong>Declared symbols:</strong> <code>walk</code></p>
-              <p><strong>Dependencies:</strong> <code>node:fs</code>, <code>node:path</code>, <code>node:url</code></p>
+              <div class="meta-grid">
+                <p><strong>Detected symbols:</strong> <code>walk</code></p>
+                <p><strong>Dependencies:</strong> <code>node:fs</code>, <code>node:path</code>, <code>node:url</code></p>
+                <p class="muted tiny">Snapshot timestamp: 2026-03-15T10:09:56.000Z</p>
+              </div>
               <details>
                 <summary>Comment highlights</summary>
                 <p class="muted">No additional comment blocks were extracted from this file.</p>
               </details>
-              <p class="muted tiny">Snapshot timestamp: 2026-03-15T10:09:56.000Z</p>
+              <div class="symbol-section">
+                <div class="symbol-section-head">
+                  <h4>Documented symbols</h4>
+                  <span class="count-pill">7</span>
+                </div>
+                <div class="symbol-grid">
+    <section class="symbol-card searchable" id="scripts-docs-verify-source-comments-mjs-filename" data-search="const __filename No dedicated symbol docblock found; inherits file intent: Verifies that first-party source files carry an intent comment at the top so code-reference generation stays meaningful. const __filename = ">
+      <div class="symbol-head">
+        <div>
+          <p class="eyebrow">const · line 8</p>
+          <h4><code>__filename</code></h4>
+        </div>
+        <a class="anchor-link" href="#scripts-docs-verify-source-comments-mjs-filename">#</a>
+      </div>
+      <p class="symbol-signature"><code>const __filename =</code></p>
+      <p class="overview">No dedicated symbol docblock found; inherits file intent: Verifies that first-party source files carry an intent comment at the top so code-reference generation stays meaningful.</p>
+      
+    </section>
+    <section class="symbol-card searchable" id="scripts-docs-verify-source-comments-mjs-dirname" data-search="const __dirname No dedicated symbol docblock found; inherits file intent: Verifies that first-party source files carry an intent comment at the top so code-reference generation stays meaningful. const __dirname = ">
+      <div class="symbol-head">
+        <div>
+          <p class="eyebrow">const · line 9</p>
+          <h4><code>__dirname</code></h4>
+        </div>
+        <a class="anchor-link" href="#scripts-docs-verify-source-comments-mjs-dirname">#</a>
+      </div>
+      <p class="symbol-signature"><code>const __dirname =</code></p>
+      <p class="overview">No dedicated symbol docblock found; inherits file intent: Verifies that first-party source files carry an intent comment at the top so code-reference generation stays meaningful.</p>
+      
+    </section>
+    <section class="symbol-card searchable" id="scripts-docs-verify-source-comments-mjs-root" data-search="const root No dedicated symbol docblock found; inherits file intent: Verifies that first-party source files carry an intent comment at the top so code-reference generation stays meaningful. const root = ">
+      <div class="symbol-head">
+        <div>
+          <p class="eyebrow">const · line 10</p>
+          <h4><code>root</code></h4>
+        </div>
+        <a class="anchor-link" href="#scripts-docs-verify-source-comments-mjs-root">#</a>
+      </div>
+      <p class="symbol-signature"><code>const root =</code></p>
+      <p class="overview">No dedicated symbol docblock found; inherits file intent: Verifies that first-party source files carry an intent comment at the top so code-reference generation stays meaningful.</p>
+      
+    </section>
+    <section class="symbol-card searchable" id="scripts-docs-verify-source-comments-mjs-includeroots" data-search="const includeRoots No dedicated symbol docblock found; inherits file intent: Verifies that first-party source files carry an intent comment at the top so code-reference generation stays meaningful. const includeRoots = ">
+      <div class="symbol-head">
+        <div>
+          <p class="eyebrow">const · line 11</p>
+          <h4><code>includeRoots</code></h4>
+        </div>
+        <a class="anchor-link" href="#scripts-docs-verify-source-comments-mjs-includeroots">#</a>
+      </div>
+      <p class="symbol-signature"><code>const includeRoots =</code></p>
+      <p class="overview">No dedicated symbol docblock found; inherits file intent: Verifies that first-party source files carry an intent comment at the top so code-reference generation stays meaningful.</p>
+      
+    </section>
+    <section class="symbol-card searchable" id="scripts-docs-verify-source-comments-mjs-allowedextensions" data-search="const allowedExtensions No dedicated symbol docblock found; inherits file intent: Verifies that first-party source files carry an intent comment at the top so code-reference generation stays meaningful. const allowedExtensions = ">
+      <div class="symbol-head">
+        <div>
+          <p class="eyebrow">const · line 12</p>
+          <h4><code>allowedExtensions</code></h4>
+        </div>
+        <a class="anchor-link" href="#scripts-docs-verify-source-comments-mjs-allowedextensions">#</a>
+      </div>
+      <p class="symbol-signature"><code>const allowedExtensions =</code></p>
+      <p class="overview">No dedicated symbol docblock found; inherits file intent: Verifies that first-party source files carry an intent comment at the top so code-reference generation stays meaningful.</p>
+      
+    </section>
+    <section class="symbol-card searchable" id="scripts-docs-verify-source-comments-mjs-failures" data-search="const failures No dedicated symbol docblock found; inherits file intent: Verifies that first-party source files carry an intent comment at the top so code-reference generation stays meaningful. const failures = ">
+      <div class="symbol-head">
+        <div>
+          <p class="eyebrow">const · line 13</p>
+          <h4><code>failures</code></h4>
+        </div>
+        <a class="anchor-link" href="#scripts-docs-verify-source-comments-mjs-failures">#</a>
+      </div>
+      <p class="symbol-signature"><code>const failures =</code></p>
+      <p class="overview">No dedicated symbol docblock found; inherits file intent: Verifies that first-party source files carry an intent comment at the top so code-reference generation stays meaningful.</p>
+      
+    </section>
+    <section class="symbol-card searchable" id="scripts-docs-verify-source-comments-mjs-walk" data-search="function walk No dedicated symbol docblock found; inherits file intent: Verifies that first-party source files carry an intent comment at the top so code-reference generation stays meaningful. function walk( ">
+      <div class="symbol-head">
+        <div>
+          <p class="eyebrow">function · line 15</p>
+          <h4><code>walk</code></h4>
+        </div>
+        <a class="anchor-link" href="#scripts-docs-verify-source-comments-mjs-walk">#</a>
+      </div>
+      <p class="symbol-signature"><code>function walk(</code></p>
+      <p class="overview">No dedicated symbol docblock found; inherits file intent: Verifies that first-party source files carry an intent comment at the top so code-reference generation stays meaningful.</p>
+      
+    </section></div>
+              </div>
             </article>
         </div>
       </section>
+        </div>
+      </div>
     </main>
+    <script>
+      const searchInput = document.getElementById('page-search');
+      const searchable = Array.from(document.querySelectorAll('.searchable'));
+      if (searchInput) {
+        searchInput.addEventListener('input', () => {
+          const query = searchInput.value.trim().toLowerCase();
+          searchable.forEach((element) => {
+            const haystack = (element.getAttribute('data-search') || '').toLowerCase();
+            element.classList.toggle('is-hidden', query && !haystack.includes(query));
+          });
+        });
+      }
+    </script>
   </body>
 </html>

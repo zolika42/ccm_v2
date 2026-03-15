@@ -10,473 +10,1643 @@
         --bg: #020617;
         --panel: rgba(15, 23, 42, 0.92);
         --panel-strong: rgba(17, 24, 39, 0.94);
+        --panel-soft: rgba(30, 41, 59, 0.86);
         --text: #e5e7eb;
         --muted: #94a3b8;
         --accent: #60a5fa;
+        --accent-soft: rgba(96, 165, 250, 0.16);
         --border: rgba(148, 163, 184, 0.24);
+        --shadow: 0 18px 40px rgba(0, 0, 0, 0.22);
       }
       * { box-sizing: border-box; }
+      html { scroll-behavior: smooth; }
       body {
         margin: 0;
-        font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
         background: linear-gradient(180deg, #020617 0%, #111827 100%);
         color: var(--text);
       }
-      a { color: var(--accent); }
-      .shell { max-width: 1280px; margin: 0 auto; padding: 32px 20px 64px; }
-      .hero, .group, .card {
+      a { color: var(--accent); text-decoration: none; }
+      a:hover { text-decoration: underline; }
+      code { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', monospace; }
+      .page-shell { max-width: 1520px; margin: 0 auto; padding: 24px 20px 64px; }
+      .hero, .group, .file-card, .sidebar-panel, .symbol-card {
         border: 1px solid var(--border);
         border-radius: 24px;
         background: var(--panel);
-        box-shadow: 0 18px 40px rgba(0, 0, 0, 0.22);
+        box-shadow: var(--shadow);
       }
-      .hero { padding: 28px; }
-      .hero h1 { margin: 0 0 10px; font-size: 2rem; }
-      .hero p { margin: 0 0 10px; line-height: 1.6; color: var(--muted); }
+      .hero { padding: 28px; margin-bottom: 24px; }
+      .hero h1 { margin: 0 0 10px; font-size: clamp(2rem, 4vw, 2.8rem); }
+      .hero p { margin: 0 0 12px; line-height: 1.6; color: var(--muted); }
       .nav-row { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 18px; }
       .nav-pill {
         display: inline-flex; align-items: center; justify-content: center; text-decoration: none;
         border-radius: 999px; border: 1px solid var(--border); padding: 8px 12px; background: rgba(30, 41, 59, 0.8);
       }
-      .nav-pill.active { background: rgba(96, 165, 250, 0.16); color: #dbeafe; }
-      .group { margin-top: 24px; padding: 20px; }
-      .group-head, .card-head {
-        display: flex; align-items: center; justify-content: space-between; gap: 12px;
+      .nav-pill.active { background: var(--accent-soft); color: #dbeafe; }
+      .layout { display: grid; grid-template-columns: minmax(260px, 320px) minmax(0, 1fr); gap: 24px; align-items: start; }
+      .sticky { position: sticky; top: 24px; }
+      .sidebar-panel { padding: 20px; }
+      .sidebar-panel h2 { margin: 0 0 8px; }
+      .small { font-size: 0.92rem; }
+      .search-input {
+        width: 100%; margin: 14px 0 18px; padding: 12px 14px; border-radius: 14px;
+        border: 1px solid var(--border); background: rgba(2, 6, 23, 0.65); color: var(--text);
       }
-      .card-grid {
-        display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 16px; margin-top: 16px;
+      .sidebar-nav { max-height: calc(100vh - 220px); overflow: auto; padding-right: 6px; }
+      .sidebar-group + .sidebar-group { margin-top: 18px; }
+      .sidebar-group h3 { margin: 0 0 8px; font-size: 0.95rem; color: #bfdbfe; }
+      .sidebar-group ul { margin: 0; padding-left: 18px; line-height: 1.45; }
+      .symbol-list { margin-top: 6px; }
+      .content { display: grid; gap: 24px; }
+      .group { padding: 20px; }
+      .group-head, .card-head, .symbol-head, .symbol-section-head {
+        display: flex; align-items: start; justify-content: space-between; gap: 12px;
       }
-      .card { background: var(--panel-strong); padding: 18px; }
-      .card h3, .group h2 { margin: 0; }
+      .group h2, .file-card h3, .symbol-card h4 { margin: 0; }
+      .file-stack { display: grid; gap: 18px; margin-top: 16px; }
+      .file-card { padding: 20px; background: var(--panel-strong); }
       .overview { line-height: 1.6; }
+      .meta-grid { display: grid; gap: 8px; margin: 14px 0; }
       .count-pill {
         display: inline-flex; align-items: center; justify-content: center; padding: 4px 10px; border-radius: 999px;
-        background: rgba(96, 165, 250, 0.15); color: #bfdbfe; font-size: 0.85rem;
+        background: var(--accent-soft); color: #bfdbfe; font-size: 0.85rem;
       }
       .muted { color: var(--muted); }
       .tiny { font-size: 0.8rem; }
+      .eyebrow { margin: 0 0 6px; color: #93c5fd; font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.08em; }
       details { margin-top: 14px; border-top: 1px solid var(--border); padding-top: 12px; }
       summary { cursor: pointer; }
-      code { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; }
-      ul { padding-left: 18px; line-height: 1.5; }
+      .symbol-section { margin-top: 20px; border-top: 1px solid var(--border); padding-top: 16px; }
+      .symbol-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 14px; margin-top: 14px; }
+      .symbol-card { background: var(--panel-soft); padding: 16px; }
+      .symbol-signature { margin: 10px 0; padding: 10px 12px; border-radius: 14px; background: rgba(2, 6, 23, 0.5); overflow: auto; }
+      .anchor-link {
+        display: inline-flex; align-items: center; justify-content: center; width: 34px; height: 34px;
+        border-radius: 999px; border: 1px solid var(--border); background: rgba(2, 6, 23, 0.45);
+      }
+      .tags-block ul { padding-left: 18px; line-height: 1.5; }
+      .is-hidden { display: none !important; }
+      @media (max-width: 980px) {
+        .layout { grid-template-columns: 1fr; }
+        .sticky { position: static; }
+        .sidebar-nav { max-height: none; }
+      }
     </style>
   </head>
   <body>
-    <main class="shell">
+    <main class="page-shell">
       <section class="hero">
         <h1>Backend Code Reference</h1>
         <p>PHP entrypoints, API support code, and backend-facing project scripts.</p>
-        <p class="muted">Generated automatically by <code>scripts/docs/generate-code-reference.mjs</code>.</p>
+        <p class="muted">Generated automatically by <code>scripts/docs/generate-code-reference.mjs</code>. Use the search box to filter files and documented symbols on this page.</p>
         <div class="nav-row">
           <a class="nav-pill" href="./index.html">Index</a>
           <span class="nav-pill active">Backend Code Reference</span><a class="nav-pill" href="./frontend.html">Frontend Code Reference</a><a class="nav-pill" href="./tooling.html">Tooling Code Reference</a>
         </div>
       </section>
-      
-      <section class="group">
+      <div class="layout">
+        
+    <aside class="sidebar">
+      <div class="sidebar-panel sticky">
+        <h2>Backend Code Reference</h2>
+        <p class="muted small">Jump through files and documented symbols without opening the source tree.</p>
+        <input id="page-search" class="search-input" type="search" placeholder="Search files, symbols, comments..." autocomplete="off" />
+        <nav class="sidebar-nav">
+          
+            <section class="sidebar-group">
+              <h3>apps/api/public</h3>
+              <ul>
+                
+                  <li>
+                    <a href="#apps-api-public-index-php">index.php</a>
+                    
+                  </li>
+              </ul>
+            </section>
+            <section class="sidebar-group">
+              <h3>apps/api/src/Controllers</h3>
+              <ul>
+                
+                  <li>
+                    <a href="#apps-api-src-controllers-authcontroller-php">AuthController.php</a>
+                    <ul class="symbol-list"><li><a href="#apps-api-src-controllers-authcontroller-php-authcontroller">AuthController</a></li></ul>
+                  </li>
+                  <li>
+                    <a href="#apps-api-src-controllers-cartcontroller-php">CartController.php</a>
+                    <ul class="symbol-list"><li><a href="#apps-api-src-controllers-cartcontroller-php-cartcontroller">CartController</a></li></ul>
+                  </li>
+                  <li>
+                    <a href="#apps-api-src-controllers-catalogcontroller-php">CatalogController.php</a>
+                    <ul class="symbol-list"><li><a href="#apps-api-src-controllers-catalogcontroller-php-catalogcontroller">CatalogController</a></li></ul>
+                  </li>
+                  <li>
+                    <a href="#apps-api-src-controllers-checkoutcontroller-php">CheckoutController.php</a>
+                    <ul class="symbol-list"><li><a href="#apps-api-src-controllers-checkoutcontroller-php-checkoutcontroller">CheckoutController</a></li></ul>
+                  </li>
+                  <li>
+                    <a href="#apps-api-src-controllers-librarycontroller-php">LibraryController.php</a>
+                    <ul class="symbol-list"><li><a href="#apps-api-src-controllers-librarycontroller-php-librarycontroller">LibraryController</a></li></ul>
+                  </li>
+              </ul>
+            </section>
+            <section class="sidebar-group">
+              <h3>apps/api/src/Database</h3>
+              <ul>
+                
+                  <li>
+                    <a href="#apps-api-src-database-connectionfactory-php">ConnectionFactory.php</a>
+                    <ul class="symbol-list"><li><a href="#apps-api-src-database-connectionfactory-php-connectionfactory">ConnectionFactory</a></li></ul>
+                  </li>
+              </ul>
+            </section>
+            <section class="sidebar-group">
+              <h3>apps/api/src/Repositories</h3>
+              <ul>
+                
+                  <li>
+                    <a href="#apps-api-src-repositories-cartrepository-php">CartRepository.php</a>
+                    <ul class="symbol-list"><li><a href="#apps-api-src-repositories-cartrepository-php-cartrepository">CartRepository</a></li><li><a href="#apps-api-src-repositories-cartrepository-php-mutatecart">mutateCart</a></li><li><a href="#apps-api-src-repositories-cartrepository-php-choosestorage">chooseStorage</a></li><li><a href="#apps-api-src-repositories-cartrepository-php-shouldusebrowserstate">shouldUseBrowserState</a></li><li><a href="#apps-api-src-repositories-cartrepository-php-basequantities">baseQuantities</a></li><li><a href="#apps-api-src-repositories-cartrepository-php-resolvelegacycontext">resolveLegacyContext</a></li><li><a href="#apps-api-src-repositories-cartrepository-php-writebrowserstate">writeBrowserState</a></li><li><a href="#apps-api-src-repositories-cartrepository-php-buildcartfromquantities">buildCartFromQuantities</a></li><li><a href="#apps-api-src-repositories-cartrepository-php-loadorderfields">loadOrderFields</a></li><li><a href="#apps-api-src-repositories-cartrepository-php-loaditemfieldmap">loadItemFieldMap</a></li><li><a href="#apps-api-src-repositories-cartrepository-php-loadquantitiesfromorder">loadQuantitiesFromOrder</a></li><li><a href="#apps-api-src-repositories-cartrepository-php-syncorder">syncOrder</a></li><li><a href="#apps-api-src-repositories-cartrepository-php-syncorderstatus">syncOrderStatus</a></li><li><a href="#apps-api-src-repositories-cartrepository-php-syncorderstatuswithvalue">syncOrderStatusWithValue</a></li><li><a href="#apps-api-src-repositories-cartrepository-php-replaceitemrows">replaceItemRows</a></li><li><a href="#apps-api-src-repositories-cartrepository-php-syncordersummaryfields">syncOrderSummaryFields</a></li><li><a href="#apps-api-src-repositories-cartrepository-php-upsertorderfield">upsertOrderField</a></li><li><a href="#apps-api-src-repositories-cartrepository-php-calculatemetrics">calculateMetrics</a></li><li><a href="#apps-api-src-repositories-cartrepository-php-buildcustomerloginstate">buildCustomerLoginState</a></li><li><a href="#apps-api-src-repositories-cartrepository-php-buildbrowserstatestring">buildBrowserStateString</a></li><li><a href="#apps-api-src-repositories-cartrepository-php-itemfieldsforproduct">itemFieldsForProduct</a></li><li><a href="#apps-api-src-repositories-cartrepository-php-submitorderfields">submitOrderFields</a></li><li><a href="#apps-api-src-repositories-cartrepository-php-parsequantitiesfrombrowserstate">parseQuantitiesFromBrowserState</a></li><li><a href="#apps-api-src-repositories-cartrepository-php-normalizequantities">normalizeQuantities</a></li><li><a href="#apps-api-src-repositories-cartrepository-php-generateorderid">generateOrderId</a></li></ul>
+                  </li>
+                  <li>
+                    <a href="#apps-api-src-repositories-checkoutrepository-php">CheckoutRepository.php</a>
+                    <ul class="symbol-list"><li><a href="#apps-api-src-repositories-checkoutrepository-php-checkoutrepository">CheckoutRepository</a></li></ul>
+                  </li>
+                  <li>
+                    <a href="#apps-api-src-repositories-customerrepository-php">CustomerRepository.php</a>
+                    <ul class="symbol-list"><li><a href="#apps-api-src-repositories-customerrepository-php-customerrepository">CustomerRepository</a></li></ul>
+                  </li>
+                  <li>
+                    <a href="#apps-api-src-repositories-libraryrepository-php">LibraryRepository.php</a>
+                    <ul class="symbol-list"><li><a href="#apps-api-src-repositories-libraryrepository-php-libraryrepository">LibraryRepository</a></li></ul>
+                  </li>
+                  <li>
+                    <a href="#apps-api-src-repositories-productrepository-php">ProductRepository.php</a>
+                    <ul class="symbol-list"><li><a href="#apps-api-src-repositories-productrepository-php-productrepository">ProductRepository</a></li></ul>
+                  </li>
+              </ul>
+            </section>
+            <section class="sidebar-group">
+              <h3>apps/api/src/Services</h3>
+              <ul>
+                
+                  <li>
+                    <a href="#apps-api-src-services-authservice-php">AuthService.php</a>
+                    <ul class="symbol-list"><li><a href="#apps-api-src-services-authservice-php-authservice">AuthService</a></li></ul>
+                  </li>
+                  <li>
+                    <a href="#apps-api-src-services-cartservice-php">CartService.php</a>
+                    <ul class="symbol-list"><li><a href="#apps-api-src-services-cartservice-php-cartservice">CartService</a></li></ul>
+                  </li>
+                  <li>
+                    <a href="#apps-api-src-services-catalogservice-php">CatalogService.php</a>
+                    <ul class="symbol-list"><li><a href="#apps-api-src-services-catalogservice-php-catalogservice">CatalogService</a></li></ul>
+                  </li>
+                  <li>
+                    <a href="#apps-api-src-services-checkoutservice-php">CheckoutService.php</a>
+                    <ul class="symbol-list"><li><a href="#apps-api-src-services-checkoutservice-php-checkoutservice">CheckoutService</a></li></ul>
+                  </li>
+                  <li>
+                    <a href="#apps-api-src-services-libraryservice-php">LibraryService.php</a>
+                    <ul class="symbol-list"><li><a href="#apps-api-src-services-libraryservice-php-libraryservice">LibraryService</a></li></ul>
+                  </li>
+              </ul>
+            </section>
+            <section class="sidebar-group">
+              <h3>apps/api/src/Support</h3>
+              <ul>
+                
+                  <li>
+                    <a href="#apps-api-src-support-apilogger-php">ApiLogger.php</a>
+                    <ul class="symbol-list"><li><a href="#apps-api-src-support-apilogger-php-apilogger">ApiLogger</a></li><li><a href="#apps-api-src-support-apilogger-php-info">info</a></li><li><a href="#apps-api-src-support-apilogger-php-error">error</a></li><li><a href="#apps-api-src-support-apilogger-php-write">write</a></li></ul>
+                  </li>
+                  <li>
+                    <a href="#apps-api-src-support-cookiebridge-php">CookieBridge.php</a>
+                    <ul class="symbol-list"><li><a href="#apps-api-src-support-cookiebridge-php-cookiebridge">CookieBridge</a></li></ul>
+                  </li>
+                  <li>
+                    <a href="#apps-api-src-support-cors-php">Cors.php</a>
+                    <ul class="symbol-list"><li><a href="#apps-api-src-support-cors-php-cors">Cors</a></li></ul>
+                  </li>
+                  <li>
+                    <a href="#apps-api-src-support-jsonresponse-php">JsonResponse.php</a>
+                    <ul class="symbol-list"><li><a href="#apps-api-src-support-jsonresponse-php-jsonresponse">JsonResponse</a></li><li><a href="#apps-api-src-support-jsonresponse-php-success">success</a></li><li><a href="#apps-api-src-support-jsonresponse-php-error">error</a></li><li><a href="#apps-api-src-support-jsonresponse-php-send">send</a></li></ul>
+                  </li>
+                  <li>
+                    <a href="#apps-api-src-support-request-php">Request.php</a>
+                    <ul class="symbol-list"><li><a href="#apps-api-src-support-request-php-request">Request</a></li><li><a href="#apps-api-src-support-request-php-construct">__construct</a></li></ul>
+                  </li>
+                  <li>
+                    <a href="#apps-api-src-support-requestcontext-php">RequestContext.php</a>
+                    <ul class="symbol-list"><li><a href="#apps-api-src-support-requestcontext-php-requestcontext">RequestContext</a></li><li><a href="#apps-api-src-support-requestcontext-php-responsemeta">responseMeta</a></li></ul>
+                  </li>
+                  <li>
+                    <a href="#apps-api-src-support-router-php">Router.php</a>
+                    <ul class="symbol-list"><li><a href="#apps-api-src-support-router-php-router">Router</a></li></ul>
+                  </li>
+                  <li>
+                    <a href="#apps-api-src-support-sessionauth-php">SessionAuth.php</a>
+                    <ul class="symbol-list"><li><a href="#apps-api-src-support-sessionauth-php-sessionauth">SessionAuth</a></li></ul>
+                  </li>
+              </ul>
+            </section>
+        </nav>
+      </div>
+    </aside>
+        <div class="content" id="search-scope">
+          
+      <section class="group searchable" data-search="apps/api/public">
         <div class="group-head">
           <h2>apps/api/public</h2>
           <span class="count-pill">1 file(s)</span>
         </div>
-        <div class="card-grid">
+        <div class="file-stack">
           
-            <article class="card">
+            <article class="file-card searchable" id="apps-api-public-index-php" data-search="apps/api/public/index.php HTTP entrypoint: wires the request lifecycle, service container, routes, and top-level exception handling.   ColumbiaGames\Api\Controllers\AuthController ColumbiaGames\Api\Controllers\CatalogController ColumbiaGames\Api\Controllers\CartController ColumbiaGames\Api\Controllers\CheckoutController ColumbiaGames\Api\Controllers\LibraryController ColumbiaGames\Api\Database\ConnectionFactory ColumbiaGames\Api\Repositories\CartRepository ColumbiaGames\Api\Repositories\CheckoutRepository ColumbiaGames\Api\Repositories\CustomerRepository ColumbiaGames\Api\Repositories\LibraryRepository ColumbiaGames\Api\Repositories\ProductRepository ColumbiaGames\Api\Services\AuthService">
               <div class="card-head">
-                <h3><code>apps/api/public/index.php</code></h3>
-                <span class="count-pill">4.1 KB</span>
+                <div>
+                  <p class="eyebrow">PHP · 4.1 KB</p>
+                  <h3><code>apps/api/public/index.php</code></h3>
+                </div>
+                <a class="anchor-link" href="#apps-api-public-index-php">#</a>
               </div>
               <p class="overview">HTTP entrypoint: wires the request lifecycle, service container, routes, and top-level exception handling.</p>
-              
-              <p><strong>Dependencies:</strong> <code>ColumbiaGames\Api\Controllers\AuthController</code>, <code>ColumbiaGames\Api\Controllers\CatalogController</code>, <code>ColumbiaGames\Api\Controllers\CartController</code>, <code>ColumbiaGames\Api\Controllers\CheckoutController</code>, <code>ColumbiaGames\Api\Controllers\LibraryController</code>, <code>ColumbiaGames\Api\Database\ConnectionFactory</code>, <code>ColumbiaGames\Api\Repositories\CartRepository</code>, <code>ColumbiaGames\Api\Repositories\CheckoutRepository</code>, <code>ColumbiaGames\Api\Repositories\CustomerRepository</code>, <code>ColumbiaGames\Api\Repositories\LibraryRepository</code></p>
+              <div class="meta-grid">
+                
+                <p><strong>Dependencies:</strong> <code>ColumbiaGames\Api\Controllers\AuthController</code>, <code>ColumbiaGames\Api\Controllers\CatalogController</code>, <code>ColumbiaGames\Api\Controllers\CartController</code>, <code>ColumbiaGames\Api\Controllers\CheckoutController</code>, <code>ColumbiaGames\Api\Controllers\LibraryController</code>, <code>ColumbiaGames\Api\Database\ConnectionFactory</code>, <code>ColumbiaGames\Api\Repositories\CartRepository</code>, <code>ColumbiaGames\Api\Repositories\CheckoutRepository</code>, <code>ColumbiaGames\Api\Repositories\CustomerRepository</code>, <code>ColumbiaGames\Api\Repositories\LibraryRepository</code>, <code>ColumbiaGames\Api\Repositories\ProductRepository</code>, <code>ColumbiaGames\Api\Services\AuthService</code></p>
+                <p class="muted tiny">Snapshot timestamp: 2026-03-15T09:46:57.000Z</p>
+              </div>
               <details>
                 <summary>Comment highlights</summary>
                 <p class="muted">No additional comment blocks were extracted from this file.</p>
               </details>
-              <p class="muted tiny">Snapshot timestamp: 2026-03-15T09:46:57.000Z</p>
+              <div class="symbol-section">
+                <div class="symbol-section-head">
+                  <h4>Documented symbols</h4>
+                  <span class="count-pill">0</span>
+                </div>
+                <p class="muted">No class/function-level doc block was paired with a declaration in this file yet.</p>
+              </div>
             </article>
         </div>
       </section>
-      <section class="group">
+      <section class="group searchable" data-search="apps/api/src/Controllers">
         <div class="group-head">
           <h2>apps/api/src/Controllers</h2>
           <span class="count-pill">5 file(s)</span>
         </div>
-        <div class="card-grid">
+        <div class="file-stack">
           
-            <article class="card">
+            <article class="file-card searchable" id="apps-api-src-controllers-authcontroller-php" data-search="apps/api/src/Controllers/AuthController.php Controller for login/logout/session lookup endpoints. Keeps HTTP validation separate from auth business rules.  AuthController __construct login logout me ColumbiaGames\Api\Services\AuthService ColumbiaGames\Api\Support\JsonResponse ColumbiaGames\Api\Support\Request RuntimeException">
               <div class="card-head">
-                <h3><code>apps/api/src/Controllers/AuthController.php</code></h3>
-                <span class="count-pill">1.5 KB</span>
+                <div>
+                  <p class="eyebrow">PHP · 1.5 KB</p>
+                  <h3><code>apps/api/src/Controllers/AuthController.php</code></h3>
+                </div>
+                <a class="anchor-link" href="#apps-api-src-controllers-authcontroller-php">#</a>
               </div>
               <p class="overview">Controller for login/logout/session lookup endpoints. Keeps HTTP validation separate from auth business rules.</p>
-              <p><strong>Declared symbols:</strong> <code>AuthController</code>, <code>__construct</code>, <code>login</code>, <code>logout</code>, <code>me</code></p>
-              <p><strong>Dependencies:</strong> <code>ColumbiaGames\Api\Services\AuthService</code>, <code>ColumbiaGames\Api\Support\JsonResponse</code>, <code>ColumbiaGames\Api\Support\Request</code>, <code>RuntimeException</code></p>
+              <div class="meta-grid">
+                <p><strong>Detected symbols:</strong> <code>AuthController</code>, <code>__construct</code>, <code>login</code>, <code>logout</code>, <code>me</code></p>
+                <p><strong>Dependencies:</strong> <code>ColumbiaGames\Api\Services\AuthService</code>, <code>ColumbiaGames\Api\Support\JsonResponse</code>, <code>ColumbiaGames\Api\Support\Request</code>, <code>RuntimeException</code></p>
+                <p class="muted tiny">Snapshot timestamp: 2026-03-15T09:46:57.000Z</p>
+              </div>
               <details>
                 <summary>Comment highlights</summary>
                 <p class="muted">No additional comment blocks were extracted from this file.</p>
               </details>
-              <p class="muted tiny">Snapshot timestamp: 2026-03-15T09:46:57.000Z</p>
+              <div class="symbol-section">
+                <div class="symbol-section-head">
+                  <h4>Documented symbols</h4>
+                  <span class="count-pill">1</span>
+                </div>
+                <div class="symbol-grid">
+    <section class="symbol-card searchable" id="apps-api-src-controllers-authcontroller-php-authcontroller" data-search="class AuthController No dedicated symbol docblock found; inherits file intent: Controller for login/logout/session lookup endpoints. Keeps HTTP validation separate from auth business rules. final class AuthController ">
+      <div class="symbol-head">
+        <div>
+          <p class="eyebrow">class · line 16</p>
+          <h4><code>AuthController</code></h4>
+        </div>
+        <a class="anchor-link" href="#apps-api-src-controllers-authcontroller-php-authcontroller">#</a>
+      </div>
+      <p class="symbol-signature"><code>final class AuthController</code></p>
+      <p class="overview">No dedicated symbol docblock found; inherits file intent: Controller for login/logout/session lookup endpoints. Keeps HTTP validation separate from auth business rules.</p>
+      
+    </section></div>
+              </div>
             </article>
-            <article class="card">
+            <article class="file-card searchable" id="apps-api-src-controllers-cartcontroller-php" data-search="apps/api/src/Controllers/CartController.php Controller for cart identity, cart reads, and cart mutations. Translates HTTP payloads into cart service calls.  CartController __construct identity show summary addItem updateItem removeItem ColumbiaGames\Api\Services\CartService ColumbiaGames\Api\Support\CookieBridge ColumbiaGames\Api\Support\JsonResponse ColumbiaGames\Api\Support\Request RuntimeException">
               <div class="card-head">
-                <h3><code>apps/api/src/Controllers/CartController.php</code></h3>
-                <span class="count-pill">4.1 KB</span>
+                <div>
+                  <p class="eyebrow">PHP · 4.1 KB</p>
+                  <h3><code>apps/api/src/Controllers/CartController.php</code></h3>
+                </div>
+                <a class="anchor-link" href="#apps-api-src-controllers-cartcontroller-php">#</a>
               </div>
               <p class="overview">Controller for cart identity, cart reads, and cart mutations. Translates HTTP payloads into cart service calls.</p>
-              <p><strong>Declared symbols:</strong> <code>CartController</code>, <code>__construct</code>, <code>identity</code>, <code>show</code>, <code>summary</code>, <code>addItem</code>, <code>updateItem</code>, <code>removeItem</code></p>
-              <p><strong>Dependencies:</strong> <code>ColumbiaGames\Api\Services\CartService</code>, <code>ColumbiaGames\Api\Support\CookieBridge</code>, <code>ColumbiaGames\Api\Support\JsonResponse</code>, <code>ColumbiaGames\Api\Support\Request</code>, <code>RuntimeException</code></p>
+              <div class="meta-grid">
+                <p><strong>Detected symbols:</strong> <code>CartController</code>, <code>__construct</code>, <code>identity</code>, <code>show</code>, <code>summary</code>, <code>addItem</code>, <code>updateItem</code>, <code>removeItem</code></p>
+                <p><strong>Dependencies:</strong> <code>ColumbiaGames\Api\Services\CartService</code>, <code>ColumbiaGames\Api\Support\CookieBridge</code>, <code>ColumbiaGames\Api\Support\JsonResponse</code>, <code>ColumbiaGames\Api\Support\Request</code>, <code>RuntimeException</code></p>
+                <p class="muted tiny">Snapshot timestamp: 2026-03-15T09:46:57.000Z</p>
+              </div>
               <details>
                 <summary>Comment highlights</summary>
                 <p class="muted">No additional comment blocks were extracted from this file.</p>
               </details>
-              <p class="muted tiny">Snapshot timestamp: 2026-03-15T09:46:57.000Z</p>
+              <div class="symbol-section">
+                <div class="symbol-section-head">
+                  <h4>Documented symbols</h4>
+                  <span class="count-pill">1</span>
+                </div>
+                <div class="symbol-grid">
+    <section class="symbol-card searchable" id="apps-api-src-controllers-cartcontroller-php-cartcontroller" data-search="class CartController No dedicated symbol docblock found; inherits file intent: Controller for cart identity, cart reads, and cart mutations. Translates HTTP payloads into cart service calls. final class CartController ">
+      <div class="symbol-head">
+        <div>
+          <p class="eyebrow">class · line 17</p>
+          <h4><code>CartController</code></h4>
+        </div>
+        <a class="anchor-link" href="#apps-api-src-controllers-cartcontroller-php-cartcontroller">#</a>
+      </div>
+      <p class="symbol-signature"><code>final class CartController</code></p>
+      <p class="overview">No dedicated symbol docblock found; inherits file intent: Controller for cart identity, cart reads, and cart mutations. Translates HTTP payloads into cart service calls.</p>
+      
+    </section></div>
+              </div>
             </article>
-            <article class="card">
+            <article class="file-card searchable" id="apps-api-src-controllers-catalogcontroller-php" data-search="apps/api/src/Controllers/CatalogController.php Controller for product listing, product detail, and related-product catalog endpoints.  CatalogController __construct index show related ColumbiaGames\Api\Services\CatalogService ColumbiaGames\Api\Support\JsonResponse ColumbiaGames\Api\Support\Request">
               <div class="card-head">
-                <h3><code>apps/api/src/Controllers/CatalogController.php</code></h3>
-                <span class="count-pill">1.1 KB</span>
+                <div>
+                  <p class="eyebrow">PHP · 1.1 KB</p>
+                  <h3><code>apps/api/src/Controllers/CatalogController.php</code></h3>
+                </div>
+                <a class="anchor-link" href="#apps-api-src-controllers-catalogcontroller-php">#</a>
               </div>
               <p class="overview">Controller for product listing, product detail, and related-product catalog endpoints.</p>
-              <p><strong>Declared symbols:</strong> <code>CatalogController</code>, <code>__construct</code>, <code>index</code>, <code>show</code>, <code>related</code></p>
-              <p><strong>Dependencies:</strong> <code>ColumbiaGames\Api\Services\CatalogService</code>, <code>ColumbiaGames\Api\Support\JsonResponse</code>, <code>ColumbiaGames\Api\Support\Request</code></p>
+              <div class="meta-grid">
+                <p><strong>Detected symbols:</strong> <code>CatalogController</code>, <code>__construct</code>, <code>index</code>, <code>show</code>, <code>related</code></p>
+                <p><strong>Dependencies:</strong> <code>ColumbiaGames\Api\Services\CatalogService</code>, <code>ColumbiaGames\Api\Support\JsonResponse</code>, <code>ColumbiaGames\Api\Support\Request</code></p>
+                <p class="muted tiny">Snapshot timestamp: 2026-03-15T09:46:57.000Z</p>
+              </div>
               <details>
                 <summary>Comment highlights</summary>
                 <p class="muted">No additional comment blocks were extracted from this file.</p>
               </details>
-              <p class="muted tiny">Snapshot timestamp: 2026-03-15T09:46:57.000Z</p>
+              <div class="symbol-section">
+                <div class="symbol-section-head">
+                  <h4>Documented symbols</h4>
+                  <span class="count-pill">1</span>
+                </div>
+                <div class="symbol-grid">
+    <section class="symbol-card searchable" id="apps-api-src-controllers-catalogcontroller-php-catalogcontroller" data-search="class CatalogController No dedicated symbol docblock found; inherits file intent: Controller for product listing, product detail, and related-product catalog endpoints. final class CatalogController ">
+      <div class="symbol-head">
+        <div>
+          <p class="eyebrow">class · line 15</p>
+          <h4><code>CatalogController</code></h4>
+        </div>
+        <a class="anchor-link" href="#apps-api-src-controllers-catalogcontroller-php-catalogcontroller">#</a>
+      </div>
+      <p class="symbol-signature"><code>final class CatalogController</code></p>
+      <p class="overview">No dedicated symbol docblock found; inherits file intent: Controller for product listing, product detail, and related-product catalog endpoints.</p>
+      
+    </section></div>
+              </div>
             </article>
-            <article class="card">
+            <article class="file-card searchable" id="apps-api-src-controllers-checkoutcontroller-php" data-search="apps/api/src/Controllers/CheckoutController.php Controller for checkout summary, validation, and submit endpoints.  CheckoutController __construct summary validate submit ColumbiaGames\Api\Services\CheckoutService ColumbiaGames\Api\Support\CookieBridge ColumbiaGames\Api\Support\JsonResponse ColumbiaGames\Api\Support\Request">
               <div class="card-head">
-                <h3><code>apps/api/src/Controllers/CheckoutController.php</code></h3>
-                <span class="count-pill">1.9 KB</span>
+                <div>
+                  <p class="eyebrow">PHP · 1.9 KB</p>
+                  <h3><code>apps/api/src/Controllers/CheckoutController.php</code></h3>
+                </div>
+                <a class="anchor-link" href="#apps-api-src-controllers-checkoutcontroller-php">#</a>
               </div>
               <p class="overview">Controller for checkout summary, validation, and submit endpoints.</p>
-              <p><strong>Declared symbols:</strong> <code>CheckoutController</code>, <code>__construct</code>, <code>summary</code>, <code>validate</code>, <code>submit</code></p>
-              <p><strong>Dependencies:</strong> <code>ColumbiaGames\Api\Services\CheckoutService</code>, <code>ColumbiaGames\Api\Support\CookieBridge</code>, <code>ColumbiaGames\Api\Support\JsonResponse</code>, <code>ColumbiaGames\Api\Support\Request</code></p>
+              <div class="meta-grid">
+                <p><strong>Detected symbols:</strong> <code>CheckoutController</code>, <code>__construct</code>, <code>summary</code>, <code>validate</code>, <code>submit</code></p>
+                <p><strong>Dependencies:</strong> <code>ColumbiaGames\Api\Services\CheckoutService</code>, <code>ColumbiaGames\Api\Support\CookieBridge</code>, <code>ColumbiaGames\Api\Support\JsonResponse</code>, <code>ColumbiaGames\Api\Support\Request</code></p>
+                <p class="muted tiny">Snapshot timestamp: 2026-03-15T09:46:57.000Z</p>
+              </div>
               <details>
                 <summary>Comment highlights</summary>
                 <p class="muted">No additional comment blocks were extracted from this file.</p>
               </details>
-              <p class="muted tiny">Snapshot timestamp: 2026-03-15T09:46:57.000Z</p>
+              <div class="symbol-section">
+                <div class="symbol-section-head">
+                  <h4>Documented symbols</h4>
+                  <span class="count-pill">1</span>
+                </div>
+                <div class="symbol-grid">
+    <section class="symbol-card searchable" id="apps-api-src-controllers-checkoutcontroller-php-checkoutcontroller" data-search="class CheckoutController No dedicated symbol docblock found; inherits file intent: Controller for checkout summary, validation, and submit endpoints. final class CheckoutController ">
+      <div class="symbol-head">
+        <div>
+          <p class="eyebrow">class · line 16</p>
+          <h4><code>CheckoutController</code></h4>
+        </div>
+        <a class="anchor-link" href="#apps-api-src-controllers-checkoutcontroller-php-checkoutcontroller">#</a>
+      </div>
+      <p class="symbol-signature"><code>final class CheckoutController</code></p>
+      <p class="overview">No dedicated symbol docblock found; inherits file intent: Controller for checkout summary, validation, and submit endpoints.</p>
+      
+    </section></div>
+              </div>
             </article>
-            <article class="card">
+            <article class="file-card searchable" id="apps-api-src-controllers-librarycontroller-php" data-search="apps/api/src/Controllers/LibraryController.php Controller for the authenticated digital library endpoint.  LibraryController __construct index ColumbiaGames\Api\Services\LibraryService ColumbiaGames\Api\Support\JsonResponse ColumbiaGames\Api\Support\Request RuntimeException">
               <div class="card-head">
-                <h3><code>apps/api/src/Controllers/LibraryController.php</code></h3>
-                <span class="count-pill">0.7 KB</span>
+                <div>
+                  <p class="eyebrow">PHP · 0.7 KB</p>
+                  <h3><code>apps/api/src/Controllers/LibraryController.php</code></h3>
+                </div>
+                <a class="anchor-link" href="#apps-api-src-controllers-librarycontroller-php">#</a>
               </div>
               <p class="overview">Controller for the authenticated digital library endpoint.</p>
-              <p><strong>Declared symbols:</strong> <code>LibraryController</code>, <code>__construct</code>, <code>index</code></p>
-              <p><strong>Dependencies:</strong> <code>ColumbiaGames\Api\Services\LibraryService</code>, <code>ColumbiaGames\Api\Support\JsonResponse</code>, <code>ColumbiaGames\Api\Support\Request</code>, <code>RuntimeException</code></p>
+              <div class="meta-grid">
+                <p><strong>Detected symbols:</strong> <code>LibraryController</code>, <code>__construct</code>, <code>index</code></p>
+                <p><strong>Dependencies:</strong> <code>ColumbiaGames\Api\Services\LibraryService</code>, <code>ColumbiaGames\Api\Support\JsonResponse</code>, <code>ColumbiaGames\Api\Support\Request</code>, <code>RuntimeException</code></p>
+                <p class="muted tiny">Snapshot timestamp: 2026-03-15T09:46:57.000Z</p>
+              </div>
               <details>
                 <summary>Comment highlights</summary>
                 <p class="muted">No additional comment blocks were extracted from this file.</p>
               </details>
-              <p class="muted tiny">Snapshot timestamp: 2026-03-15T09:46:57.000Z</p>
+              <div class="symbol-section">
+                <div class="symbol-section-head">
+                  <h4>Documented symbols</h4>
+                  <span class="count-pill">1</span>
+                </div>
+                <div class="symbol-grid">
+    <section class="symbol-card searchable" id="apps-api-src-controllers-librarycontroller-php-librarycontroller" data-search="class LibraryController No dedicated symbol docblock found; inherits file intent: Controller for the authenticated digital library endpoint. final class LibraryController ">
+      <div class="symbol-head">
+        <div>
+          <p class="eyebrow">class · line 16</p>
+          <h4><code>LibraryController</code></h4>
+        </div>
+        <a class="anchor-link" href="#apps-api-src-controllers-librarycontroller-php-librarycontroller">#</a>
+      </div>
+      <p class="symbol-signature"><code>final class LibraryController</code></p>
+      <p class="overview">No dedicated symbol docblock found; inherits file intent: Controller for the authenticated digital library endpoint.</p>
+      
+    </section></div>
+              </div>
             </article>
         </div>
       </section>
-      <section class="group">
+      <section class="group searchable" data-search="apps/api/src/Database">
         <div class="group-head">
           <h2>apps/api/src/Database</h2>
           <span class="count-pill">1 file(s)</span>
         </div>
-        <div class="card-grid">
+        <div class="file-stack">
           
-            <article class="card">
+            <article class="file-card searchable" id="apps-api-src-database-connectionfactory-php" data-search="apps/api/src/Database/ConnectionFactory.php Builds and configures PostgreSQL PDO connections for both legacy CCM and store databases.  ConnectionFactory ccm store ping connect PDO PDOException">
               <div class="card-head">
-                <h3><code>apps/api/src/Database/ConnectionFactory.php</code></h3>
-                <span class="count-pill">2.0 KB</span>
+                <div>
+                  <p class="eyebrow">PHP · 2.0 KB</p>
+                  <h3><code>apps/api/src/Database/ConnectionFactory.php</code></h3>
+                </div>
+                <a class="anchor-link" href="#apps-api-src-database-connectionfactory-php">#</a>
               </div>
               <p class="overview">Builds and configures PostgreSQL PDO connections for both legacy CCM and store databases.</p>
-              <p><strong>Declared symbols:</strong> <code>ConnectionFactory</code>, <code>ccm</code>, <code>store</code>, <code>ping</code>, <code>connect</code></p>
-              <p><strong>Dependencies:</strong> <code>PDO</code>, <code>PDOException</code></p>
+              <div class="meta-grid">
+                <p><strong>Detected symbols:</strong> <code>ConnectionFactory</code>, <code>ccm</code>, <code>store</code>, <code>ping</code>, <code>connect</code></p>
+                <p><strong>Dependencies:</strong> <code>PDO</code>, <code>PDOException</code></p>
+                <p class="muted tiny">Snapshot timestamp: 2026-03-15T09:46:57.000Z</p>
+              </div>
               <details>
                 <summary>Comment highlights</summary>
                 <p class="muted">No additional comment blocks were extracted from this file.</p>
               </details>
-              <p class="muted tiny">Snapshot timestamp: 2026-03-15T09:46:57.000Z</p>
+              <div class="symbol-section">
+                <div class="symbol-section-head">
+                  <h4>Documented symbols</h4>
+                  <span class="count-pill">1</span>
+                </div>
+                <div class="symbol-grid">
+    <section class="symbol-card searchable" id="apps-api-src-database-connectionfactory-php-connectionfactory" data-search="class ConnectionFactory No dedicated symbol docblock found; inherits file intent: Builds and configures PostgreSQL PDO connections for both legacy CCM and store databases. final class ConnectionFactory ">
+      <div class="symbol-head">
+        <div>
+          <p class="eyebrow">class · line 14</p>
+          <h4><code>ConnectionFactory</code></h4>
+        </div>
+        <a class="anchor-link" href="#apps-api-src-database-connectionfactory-php-connectionfactory">#</a>
+      </div>
+      <p class="symbol-signature"><code>final class ConnectionFactory</code></p>
+      <p class="overview">No dedicated symbol docblock found; inherits file intent: Builds and configures PostgreSQL PDO connections for both legacy CCM and store databases.</p>
+      
+    </section></div>
+              </div>
             </article>
         </div>
       </section>
-      <section class="group">
+      <section class="group searchable" data-search="apps/api/src/Repositories">
         <div class="group-head">
           <h2>apps/api/src/Repositories</h2>
           <span class="count-pill">5 file(s)</span>
         </div>
-        <div class="card-grid">
+        <div class="file-stack">
           
-            <article class="card">
+            <article class="file-card searchable" id="apps-api-src-repositories-cartrepository-php" data-search="apps/api/src/Repositories/CartRepository.php Legacy cart adapter: reads and writes the browser-state + CCM EAV cart model. @var array&lt;string, array|null&gt; CartRepository __construct resolveBrowserId getIdentity getCart addItem updateItem removeItem beginTransaction commitTransaction rollBackTransaction submitOrderDraft mutateCart chooseStorage shouldUseBrowserState baseQuantities readBrowserStateRow findActiveOrder resolveLegacyContext ensureBrowserStateRow PDO RuntimeException">
               <div class="card-head">
-                <h3><code>apps/api/src/Repositories/CartRepository.php</code></h3>
-                <span class="count-pill">39.8 KB</span>
+                <div>
+                  <p class="eyebrow">PHP · 39.8 KB</p>
+                  <h3><code>apps/api/src/Repositories/CartRepository.php</code></h3>
+                </div>
+                <a class="anchor-link" href="#apps-api-src-repositories-cartrepository-php">#</a>
               </div>
               <p class="overview">Legacy cart adapter: reads and writes the browser-state + CCM EAV cart model.</p>
-              <p><strong>Declared symbols:</strong> <code>CartRepository</code>, <code>__construct</code>, <code>resolveBrowserId</code>, <code>getIdentity</code>, <code>getCart</code>, <code>addItem</code>, <code>updateItem</code>, <code>removeItem</code>, <code>beginTransaction</code>, <code>commitTransaction</code>, <code>rollBackTransaction</code>, <code>submitOrderDraft</code></p>
-              <p><strong>Dependencies:</strong> <code>PDO</code>, <code>RuntimeException</code></p>
+              <div class="meta-grid">
+                <p><strong>Detected symbols:</strong> <code>CartRepository</code>, <code>__construct</code>, <code>resolveBrowserId</code>, <code>getIdentity</code>, <code>getCart</code>, <code>addItem</code>, <code>updateItem</code>, <code>removeItem</code>, <code>beginTransaction</code>, <code>commitTransaction</code>, <code>rollBackTransaction</code>, <code>submitOrderDraft</code>, <code>mutateCart</code>, <code>chooseStorage</code>, <code>shouldUseBrowserState</code>, <code>baseQuantities</code>, <code>readBrowserStateRow</code>, <code>findActiveOrder</code>, <code>resolveLegacyContext</code>, <code>ensureBrowserStateRow</code></p>
+                <p><strong>Dependencies:</strong> <code>PDO</code>, <code>RuntimeException</code></p>
+                <p class="muted tiny">Snapshot timestamp: 2026-03-15T09:46:57.000Z</p>
+              </div>
               <details>
                 <summary>Comment highlights</summary>
                 <ul><li>@var array&lt;string, array|null&gt;</li></ul>
               </details>
-              <p class="muted tiny">Snapshot timestamp: 2026-03-15T09:46:57.000Z</p>
+              <div class="symbol-section">
+                <div class="symbol-section-head">
+                  <h4>Documented symbols</h4>
+                  <span class="count-pill">25</span>
+                </div>
+                <div class="symbol-grid">
+    <section class="symbol-card searchable" id="apps-api-src-repositories-cartrepository-php-cartrepository" data-search="class CartRepository No dedicated symbol docblock found; inherits file intent: Legacy cart adapter: reads and writes the browser-state + CCM EAV cart model. final class CartRepository ">
+      <div class="symbol-head">
+        <div>
+          <p class="eyebrow">class · line 14</p>
+          <h4><code>CartRepository</code></h4>
+        </div>
+        <a class="anchor-link" href="#apps-api-src-repositories-cartrepository-php-cartrepository">#</a>
+      </div>
+      <p class="symbol-signature"><code>final class CartRepository</code></p>
+      <p class="overview">No dedicated symbol docblock found; inherits file intent: Legacy cart adapter: reads and writes the browser-state + CCM EAV cart model.</p>
+      
+    </section>
+    <section class="symbol-card searchable" id="apps-api-src-repositories-cartrepository-php-mutatecart" data-search="function mutateCart No descriptive summary was found for this symbol. private function mutateCart(string $browserId, callable $mutator): array param callable(array&lt;string,int&gt;): array&lt;string,int&gt; $mutator">
+      <div class="symbol-head">
+        <div>
+          <p class="eyebrow">function · line 169</p>
+          <h4><code>mutateCart</code></h4>
+        </div>
+        <a class="anchor-link" href="#apps-api-src-repositories-cartrepository-php-mutatecart">#</a>
+      </div>
+      <p class="symbol-signature"><code>private function mutateCart(string $browserId, callable $mutator): array</code></p>
+      <p class="overview">No descriptive summary was found for this symbol.</p>
+      <details class="tags-block"><summary>Doc tags</summary><ul><li><code>@param</code> callable(array&lt;string,int&gt;): array&lt;string,int&gt; $mutator</li></ul></details>
+    </section>
+    <section class="symbol-card searchable" id="apps-api-src-repositories-cartrepository-php-choosestorage" data-search="function chooseStorage No descriptive summary was found for this symbol. private function chooseStorage(?array $browserState, ?array $activeOrder): string param array&lt;string,mixed&gt;|null $browserState param array&lt;string,mixed&gt;|null $activeOrder">
+      <div class="symbol-head">
+        <div>
+          <p class="eyebrow">function · line 212</p>
+          <h4><code>chooseStorage</code></h4>
+        </div>
+        <a class="anchor-link" href="#apps-api-src-repositories-cartrepository-php-choosestorage">#</a>
+      </div>
+      <p class="symbol-signature"><code>private function chooseStorage(?array $browserState, ?array $activeOrder): string</code></p>
+      <p class="overview">No descriptive summary was found for this symbol.</p>
+      <details class="tags-block"><summary>Doc tags</summary><ul><li><code>@param</code> array&lt;string,mixed&gt;|null $browserState</li><li><code>@param</code> array&lt;string,mixed&gt;|null $activeOrder</li></ul></details>
+    </section>
+    <section class="symbol-card searchable" id="apps-api-src-repositories-cartrepository-php-shouldusebrowserstate" data-search="function shouldUseBrowserState No descriptive summary was found for this symbol. private function shouldUseBrowserState(?array $browserState, ?array $activeOrder): bool param array&lt;string,mixed&gt;|null $browserState param array&lt;string,mixed&gt;|null $activeOrder">
+      <div class="symbol-head">
+        <div>
+          <p class="eyebrow">function · line 225</p>
+          <h4><code>shouldUseBrowserState</code></h4>
+        </div>
+        <a class="anchor-link" href="#apps-api-src-repositories-cartrepository-php-shouldusebrowserstate">#</a>
+      </div>
+      <p class="symbol-signature"><code>private function shouldUseBrowserState(?array $browserState, ?array $activeOrder): bool</code></p>
+      <p class="overview">No descriptive summary was found for this symbol.</p>
+      <details class="tags-block"><summary>Doc tags</summary><ul><li><code>@param</code> array&lt;string,mixed&gt;|null $browserState</li><li><code>@param</code> array&lt;string,mixed&gt;|null $activeOrder</li></ul></details>
+    </section>
+    <section class="symbol-card searchable" id="apps-api-src-repositories-cartrepository-php-basequantities" data-search="function baseQuantities No descriptive summary was found for this symbol. private function baseQuantities(?array $browserState, ?array $activeOrder): array param array&lt;string,mixed&gt;|null $browserState param array&lt;string,mixed&gt;|null $activeOrder return array&lt;string,int&gt;">
+      <div class="symbol-head">
+        <div>
+          <p class="eyebrow">function · line 243</p>
+          <h4><code>baseQuantities</code></h4>
+        </div>
+        <a class="anchor-link" href="#apps-api-src-repositories-cartrepository-php-basequantities">#</a>
+      </div>
+      <p class="symbol-signature"><code>private function baseQuantities(?array $browserState, ?array $activeOrder): array</code></p>
+      <p class="overview">No descriptive summary was found for this symbol.</p>
+      <details class="tags-block"><summary>Doc tags</summary><ul><li><code>@param</code> array&lt;string,mixed&gt;|null $browserState</li><li><code>@param</code> array&lt;string,mixed&gt;|null $activeOrder</li><li><code>@return</code> array&lt;string,int&gt;</li></ul></details>
+    </section>
+    <section class="symbol-card searchable" id="apps-api-src-repositories-cartrepository-php-resolvelegacycontext" data-search="function resolveLegacyContext No descriptive summary was found for this symbol. private function resolveLegacyContext(string $browserId, ?string $orderId = null, ?array $browserState = null): array param array&lt;string,mixed&gt;|null $browserState return array{merchantId:string,configId:string}">
+      <div class="symbol-head">
+        <div>
+          <p class="eyebrow">function · line 317</p>
+          <h4><code>resolveLegacyContext</code></h4>
+        </div>
+        <a class="anchor-link" href="#apps-api-src-repositories-cartrepository-php-resolvelegacycontext">#</a>
+      </div>
+      <p class="symbol-signature"><code>private function resolveLegacyContext(string $browserId, ?string $orderId = null, ?array $browserState = null): array</code></p>
+      <p class="overview">No descriptive summary was found for this symbol.</p>
+      <details class="tags-block"><summary>Doc tags</summary><ul><li><code>@param</code> array&lt;string,mixed&gt;|null $browserState</li><li><code>@return</code> array{merchantId:string,configId:string}</li></ul></details>
+    </section>
+    <section class="symbol-card searchable" id="apps-api-src-repositories-cartrepository-php-writebrowserstate" data-search="function writeBrowserState No descriptive summary was found for this symbol. private function writeBrowserState(array $context, string $browserId, array $quantities, ?string $orderId): void param array{merchantId:string,configId:string} $context param array&lt;string,int&gt; $quantities">
+      <div class="symbol-head">
+        <div>
+          <p class="eyebrow">function · line 383</p>
+          <h4><code>writeBrowserState</code></h4>
+        </div>
+        <a class="anchor-link" href="#apps-api-src-repositories-cartrepository-php-writebrowserstate">#</a>
+      </div>
+      <p class="symbol-signature"><code>private function writeBrowserState(array $context, string $browserId, array $quantities, ?string $orderId): void</code></p>
+      <p class="overview">No descriptive summary was found for this symbol.</p>
+      <details class="tags-block"><summary>Doc tags</summary><ul><li><code>@param</code> array{merchantId:string,configId:string} $context</li><li><code>@param</code> array&lt;string,int&gt; $quantities</li></ul></details>
+    </section>
+    <section class="symbol-card searchable" id="apps-api-src-repositories-cartrepository-php-buildcartfromquantities" data-search="function buildCartFromQuantities No descriptive summary was found for this symbol. private function buildCartFromQuantities(string $browserId, array $quantities, string $storage, ?string $orderId): array param array&lt;string,int&gt; $quantities">
+      <div class="symbol-head">
+        <div>
+          <p class="eyebrow">function · line 501</p>
+          <h4><code>buildCartFromQuantities</code></h4>
+        </div>
+        <a class="anchor-link" href="#apps-api-src-repositories-cartrepository-php-buildcartfromquantities">#</a>
+      </div>
+      <p class="symbol-signature"><code>private function buildCartFromQuantities(string $browserId, array $quantities, string $storage, ?string $orderId): array</code></p>
+      <p class="overview">No descriptive summary was found for this symbol.</p>
+      <details class="tags-block"><summary>Doc tags</summary><ul><li><code>@param</code> array&lt;string,int&gt; $quantities</li></ul></details>
+    </section>
+    <section class="symbol-card searchable" id="apps-api-src-repositories-cartrepository-php-loadorderfields" data-search="function loadOrderFields No descriptive summary was found for this symbol. private function loadOrderFields(string $orderId): array return array&lt;string,string&gt;">
+      <div class="symbol-head">
+        <div>
+          <p class="eyebrow">function · line 579</p>
+          <h4><code>loadOrderFields</code></h4>
+        </div>
+        <a class="anchor-link" href="#apps-api-src-repositories-cartrepository-php-loadorderfields">#</a>
+      </div>
+      <p class="symbol-signature"><code>private function loadOrderFields(string $orderId): array</code></p>
+      <p class="overview">No descriptive summary was found for this symbol.</p>
+      <details class="tags-block"><summary>Doc tags</summary><ul><li><code>@return</code> array&lt;string,string&gt;</li></ul></details>
+    </section>
+    <section class="symbol-card searchable" id="apps-api-src-repositories-cartrepository-php-loaditemfieldmap" data-search="function loadItemFieldMap No descriptive summary was found for this symbol. private function loadItemFieldMap(string $orderId): array return array&lt;string, array&lt;string,string&gt;&gt;">
+      <div class="symbol-head">
+        <div>
+          <p class="eyebrow">function · line 604</p>
+          <h4><code>loadItemFieldMap</code></h4>
+        </div>
+        <a class="anchor-link" href="#apps-api-src-repositories-cartrepository-php-loaditemfieldmap">#</a>
+      </div>
+      <p class="symbol-signature"><code>private function loadItemFieldMap(string $orderId): array</code></p>
+      <p class="overview">No descriptive summary was found for this symbol.</p>
+      <details class="tags-block"><summary>Doc tags</summary><ul><li><code>@return</code> array&lt;string, array&lt;string,string&gt;&gt;</li></ul></details>
+    </section>
+    <section class="symbol-card searchable" id="apps-api-src-repositories-cartrepository-php-loadquantitiesfromorder" data-search="function loadQuantitiesFromOrder No descriptive summary was found for this symbol. private function loadQuantitiesFromOrder(string $orderId): array return array&lt;string,int&gt;">
+      <div class="symbol-head">
+        <div>
+          <p class="eyebrow">function · line 630</p>
+          <h4><code>loadQuantitiesFromOrder</code></h4>
+        </div>
+        <a class="anchor-link" href="#apps-api-src-repositories-cartrepository-php-loadquantitiesfromorder">#</a>
+      </div>
+      <p class="symbol-signature"><code>private function loadQuantitiesFromOrder(string $orderId): array</code></p>
+      <p class="overview">No descriptive summary was found for this symbol.</p>
+      <details class="tags-block"><summary>Doc tags</summary><ul><li><code>@return</code> array&lt;string,int&gt;</li></ul></details>
+    </section>
+    <section class="symbol-card searchable" id="apps-api-src-repositories-cartrepository-php-syncorder" data-search="function syncOrder No descriptive summary was found for this symbol. private function syncOrder(array $context, string $orderId, string $browserId, array $quantities, bool $active): void param array{merchantId:string,configId:string} $context param array&lt;string,int&gt; $quantities">
+      <div class="symbol-head">
+        <div>
+          <p class="eyebrow">function · line 647</p>
+          <h4><code>syncOrder</code></h4>
+        </div>
+        <a class="anchor-link" href="#apps-api-src-repositories-cartrepository-php-syncorder">#</a>
+      </div>
+      <p class="symbol-signature"><code>private function syncOrder(array $context, string $orderId, string $browserId, array $quantities, bool $active): void</code></p>
+      <p class="overview">No descriptive summary was found for this symbol.</p>
+      <details class="tags-block"><summary>Doc tags</summary><ul><li><code>@param</code> array{merchantId:string,configId:string} $context</li><li><code>@param</code> array&lt;string,int&gt; $quantities</li></ul></details>
+    </section>
+    <section class="symbol-card searchable" id="apps-api-src-repositories-cartrepository-php-syncorderstatus" data-search="function syncOrderStatus No descriptive summary was found for this symbol. private function syncOrderStatus(array $context, string $orderId, string $browserId, bool $active): void param array{merchantId:string,configId:string} $context">
+      <div class="symbol-head">
+        <div>
+          <p class="eyebrow">function · line 657</p>
+          <h4><code>syncOrderStatus</code></h4>
+        </div>
+        <a class="anchor-link" href="#apps-api-src-repositories-cartrepository-php-syncorderstatus">#</a>
+      </div>
+      <p class="symbol-signature"><code>private function syncOrderStatus(array $context, string $orderId, string $browserId, bool $active): void</code></p>
+      <p class="overview">No descriptive summary was found for this symbol.</p>
+      <details class="tags-block"><summary>Doc tags</summary><ul><li><code>@param</code> array{merchantId:string,configId:string} $context</li></ul></details>
+    </section>
+    <section class="symbol-card searchable" id="apps-api-src-repositories-cartrepository-php-syncorderstatuswithvalue" data-search="function syncOrderStatusWithValue No descriptive summary was found for this symbol. private function syncOrderStatusWithValue(array $context, string $orderId, string $browserId, int $status): void param array{merchantId:string,configId:string} $context">
+      <div class="symbol-head">
+        <div>
+          <p class="eyebrow">function · line 666</p>
+          <h4><code>syncOrderStatusWithValue</code></h4>
+        </div>
+        <a class="anchor-link" href="#apps-api-src-repositories-cartrepository-php-syncorderstatuswithvalue">#</a>
+      </div>
+      <p class="symbol-signature"><code>private function syncOrderStatusWithValue(array $context, string $orderId, string $browserId, int $status): void</code></p>
+      <p class="overview">No descriptive summary was found for this symbol.</p>
+      <details class="tags-block"><summary>Doc tags</summary><ul><li><code>@param</code> array{merchantId:string,configId:string} $context</li></ul></details>
+    </section>
+    <section class="symbol-card searchable" id="apps-api-src-repositories-cartrepository-php-replaceitemrows" data-search="function replaceItemRows No descriptive summary was found for this symbol. private function replaceItemRows(array $context, string $orderId, array $quantities): void param array{merchantId:string,configId:string} $context param array&lt;string,int&gt; $quantities">
+      <div class="symbol-head">
+        <div>
+          <p class="eyebrow">function · line 706</p>
+          <h4><code>replaceItemRows</code></h4>
+        </div>
+        <a class="anchor-link" href="#apps-api-src-repositories-cartrepository-php-replaceitemrows">#</a>
+      </div>
+      <p class="symbol-signature"><code>private function replaceItemRows(array $context, string $orderId, array $quantities): void</code></p>
+      <p class="overview">No descriptive summary was found for this symbol.</p>
+      <details class="tags-block"><summary>Doc tags</summary><ul><li><code>@param</code> array{merchantId:string,configId:string} $context</li><li><code>@param</code> array&lt;string,int&gt; $quantities</li></ul></details>
+    </section>
+    <section class="symbol-card searchable" id="apps-api-src-repositories-cartrepository-php-syncordersummaryfields" data-search="function syncOrderSummaryFields No descriptive summary was found for this symbol. private function syncOrderSummaryFields(array $context, string $orderId, string $browserId, array $quantities): void param array{merchantId:string,configId:string} $context param array&lt;string,int&gt; $quantities">
+      <div class="symbol-head">
+        <div>
+          <p class="eyebrow">function · line 744</p>
+          <h4><code>syncOrderSummaryFields</code></h4>
+        </div>
+        <a class="anchor-link" href="#apps-api-src-repositories-cartrepository-php-syncordersummaryfields">#</a>
+      </div>
+      <p class="symbol-signature"><code>private function syncOrderSummaryFields(array $context, string $orderId, string $browserId, array $quantities): void</code></p>
+      <p class="overview">No descriptive summary was found for this symbol.</p>
+      <details class="tags-block"><summary>Doc tags</summary><ul><li><code>@param</code> array{merchantId:string,configId:string} $context</li><li><code>@param</code> array&lt;string,int&gt; $quantities</li></ul></details>
+    </section>
+    <section class="symbol-card searchable" id="apps-api-src-repositories-cartrepository-php-upsertorderfield" data-search="function upsertOrderField No descriptive summary was found for this symbol. private function upsertOrderField(array $context, string $orderId, string $field, string $value): void param array{merchantId:string,configId:string} $context">
+      <div class="symbol-head">
+        <div>
+          <p class="eyebrow">function · line 766</p>
+          <h4><code>upsertOrderField</code></h4>
+        </div>
+        <a class="anchor-link" href="#apps-api-src-repositories-cartrepository-php-upsertorderfield">#</a>
+      </div>
+      <p class="symbol-signature"><code>private function upsertOrderField(array $context, string $orderId, string $field, string $value): void</code></p>
+      <p class="overview">No descriptive summary was found for this symbol.</p>
+      <details class="tags-block"><summary>Doc tags</summary><ul><li><code>@param</code> array{merchantId:string,configId:string} $context</li></ul></details>
+    </section>
+    <section class="symbol-card searchable" id="apps-api-src-repositories-cartrepository-php-calculatemetrics" data-search="function calculateMetrics No descriptive summary was found for this symbol. private function calculateMetrics(array $quantities): array param array&lt;string,int&gt; $quantities return array{paidLineCount:int,discountableTotal:float,downloadableSubtotal:float,shippableSubtotal:float,totalItemCount:int,uniqueItemCount:int,downloadableItemCount:int,nonDownloadableItemCount:int}">
+      <div class="symbol-head">
+        <div>
+          <p class="eyebrow">function · line 801</p>
+          <h4><code>calculateMetrics</code></h4>
+        </div>
+        <a class="anchor-link" href="#apps-api-src-repositories-cartrepository-php-calculatemetrics">#</a>
+      </div>
+      <p class="symbol-signature"><code>private function calculateMetrics(array $quantities): array</code></p>
+      <p class="overview">No descriptive summary was found for this symbol.</p>
+      <details class="tags-block"><summary>Doc tags</summary><ul><li><code>@param</code> array&lt;string,int&gt; $quantities</li><li><code>@return</code> array{paidLineCount:int,discountableTotal:float,downloadableSubtotal:float,shippableSubtotal:float,totalItemCount:int,uniqueItemCount:int,downloadableItemCount:int,nonDownloadableItemCount:int}</li></ul></details>
+    </section>
+    <section class="symbol-card searchable" id="apps-api-src-repositories-cartrepository-php-buildcustomerloginstate" data-search="function buildCustomerLoginState No descriptive summary was found for this symbol. private function buildCustomerLoginState(string $browserId, string $orderId, array $context, array $quantities, array $metrics, int $orderDate): string param array&lt;string,int&gt; $quantities param array{merchantId:string,configId:string} $context param array{paidLineCount:int,discountableTotal:float,downloadableSubtotal:float,shippableSubtotal:float,totalItemCount:int,uniqueItemCount:int,downloadableItemCount:int,nonDownloadableItemCount:int} $metrics">
+      <div class="symbol-head">
+        <div>
+          <p class="eyebrow">function · line 852</p>
+          <h4><code>buildCustomerLoginState</code></h4>
+        </div>
+        <a class="anchor-link" href="#apps-api-src-repositories-cartrepository-php-buildcustomerloginstate">#</a>
+      </div>
+      <p class="symbol-signature"><code>private function buildCustomerLoginState(string $browserId, string $orderId, array $context, array $quantities, array $metrics, int $orderDate): string</code></p>
+      <p class="overview">No descriptive summary was found for this symbol.</p>
+      <details class="tags-block"><summary>Doc tags</summary><ul><li><code>@param</code> array&lt;string,int&gt; $quantities</li><li><code>@param</code> array{merchantId:string,configId:string} $context</li><li><code>@param</code> array{paidLineCount:int,discountableTotal:float,downloadableSubtotal:float,shippableSubtotal:float,totalItemCount:int,uniqueItemCount:int,downloadableItemCount:int,nonDownloadableItemCount:int} $metrics</li></ul></details>
+    </section>
+    <section class="symbol-card searchable" id="apps-api-src-repositories-cartrepository-php-buildbrowserstatestring" data-search="function buildBrowserStateString No descriptive summary was found for this symbol. private function buildBrowserStateString(array $quantities, array $context, ?string $orderId = null): string param array&lt;string,int&gt; $quantities param array{merchantId:string,configId:string} $context">
+      <div class="symbol-head">
+        <div>
+          <p class="eyebrow">function · line 885</p>
+          <h4><code>buildBrowserStateString</code></h4>
+        </div>
+        <a class="anchor-link" href="#apps-api-src-repositories-cartrepository-php-buildbrowserstatestring">#</a>
+      </div>
+      <p class="symbol-signature"><code>private function buildBrowserStateString(array $quantities, array $context, ?string $orderId = null): string</code></p>
+      <p class="overview">No descriptive summary was found for this symbol.</p>
+      <details class="tags-block"><summary>Doc tags</summary><ul><li><code>@param</code> array&lt;string,int&gt; $quantities</li><li><code>@param</code> array{merchantId:string,configId:string} $context</li></ul></details>
+    </section>
+    <section class="symbol-card searchable" id="apps-api-src-repositories-cartrepository-php-itemfieldsforproduct" data-search="function itemFieldsForProduct No descriptive summary was found for this symbol. private function itemFieldsForProduct(string $productId, int $quantity, array $product): array param array&lt;string,mixed&gt; $product return array&lt;string,string&gt;">
+      <div class="symbol-head">
+        <div>
+          <p class="eyebrow">function · line 918</p>
+          <h4><code>itemFieldsForProduct</code></h4>
+        </div>
+        <a class="anchor-link" href="#apps-api-src-repositories-cartrepository-php-itemfieldsforproduct">#</a>
+      </div>
+      <p class="symbol-signature"><code>private function itemFieldsForProduct(string $productId, int $quantity, array $product): array</code></p>
+      <p class="overview">No descriptive summary was found for this symbol.</p>
+      <details class="tags-block"><summary>Doc tags</summary><ul><li><code>@param</code> array&lt;string,mixed&gt; $product</li><li><code>@return</code> array&lt;string,string&gt;</li></ul></details>
+    </section>
+    <section class="symbol-card searchable" id="apps-api-src-repositories-cartrepository-php-submitorderfields" data-search="function submitOrderFields No descriptive summary was found for this symbol. private function submitOrderFields(array $draft, int $customerId, int $customerPoints): array return array&lt;string,string&gt;">
+      <div class="symbol-head">
+        <div>
+          <p class="eyebrow">function · line 946</p>
+          <h4><code>submitOrderFields</code></h4>
+        </div>
+        <a class="anchor-link" href="#apps-api-src-repositories-cartrepository-php-submitorderfields">#</a>
+      </div>
+      <p class="symbol-signature"><code>private function submitOrderFields(array $draft, int $customerId, int $customerPoints): array</code></p>
+      <p class="overview">No descriptive summary was found for this symbol.</p>
+      <details class="tags-block"><summary>Doc tags</summary><ul><li><code>@return</code> array&lt;string,string&gt;</li></ul></details>
+    </section>
+    <section class="symbol-card searchable" id="apps-api-src-repositories-cartrepository-php-parsequantitiesfrombrowserstate" data-search="function parseQuantitiesFromBrowserState No descriptive summary was found for this symbol. private function parseQuantitiesFromBrowserState(string $state): array return array&lt;string,int&gt;">
+      <div class="symbol-head">
+        <div>
+          <p class="eyebrow">function · line 992</p>
+          <h4><code>parseQuantitiesFromBrowserState</code></h4>
+        </div>
+        <a class="anchor-link" href="#apps-api-src-repositories-cartrepository-php-parsequantitiesfrombrowserstate">#</a>
+      </div>
+      <p class="symbol-signature"><code>private function parseQuantitiesFromBrowserState(string $state): array</code></p>
+      <p class="overview">No descriptive summary was found for this symbol.</p>
+      <details class="tags-block"><summary>Doc tags</summary><ul><li><code>@return</code> array&lt;string,int&gt;</li></ul></details>
+    </section>
+    <section class="symbol-card searchable" id="apps-api-src-repositories-cartrepository-php-normalizequantities" data-search="function normalizeQuantities No descriptive summary was found for this symbol. private function normalizeQuantities(array $quantities): array param array&lt;string,int&gt; $quantities return array&lt;string,int&gt;">
+      <div class="symbol-head">
+        <div>
+          <p class="eyebrow">function · line 1032</p>
+          <h4><code>normalizeQuantities</code></h4>
+        </div>
+        <a class="anchor-link" href="#apps-api-src-repositories-cartrepository-php-normalizequantities">#</a>
+      </div>
+      <p class="symbol-signature"><code>private function normalizeQuantities(array $quantities): array</code></p>
+      <p class="overview">No descriptive summary was found for this symbol.</p>
+      <details class="tags-block"><summary>Doc tags</summary><ul><li><code>@param</code> array&lt;string,int&gt; $quantities</li><li><code>@return</code> array&lt;string,int&gt;</li></ul></details>
+    </section>
+    <section class="symbol-card searchable" id="apps-api-src-repositories-cartrepository-php-generateorderid" data-search="function generateOrderId No descriptive summary was found for this symbol. private function generateOrderId(array $context): string param array{merchantId:string,configId:string} $context">
+      <div class="symbol-head">
+        <div>
+          <p class="eyebrow">function · line 1091</p>
+          <h4><code>generateOrderId</code></h4>
+        </div>
+        <a class="anchor-link" href="#apps-api-src-repositories-cartrepository-php-generateorderid">#</a>
+      </div>
+      <p class="symbol-signature"><code>private function generateOrderId(array $context): string</code></p>
+      <p class="overview">No descriptive summary was found for this symbol.</p>
+      <details class="tags-block"><summary>Doc tags</summary><ul><li><code>@param</code> array{merchantId:string,configId:string} $context</li></ul></details>
+    </section></div>
+              </div>
             </article>
-            <article class="card">
+            <article class="file-card searchable" id="apps-api-src-repositories-checkoutrepository-php" data-search="apps/api/src/Repositories/CheckoutRepository.php Checkout persistence adapter: maps validated checkout data into legacy order/store records.  CheckoutRepository __construct beginStoreTransaction commitStoreTransaction rollBackStoreTransaction loadOrderFields loadBrowserStateFields loadPaymentConfig submitToLegacyStore loadCustomerCheckoutProfile saveCustomerCheckoutProfile recordOrder recordItem PDO">
               <div class="card-head">
-                <h3><code>apps/api/src/Repositories/CheckoutRepository.php</code></h3>
-                <span class="count-pill">9.2 KB</span>
+                <div>
+                  <p class="eyebrow">PHP · 9.2 KB</p>
+                  <h3><code>apps/api/src/Repositories/CheckoutRepository.php</code></h3>
+                </div>
+                <a class="anchor-link" href="#apps-api-src-repositories-checkoutrepository-php">#</a>
               </div>
               <p class="overview">Checkout persistence adapter: maps validated checkout data into legacy order/store records.</p>
-              <p><strong>Declared symbols:</strong> <code>CheckoutRepository</code>, <code>__construct</code>, <code>beginStoreTransaction</code>, <code>commitStoreTransaction</code>, <code>rollBackStoreTransaction</code>, <code>loadOrderFields</code>, <code>loadBrowserStateFields</code>, <code>loadPaymentConfig</code>, <code>submitToLegacyStore</code>, <code>loadCustomerCheckoutProfile</code>, <code>saveCustomerCheckoutProfile</code>, <code>recordOrder</code></p>
-              <p><strong>Dependencies:</strong> <code>PDO</code></p>
+              <div class="meta-grid">
+                <p><strong>Detected symbols:</strong> <code>CheckoutRepository</code>, <code>__construct</code>, <code>beginStoreTransaction</code>, <code>commitStoreTransaction</code>, <code>rollBackStoreTransaction</code>, <code>loadOrderFields</code>, <code>loadBrowserStateFields</code>, <code>loadPaymentConfig</code>, <code>submitToLegacyStore</code>, <code>loadCustomerCheckoutProfile</code>, <code>saveCustomerCheckoutProfile</code>, <code>recordOrder</code>, <code>recordItem</code></p>
+                <p><strong>Dependencies:</strong> <code>PDO</code></p>
+                <p class="muted tiny">Snapshot timestamp: 2026-03-15T09:46:57.000Z</p>
+              </div>
               <details>
                 <summary>Comment highlights</summary>
                 <p class="muted">No additional comment blocks were extracted from this file.</p>
               </details>
-              <p class="muted tiny">Snapshot timestamp: 2026-03-15T09:46:57.000Z</p>
+              <div class="symbol-section">
+                <div class="symbol-section-head">
+                  <h4>Documented symbols</h4>
+                  <span class="count-pill">1</span>
+                </div>
+                <div class="symbol-grid">
+    <section class="symbol-card searchable" id="apps-api-src-repositories-checkoutrepository-php-checkoutrepository" data-search="class CheckoutRepository No dedicated symbol docblock found; inherits file intent: Checkout persistence adapter: maps validated checkout data into legacy order/store records. final class CheckoutRepository ">
+      <div class="symbol-head">
+        <div>
+          <p class="eyebrow">class · line 13</p>
+          <h4><code>CheckoutRepository</code></h4>
+        </div>
+        <a class="anchor-link" href="#apps-api-src-repositories-checkoutrepository-php-checkoutrepository">#</a>
+      </div>
+      <p class="symbol-signature"><code>final class CheckoutRepository</code></p>
+      <p class="overview">No dedicated symbol docblock found; inherits file intent: Checkout persistence adapter: maps validated checkout data into legacy order/store records.</p>
+      
+    </section></div>
+              </div>
             </article>
-            <article class="card">
+            <article class="file-card searchable" id="apps-api-src-repositories-customerrepository-php" data-search="apps/api/src/Repositories/CustomerRepository.php Store-database customer lookups and customer profile persistence used by auth and checkout.  CustomerRepository __construct findByEmail findPublicProfileById findCheckoutProfileById PDO">
               <div class="card-head">
-                <h3><code>apps/api/src/Repositories/CustomerRepository.php</code></h3>
-                <span class="count-pill">1.8 KB</span>
+                <div>
+                  <p class="eyebrow">PHP · 1.8 KB</p>
+                  <h3><code>apps/api/src/Repositories/CustomerRepository.php</code></h3>
+                </div>
+                <a class="anchor-link" href="#apps-api-src-repositories-customerrepository-php">#</a>
               </div>
               <p class="overview">Store-database customer lookups and customer profile persistence used by auth and checkout.</p>
-              <p><strong>Declared symbols:</strong> <code>CustomerRepository</code>, <code>__construct</code>, <code>findByEmail</code>, <code>findPublicProfileById</code>, <code>findCheckoutProfileById</code></p>
-              <p><strong>Dependencies:</strong> <code>PDO</code></p>
+              <div class="meta-grid">
+                <p><strong>Detected symbols:</strong> <code>CustomerRepository</code>, <code>__construct</code>, <code>findByEmail</code>, <code>findPublicProfileById</code>, <code>findCheckoutProfileById</code></p>
+                <p><strong>Dependencies:</strong> <code>PDO</code></p>
+                <p class="muted tiny">Snapshot timestamp: 2026-03-15T09:46:57.000Z</p>
+              </div>
               <details>
                 <summary>Comment highlights</summary>
                 <p class="muted">No additional comment blocks were extracted from this file.</p>
               </details>
-              <p class="muted tiny">Snapshot timestamp: 2026-03-15T09:46:57.000Z</p>
+              <div class="symbol-section">
+                <div class="symbol-section-head">
+                  <h4>Documented symbols</h4>
+                  <span class="count-pill">1</span>
+                </div>
+                <div class="symbol-grid">
+    <section class="symbol-card searchable" id="apps-api-src-repositories-customerrepository-php-customerrepository" data-search="class CustomerRepository No dedicated symbol docblock found; inherits file intent: Store-database customer lookups and customer profile persistence used by auth and checkout. final class CustomerRepository ">
+      <div class="symbol-head">
+        <div>
+          <p class="eyebrow">class · line 13</p>
+          <h4><code>CustomerRepository</code></h4>
+        </div>
+        <a class="anchor-link" href="#apps-api-src-repositories-customerrepository-php-customerrepository">#</a>
+      </div>
+      <p class="symbol-signature"><code>final class CustomerRepository</code></p>
+      <p class="overview">No dedicated symbol docblock found; inherits file intent: Store-database customer lookups and customer profile persistence used by auth and checkout.</p>
+      
+    </section></div>
+              </div>
             </article>
-            <article class="card">
+            <article class="file-card searchable" id="apps-api-src-repositories-libraryrepository-php" data-search="apps/api/src/Repositories/LibraryRepository.php Digital-library read model built from store preorders and products.  LibraryRepository __construct ownedDownloads PDO">
               <div class="card-head">
-                <h3><code>apps/api/src/Repositories/LibraryRepository.php</code></h3>
-                <span class="count-pill">2.3 KB</span>
+                <div>
+                  <p class="eyebrow">PHP · 2.3 KB</p>
+                  <h3><code>apps/api/src/Repositories/LibraryRepository.php</code></h3>
+                </div>
+                <a class="anchor-link" href="#apps-api-src-repositories-libraryrepository-php">#</a>
               </div>
               <p class="overview">Digital-library read model built from store preorders and products.</p>
-              <p><strong>Declared symbols:</strong> <code>LibraryRepository</code>, <code>__construct</code>, <code>ownedDownloads</code></p>
-              <p><strong>Dependencies:</strong> <code>PDO</code></p>
+              <div class="meta-grid">
+                <p><strong>Detected symbols:</strong> <code>LibraryRepository</code>, <code>__construct</code>, <code>ownedDownloads</code></p>
+                <p><strong>Dependencies:</strong> <code>PDO</code></p>
+                <p class="muted tiny">Snapshot timestamp: 2026-03-15T09:46:57.000Z</p>
+              </div>
               <details>
                 <summary>Comment highlights</summary>
                 <p class="muted">No additional comment blocks were extracted from this file.</p>
               </details>
-              <p class="muted tiny">Snapshot timestamp: 2026-03-15T09:46:57.000Z</p>
+              <div class="symbol-section">
+                <div class="symbol-section-head">
+                  <h4>Documented symbols</h4>
+                  <span class="count-pill">1</span>
+                </div>
+                <div class="symbol-grid">
+    <section class="symbol-card searchable" id="apps-api-src-repositories-libraryrepository-php-libraryrepository" data-search="class LibraryRepository No dedicated symbol docblock found; inherits file intent: Digital-library read model built from store preorders and products. final class LibraryRepository ">
+      <div class="symbol-head">
+        <div>
+          <p class="eyebrow">class · line 13</p>
+          <h4><code>LibraryRepository</code></h4>
+        </div>
+        <a class="anchor-link" href="#apps-api-src-repositories-libraryrepository-php-libraryrepository">#</a>
+      </div>
+      <p class="symbol-signature"><code>final class LibraryRepository</code></p>
+      <p class="overview">No dedicated symbol docblock found; inherits file intent: Digital-library read model built from store preorders and products.</p>
+      
+    </section></div>
+              </div>
             </article>
-            <article class="card">
+            <article class="file-card searchable" id="apps-api-src-repositories-productrepository-php" data-search="apps/api/src/Repositories/ProductRepository.php Store-database product catalog queries and product detail lookups.  ProductRepository __construct paginate findById related normalizeProduct PDO">
               <div class="card-head">
-                <h3><code>apps/api/src/Repositories/ProductRepository.php</code></h3>
-                <span class="count-pill">5.6 KB</span>
+                <div>
+                  <p class="eyebrow">PHP · 5.6 KB</p>
+                  <h3><code>apps/api/src/Repositories/ProductRepository.php</code></h3>
+                </div>
+                <a class="anchor-link" href="#apps-api-src-repositories-productrepository-php">#</a>
               </div>
               <p class="overview">Store-database product catalog queries and product detail lookups.</p>
-              <p><strong>Declared symbols:</strong> <code>ProductRepository</code>, <code>__construct</code>, <code>paginate</code>, <code>findById</code>, <code>related</code>, <code>normalizeProduct</code></p>
-              <p><strong>Dependencies:</strong> <code>PDO</code></p>
+              <div class="meta-grid">
+                <p><strong>Detected symbols:</strong> <code>ProductRepository</code>, <code>__construct</code>, <code>paginate</code>, <code>findById</code>, <code>related</code>, <code>normalizeProduct</code></p>
+                <p><strong>Dependencies:</strong> <code>PDO</code></p>
+                <p class="muted tiny">Snapshot timestamp: 2026-03-15T09:46:57.000Z</p>
+              </div>
               <details>
                 <summary>Comment highlights</summary>
                 <p class="muted">No additional comment blocks were extracted from this file.</p>
               </details>
-              <p class="muted tiny">Snapshot timestamp: 2026-03-15T09:46:57.000Z</p>
+              <div class="symbol-section">
+                <div class="symbol-section-head">
+                  <h4>Documented symbols</h4>
+                  <span class="count-pill">1</span>
+                </div>
+                <div class="symbol-grid">
+    <section class="symbol-card searchable" id="apps-api-src-repositories-productrepository-php-productrepository" data-search="class ProductRepository No dedicated symbol docblock found; inherits file intent: Store-database product catalog queries and product detail lookups. final class ProductRepository ">
+      <div class="symbol-head">
+        <div>
+          <p class="eyebrow">class · line 13</p>
+          <h4><code>ProductRepository</code></h4>
+        </div>
+        <a class="anchor-link" href="#apps-api-src-repositories-productrepository-php-productrepository">#</a>
+      </div>
+      <p class="symbol-signature"><code>final class ProductRepository</code></p>
+      <p class="overview">No dedicated symbol docblock found; inherits file intent: Store-database product catalog queries and product detail lookups.</p>
+      
+    </section></div>
+              </div>
             </article>
         </div>
       </section>
-      <section class="group">
+      <section class="group searchable" data-search="apps/api/src/Services">
         <div class="group-head">
           <h2>apps/api/src/Services</h2>
           <span class="count-pill">5 file(s)</span>
         </div>
-        <div class="card-grid">
+        <div class="file-stack">
           
-            <article class="card">
+            <article class="file-card searchable" id="apps-api-src-services-authservice-php" data-search="apps/api/src/Services/AuthService.php Authentication application service built around customer records and session state.  AuthService __construct login logout me ColumbiaGames\Api\Repositories\CustomerRepository ColumbiaGames\Api\Support\SessionAuth RuntimeException">
               <div class="card-head">
-                <h3><code>apps/api/src/Services/AuthService.php</code></h3>
-                <span class="count-pill">1.6 KB</span>
+                <div>
+                  <p class="eyebrow">PHP · 1.6 KB</p>
+                  <h3><code>apps/api/src/Services/AuthService.php</code></h3>
+                </div>
+                <a class="anchor-link" href="#apps-api-src-services-authservice-php">#</a>
               </div>
               <p class="overview">Authentication application service built around customer records and session state.</p>
-              <p><strong>Declared symbols:</strong> <code>AuthService</code>, <code>__construct</code>, <code>login</code>, <code>logout</code>, <code>me</code></p>
-              <p><strong>Dependencies:</strong> <code>ColumbiaGames\Api\Repositories\CustomerRepository</code>, <code>ColumbiaGames\Api\Support\SessionAuth</code>, <code>RuntimeException</code></p>
+              <div class="meta-grid">
+                <p><strong>Detected symbols:</strong> <code>AuthService</code>, <code>__construct</code>, <code>login</code>, <code>logout</code>, <code>me</code></p>
+                <p><strong>Dependencies:</strong> <code>ColumbiaGames\Api\Repositories\CustomerRepository</code>, <code>ColumbiaGames\Api\Support\SessionAuth</code>, <code>RuntimeException</code></p>
+                <p class="muted tiny">Snapshot timestamp: 2026-03-15T09:46:57.000Z</p>
+              </div>
               <details>
                 <summary>Comment highlights</summary>
                 <p class="muted">No additional comment blocks were extracted from this file.</p>
               </details>
-              <p class="muted tiny">Snapshot timestamp: 2026-03-15T09:46:57.000Z</p>
+              <div class="symbol-section">
+                <div class="symbol-section-head">
+                  <h4>Documented symbols</h4>
+                  <span class="count-pill">1</span>
+                </div>
+                <div class="symbol-grid">
+    <section class="symbol-card searchable" id="apps-api-src-services-authservice-php-authservice" data-search="class AuthService No dedicated symbol docblock found; inherits file intent: Authentication application service built around customer records and session state. final class AuthService ">
+      <div class="symbol-head">
+        <div>
+          <p class="eyebrow">class · line 15</p>
+          <h4><code>AuthService</code></h4>
+        </div>
+        <a class="anchor-link" href="#apps-api-src-services-authservice-php-authservice">#</a>
+      </div>
+      <p class="symbol-signature"><code>final class AuthService</code></p>
+      <p class="overview">No dedicated symbol docblock found; inherits file intent: Authentication application service built around customer records and session state.</p>
+      
+    </section></div>
+              </div>
             </article>
-            <article class="card">
+            <article class="file-card searchable" id="apps-api-src-services-cartservice-php" data-search="apps/api/src/Services/CartService.php Cart application service: validates inputs and composes cart repository + product rules.  CartService __construct identity getCart getSummary addItem updateItem removeItem ensureProductExists ColumbiaGames\Api\Repositories\CartRepository ColumbiaGames\Api\Repositories\ProductRepository RuntimeException">
               <div class="card-head">
-                <h3><code>apps/api/src/Services/CartService.php</code></h3>
-                <span class="count-pill">2.6 KB</span>
+                <div>
+                  <p class="eyebrow">PHP · 2.6 KB</p>
+                  <h3><code>apps/api/src/Services/CartService.php</code></h3>
+                </div>
+                <a class="anchor-link" href="#apps-api-src-services-cartservice-php">#</a>
               </div>
               <p class="overview">Cart application service: validates inputs and composes cart repository + product rules.</p>
-              <p><strong>Declared symbols:</strong> <code>CartService</code>, <code>__construct</code>, <code>identity</code>, <code>getCart</code>, <code>getSummary</code>, <code>addItem</code>, <code>updateItem</code>, <code>removeItem</code>, <code>ensureProductExists</code></p>
-              <p><strong>Dependencies:</strong> <code>ColumbiaGames\Api\Repositories\CartRepository</code>, <code>ColumbiaGames\Api\Repositories\ProductRepository</code>, <code>RuntimeException</code></p>
+              <div class="meta-grid">
+                <p><strong>Detected symbols:</strong> <code>CartService</code>, <code>__construct</code>, <code>identity</code>, <code>getCart</code>, <code>getSummary</code>, <code>addItem</code>, <code>updateItem</code>, <code>removeItem</code>, <code>ensureProductExists</code></p>
+                <p><strong>Dependencies:</strong> <code>ColumbiaGames\Api\Repositories\CartRepository</code>, <code>ColumbiaGames\Api\Repositories\ProductRepository</code>, <code>RuntimeException</code></p>
+                <p class="muted tiny">Snapshot timestamp: 2026-03-15T09:46:57.000Z</p>
+              </div>
               <details>
                 <summary>Comment highlights</summary>
                 <p class="muted">No additional comment blocks were extracted from this file.</p>
               </details>
-              <p class="muted tiny">Snapshot timestamp: 2026-03-15T09:46:57.000Z</p>
+              <div class="symbol-section">
+                <div class="symbol-section-head">
+                  <h4>Documented symbols</h4>
+                  <span class="count-pill">1</span>
+                </div>
+                <div class="symbol-grid">
+    <section class="symbol-card searchable" id="apps-api-src-services-cartservice-php-cartservice" data-search="class CartService No dedicated symbol docblock found; inherits file intent: Cart application service: validates inputs and composes cart repository + product rules. final class CartService ">
+      <div class="symbol-head">
+        <div>
+          <p class="eyebrow">class · line 15</p>
+          <h4><code>CartService</code></h4>
+        </div>
+        <a class="anchor-link" href="#apps-api-src-services-cartservice-php-cartservice">#</a>
+      </div>
+      <p class="symbol-signature"><code>final class CartService</code></p>
+      <p class="overview">No dedicated symbol docblock found; inherits file intent: Cart application service: validates inputs and composes cart repository + product rules.</p>
+      
+    </section></div>
+              </div>
             </article>
-            <article class="card">
+            <article class="file-card searchable" id="apps-api-src-services-catalogservice-php" data-search="apps/api/src/Services/CatalogService.php Catalog application service for product listing/detail use cases.  CatalogService __construct list show related ColumbiaGames\Api\Repositories\ProductRepository">
               <div class="card-head">
-                <h3><code>apps/api/src/Services/CatalogService.php</code></h3>
-                <span class="count-pill">0.7 KB</span>
+                <div>
+                  <p class="eyebrow">PHP · 0.7 KB</p>
+                  <h3><code>apps/api/src/Services/CatalogService.php</code></h3>
+                </div>
+                <a class="anchor-link" href="#apps-api-src-services-catalogservice-php">#</a>
               </div>
               <p class="overview">Catalog application service for product listing/detail use cases.</p>
-              <p><strong>Declared symbols:</strong> <code>CatalogService</code>, <code>__construct</code>, <code>list</code>, <code>show</code>, <code>related</code></p>
-              <p><strong>Dependencies:</strong> <code>ColumbiaGames\Api\Repositories\ProductRepository</code></p>
+              <div class="meta-grid">
+                <p><strong>Detected symbols:</strong> <code>CatalogService</code>, <code>__construct</code>, <code>list</code>, <code>show</code>, <code>related</code></p>
+                <p><strong>Dependencies:</strong> <code>ColumbiaGames\Api\Repositories\ProductRepository</code></p>
+                <p class="muted tiny">Snapshot timestamp: 2026-03-15T09:46:57.000Z</p>
+              </div>
               <details>
                 <summary>Comment highlights</summary>
                 <p class="muted">No additional comment blocks were extracted from this file.</p>
               </details>
-              <p class="muted tiny">Snapshot timestamp: 2026-03-15T09:46:57.000Z</p>
+              <div class="symbol-section">
+                <div class="symbol-section-head">
+                  <h4>Documented symbols</h4>
+                  <span class="count-pill">1</span>
+                </div>
+                <div class="symbol-grid">
+    <section class="symbol-card searchable" id="apps-api-src-services-catalogservice-php-catalogservice" data-search="class CatalogService No dedicated symbol docblock found; inherits file intent: Catalog application service for product listing/detail use cases. final class CatalogService ">
+      <div class="symbol-head">
+        <div>
+          <p class="eyebrow">class · line 13</p>
+          <h4><code>CatalogService</code></h4>
+        </div>
+        <a class="anchor-link" href="#apps-api-src-services-catalogservice-php-catalogservice">#</a>
+      </div>
+      <p class="symbol-signature"><code>final class CatalogService</code></p>
+      <p class="overview">No dedicated symbol docblock found; inherits file intent: Catalog application service for product listing/detail use cases.</p>
+      
+    </section></div>
+              </div>
             </article>
-            <article class="card">
+            <article class="file-card searchable" id="apps-api-src-services-checkoutservice-php" data-search="apps/api/src/Services/CheckoutService.php Checkout application service for summary, validation, and submit orchestration.  CheckoutService __construct summary validate submit buildCheckoutPayload loadCheckoutCustomer buildDraft normalizeInput buildRequirements validateDraft requireField ColumbiaGames\Api\Repositories\CartRepository ColumbiaGames\Api\Repositories\CheckoutRepository ColumbiaGames\Api\Repositories\CustomerRepository ColumbiaGames\Api\Support\SessionAuth">
               <div class="card-head">
-                <h3><code>apps/api/src/Services/CheckoutService.php</code></h3>
-                <span class="count-pill">16.1 KB</span>
+                <div>
+                  <p class="eyebrow">PHP · 16.1 KB</p>
+                  <h3><code>apps/api/src/Services/CheckoutService.php</code></h3>
+                </div>
+                <a class="anchor-link" href="#apps-api-src-services-checkoutservice-php">#</a>
               </div>
               <p class="overview">Checkout application service for summary, validation, and submit orchestration.</p>
-              <p><strong>Declared symbols:</strong> <code>CheckoutService</code>, <code>__construct</code>, <code>summary</code>, <code>validate</code>, <code>submit</code>, <code>buildCheckoutPayload</code>, <code>loadCheckoutCustomer</code>, <code>buildDraft</code>, <code>normalizeInput</code>, <code>buildRequirements</code>, <code>validateDraft</code>, <code>requireField</code></p>
-              <p><strong>Dependencies:</strong> <code>ColumbiaGames\Api\Repositories\CartRepository</code>, <code>ColumbiaGames\Api\Repositories\CheckoutRepository</code>, <code>ColumbiaGames\Api\Repositories\CustomerRepository</code>, <code>ColumbiaGames\Api\Support\SessionAuth</code></p>
+              <div class="meta-grid">
+                <p><strong>Detected symbols:</strong> <code>CheckoutService</code>, <code>__construct</code>, <code>summary</code>, <code>validate</code>, <code>submit</code>, <code>buildCheckoutPayload</code>, <code>loadCheckoutCustomer</code>, <code>buildDraft</code>, <code>normalizeInput</code>, <code>buildRequirements</code>, <code>validateDraft</code>, <code>requireField</code></p>
+                <p><strong>Dependencies:</strong> <code>ColumbiaGames\Api\Repositories\CartRepository</code>, <code>ColumbiaGames\Api\Repositories\CheckoutRepository</code>, <code>ColumbiaGames\Api\Repositories\CustomerRepository</code>, <code>ColumbiaGames\Api\Support\SessionAuth</code></p>
+                <p class="muted tiny">Snapshot timestamp: 2026-03-15T09:46:57.000Z</p>
+              </div>
               <details>
                 <summary>Comment highlights</summary>
                 <p class="muted">No additional comment blocks were extracted from this file.</p>
               </details>
-              <p class="muted tiny">Snapshot timestamp: 2026-03-15T09:46:57.000Z</p>
+              <div class="symbol-section">
+                <div class="symbol-section-head">
+                  <h4>Documented symbols</h4>
+                  <span class="count-pill">1</span>
+                </div>
+                <div class="symbol-grid">
+    <section class="symbol-card searchable" id="apps-api-src-services-checkoutservice-php-checkoutservice" data-search="class CheckoutService No dedicated symbol docblock found; inherits file intent: Checkout application service for summary, validation, and submit orchestration. final class CheckoutService ">
+      <div class="symbol-head">
+        <div>
+          <p class="eyebrow">class · line 16</p>
+          <h4><code>CheckoutService</code></h4>
+        </div>
+        <a class="anchor-link" href="#apps-api-src-services-checkoutservice-php-checkoutservice">#</a>
+      </div>
+      <p class="symbol-signature"><code>final class CheckoutService</code></p>
+      <p class="overview">No dedicated symbol docblock found; inherits file intent: Checkout application service for summary, validation, and submit orchestration.</p>
+      
+    </section></div>
+              </div>
             </article>
-            <article class="card">
+            <article class="file-card searchable" id="apps-api-src-services-libraryservice-php" data-search="apps/api/src/Services/LibraryService.php Library application service for owned-download retrieval.  LibraryService __construct ownedDownloads ColumbiaGames\Api\Repositories\LibraryRepository ColumbiaGames\Api\Support\SessionAuth RuntimeException">
               <div class="card-head">
-                <h3><code>apps/api/src/Services/LibraryService.php</code></h3>
-                <span class="count-pill">1.1 KB</span>
+                <div>
+                  <p class="eyebrow">PHP · 1.1 KB</p>
+                  <h3><code>apps/api/src/Services/LibraryService.php</code></h3>
+                </div>
+                <a class="anchor-link" href="#apps-api-src-services-libraryservice-php">#</a>
               </div>
               <p class="overview">Library application service for owned-download retrieval.</p>
-              <p><strong>Declared symbols:</strong> <code>LibraryService</code>, <code>__construct</code>, <code>ownedDownloads</code></p>
-              <p><strong>Dependencies:</strong> <code>ColumbiaGames\Api\Repositories\LibraryRepository</code>, <code>ColumbiaGames\Api\Support\SessionAuth</code>, <code>RuntimeException</code></p>
+              <div class="meta-grid">
+                <p><strong>Detected symbols:</strong> <code>LibraryService</code>, <code>__construct</code>, <code>ownedDownloads</code></p>
+                <p><strong>Dependencies:</strong> <code>ColumbiaGames\Api\Repositories\LibraryRepository</code>, <code>ColumbiaGames\Api\Support\SessionAuth</code>, <code>RuntimeException</code></p>
+                <p class="muted tiny">Snapshot timestamp: 2026-03-15T09:46:57.000Z</p>
+              </div>
               <details>
                 <summary>Comment highlights</summary>
                 <p class="muted">No additional comment blocks were extracted from this file.</p>
               </details>
-              <p class="muted tiny">Snapshot timestamp: 2026-03-15T09:46:57.000Z</p>
+              <div class="symbol-section">
+                <div class="symbol-section-head">
+                  <h4>Documented symbols</h4>
+                  <span class="count-pill">1</span>
+                </div>
+                <div class="symbol-grid">
+    <section class="symbol-card searchable" id="apps-api-src-services-libraryservice-php-libraryservice" data-search="class LibraryService No dedicated symbol docblock found; inherits file intent: Library application service for owned-download retrieval. final class LibraryService ">
+      <div class="symbol-head">
+        <div>
+          <p class="eyebrow">class · line 15</p>
+          <h4><code>LibraryService</code></h4>
+        </div>
+        <a class="anchor-link" href="#apps-api-src-services-libraryservice-php-libraryservice">#</a>
+      </div>
+      <p class="symbol-signature"><code>final class LibraryService</code></p>
+      <p class="overview">No dedicated symbol docblock found; inherits file intent: Library application service for owned-download retrieval.</p>
+      
+    </section></div>
+              </div>
             </article>
         </div>
       </section>
-      <section class="group">
+      <section class="group searchable" data-search="apps/api/src/Support">
         <div class="group-head">
           <h2>apps/api/src/Support</h2>
           <span class="count-pill">8 file(s)</span>
         </div>
-        <div class="card-grid">
+        <div class="file-stack">
           
-            <article class="card">
+            <article class="file-card searchable" id="apps-api-src-support-apilogger-php" data-search="apps/api/src/Support/ApiLogger.php Small logging helper used by the API entrypoint and response layer.  ApiLogger info error exception write Throwable">
               <div class="card-head">
-                <h3><code>apps/api/src/Support/ApiLogger.php</code></h3>
-                <span class="count-pill">1.4 KB</span>
+                <div>
+                  <p class="eyebrow">PHP · 1.4 KB</p>
+                  <h3><code>apps/api/src/Support/ApiLogger.php</code></h3>
+                </div>
+                <a class="anchor-link" href="#apps-api-src-support-apilogger-php">#</a>
               </div>
               <p class="overview">Small logging helper used by the API entrypoint and response layer.</p>
-              <p><strong>Declared symbols:</strong> <code>ApiLogger</code>, <code>info</code>, <code>error</code>, <code>exception</code>, <code>write</code></p>
-              <p><strong>Dependencies:</strong> <code>Throwable</code></p>
+              <div class="meta-grid">
+                <p><strong>Detected symbols:</strong> <code>ApiLogger</code>, <code>info</code>, <code>error</code>, <code>exception</code>, <code>write</code></p>
+                <p><strong>Dependencies:</strong> <code>Throwable</code></p>
+                <p class="muted tiny">Snapshot timestamp: 2026-03-15T09:46:57.000Z</p>
+              </div>
               <details>
                 <summary>Comment highlights</summary>
                 <p class="muted">No additional comment blocks were extracted from this file.</p>
               </details>
-              <p class="muted tiny">Snapshot timestamp: 2026-03-15T09:46:57.000Z</p>
+              <div class="symbol-section">
+                <div class="symbol-section-head">
+                  <h4>Documented symbols</h4>
+                  <span class="count-pill">4</span>
+                </div>
+                <div class="symbol-grid">
+    <section class="symbol-card searchable" id="apps-api-src-support-apilogger-php-apilogger" data-search="class ApiLogger No dedicated symbol docblock found; inherits file intent: Small logging helper used by the API entrypoint and response layer. final class ApiLogger ">
+      <div class="symbol-head">
+        <div>
+          <p class="eyebrow">class · line 13</p>
+          <h4><code>ApiLogger</code></h4>
+        </div>
+        <a class="anchor-link" href="#apps-api-src-support-apilogger-php-apilogger">#</a>
+      </div>
+      <p class="symbol-signature"><code>final class ApiLogger</code></p>
+      <p class="overview">No dedicated symbol docblock found; inherits file intent: Small logging helper used by the API entrypoint and response layer.</p>
+      
+    </section>
+    <section class="symbol-card searchable" id="apps-api-src-support-apilogger-php-info" data-search="function info No descriptive summary was found for this symbol. public static function info(string $event, array $context = []): void param array&lt;string, mixed&gt; $context">
+      <div class="symbol-head">
+        <div>
+          <p class="eyebrow">function · line 15</p>
+          <h4><code>info</code></h4>
+        </div>
+        <a class="anchor-link" href="#apps-api-src-support-apilogger-php-info">#</a>
+      </div>
+      <p class="symbol-signature"><code>public static function info(string $event, array $context = []): void</code></p>
+      <p class="overview">No descriptive summary was found for this symbol.</p>
+      <details class="tags-block"><summary>Doc tags</summary><ul><li><code>@param</code> array&lt;string, mixed&gt; $context</li></ul></details>
+    </section>
+    <section class="symbol-card searchable" id="apps-api-src-support-apilogger-php-error" data-search="function error No descriptive summary was found for this symbol. public static function error(string $event, array $context = []): void param array&lt;string, mixed&gt; $context">
+      <div class="symbol-head">
+        <div>
+          <p class="eyebrow">function · line 21</p>
+          <h4><code>error</code></h4>
+        </div>
+        <a class="anchor-link" href="#apps-api-src-support-apilogger-php-error">#</a>
+      </div>
+      <p class="symbol-signature"><code>public static function error(string $event, array $context = []): void</code></p>
+      <p class="overview">No descriptive summary was found for this symbol.</p>
+      <details class="tags-block"><summary>Doc tags</summary><ul><li><code>@param</code> array&lt;string, mixed&gt; $context</li></ul></details>
+    </section>
+    <section class="symbol-card searchable" id="apps-api-src-support-apilogger-php-write" data-search="function write No descriptive summary was found for this symbol. private static function write(string $level, string $event, array $context = []): void param array&lt;string, mixed&gt; $context">
+      <div class="symbol-head">
+        <div>
+          <p class="eyebrow">function · line 37</p>
+          <h4><code>write</code></h4>
+        </div>
+        <a class="anchor-link" href="#apps-api-src-support-apilogger-php-write">#</a>
+      </div>
+      <p class="symbol-signature"><code>private static function write(string $level, string $event, array $context = []): void</code></p>
+      <p class="overview">No descriptive summary was found for this symbol.</p>
+      <details class="tags-block"><summary>Doc tags</summary><ul><li><code>@param</code> array&lt;string, mixed&gt; $context</li></ul></details>
+    </section></div>
+              </div>
             </article>
-            <article class="card">
+            <article class="file-card searchable" id="apps-api-src-support-cookiebridge-php" data-search="apps/api/src/Support/CookieBridge.php Legacy cookie bridge for browser identity and cart/session continuity.  CookieBridge cookieName currentBrowserId persistBrowserId ">
               <div class="card-head">
-                <h3><code>apps/api/src/Support/CookieBridge.php</code></h3>
-                <span class="count-pill">1.4 KB</span>
+                <div>
+                  <p class="eyebrow">PHP · 1.4 KB</p>
+                  <h3><code>apps/api/src/Support/CookieBridge.php</code></h3>
+                </div>
+                <a class="anchor-link" href="#apps-api-src-support-cookiebridge-php">#</a>
               </div>
               <p class="overview">Legacy cookie bridge for browser identity and cart/session continuity.</p>
-              <p><strong>Declared symbols:</strong> <code>CookieBridge</code>, <code>cookieName</code>, <code>currentBrowserId</code>, <code>persistBrowserId</code></p>
-              
+              <div class="meta-grid">
+                <p><strong>Detected symbols:</strong> <code>CookieBridge</code>, <code>cookieName</code>, <code>currentBrowserId</code>, <code>persistBrowserId</code></p>
+                
+                <p class="muted tiny">Snapshot timestamp: 2026-03-15T09:46:57.000Z</p>
+              </div>
               <details>
                 <summary>Comment highlights</summary>
                 <p class="muted">No additional comment blocks were extracted from this file.</p>
               </details>
-              <p class="muted tiny">Snapshot timestamp: 2026-03-15T09:46:57.000Z</p>
+              <div class="symbol-section">
+                <div class="symbol-section-head">
+                  <h4>Documented symbols</h4>
+                  <span class="count-pill">1</span>
+                </div>
+                <div class="symbol-grid">
+    <section class="symbol-card searchable" id="apps-api-src-support-cookiebridge-php-cookiebridge" data-search="class CookieBridge No dedicated symbol docblock found; inherits file intent: Legacy cookie bridge for browser identity and cart/session continuity. final class CookieBridge ">
+      <div class="symbol-head">
+        <div>
+          <p class="eyebrow">class · line 11</p>
+          <h4><code>CookieBridge</code></h4>
+        </div>
+        <a class="anchor-link" href="#apps-api-src-support-cookiebridge-php-cookiebridge">#</a>
+      </div>
+      <p class="symbol-signature"><code>final class CookieBridge</code></p>
+      <p class="overview">No dedicated symbol docblock found; inherits file intent: Legacy cookie bridge for browser identity and cart/session continuity.</p>
+      
+    </section></div>
+              </div>
             </article>
-            <article class="card">
+            <article class="file-card searchable" id="apps-api-src-support-cors-php" data-search="apps/api/src/Support/Cors.php Central CORS policy helper for API requests and preflight handling.  Cors apply maybeHandlePreflight ">
               <div class="card-head">
-                <h3><code>apps/api/src/Support/Cors.php</code></h3>
-                <span class="count-pill">1.4 KB</span>
+                <div>
+                  <p class="eyebrow">PHP · 1.4 KB</p>
+                  <h3><code>apps/api/src/Support/Cors.php</code></h3>
+                </div>
+                <a class="anchor-link" href="#apps-api-src-support-cors-php">#</a>
               </div>
               <p class="overview">Central CORS policy helper for API requests and preflight handling.</p>
-              <p><strong>Declared symbols:</strong> <code>Cors</code>, <code>apply</code>, <code>maybeHandlePreflight</code></p>
-              
+              <div class="meta-grid">
+                <p><strong>Detected symbols:</strong> <code>Cors</code>, <code>apply</code>, <code>maybeHandlePreflight</code></p>
+                
+                <p class="muted tiny">Snapshot timestamp: 2026-03-15T09:46:57.000Z</p>
+              </div>
               <details>
                 <summary>Comment highlights</summary>
                 <p class="muted">No additional comment blocks were extracted from this file.</p>
               </details>
-              <p class="muted tiny">Snapshot timestamp: 2026-03-15T09:46:57.000Z</p>
+              <div class="symbol-section">
+                <div class="symbol-section-head">
+                  <h4>Documented symbols</h4>
+                  <span class="count-pill">1</span>
+                </div>
+                <div class="symbol-grid">
+    <section class="symbol-card searchable" id="apps-api-src-support-cors-php-cors" data-search="class Cors No dedicated symbol docblock found; inherits file intent: Central CORS policy helper for API requests and preflight handling. final class Cors ">
+      <div class="symbol-head">
+        <div>
+          <p class="eyebrow">class · line 11</p>
+          <h4><code>Cors</code></h4>
+        </div>
+        <a class="anchor-link" href="#apps-api-src-support-cors-php-cors">#</a>
+      </div>
+      <p class="symbol-signature"><code>final class Cors</code></p>
+      <p class="overview">No dedicated symbol docblock found; inherits file intent: Central CORS policy helper for API requests and preflight handling.</p>
+      
+    </section></div>
+              </div>
             </article>
-            <article class="card">
+            <article class="file-card searchable" id="apps-api-src-support-jsonresponse-php" data-search="apps/api/src/Support/JsonResponse.php Uniform JSON response envelope builder for success/error payloads.  JsonResponse success error send ">
               <div class="card-head">
-                <h3><code>apps/api/src/Support/JsonResponse.php</code></h3>
-                <span class="count-pill">1.6 KB</span>
+                <div>
+                  <p class="eyebrow">PHP · 1.6 KB</p>
+                  <h3><code>apps/api/src/Support/JsonResponse.php</code></h3>
+                </div>
+                <a class="anchor-link" href="#apps-api-src-support-jsonresponse-php">#</a>
               </div>
               <p class="overview">Uniform JSON response envelope builder for success/error payloads.</p>
-              <p><strong>Declared symbols:</strong> <code>JsonResponse</code>, <code>success</code>, <code>error</code>, <code>send</code></p>
-              
+              <div class="meta-grid">
+                <p><strong>Detected symbols:</strong> <code>JsonResponse</code>, <code>success</code>, <code>error</code>, <code>send</code></p>
+                
+                <p class="muted tiny">Snapshot timestamp: 2026-03-15T09:46:57.000Z</p>
+              </div>
               <details>
                 <summary>Comment highlights</summary>
                 <p class="muted">No additional comment blocks were extracted from this file.</p>
               </details>
-              <p class="muted tiny">Snapshot timestamp: 2026-03-15T09:46:57.000Z</p>
+              <div class="symbol-section">
+                <div class="symbol-section-head">
+                  <h4>Documented symbols</h4>
+                  <span class="count-pill">4</span>
+                </div>
+                <div class="symbol-grid">
+    <section class="symbol-card searchable" id="apps-api-src-support-jsonresponse-php-jsonresponse" data-search="class JsonResponse No dedicated symbol docblock found; inherits file intent: Uniform JSON response envelope builder for success/error payloads. final class JsonResponse ">
+      <div class="symbol-head">
+        <div>
+          <p class="eyebrow">class · line 11</p>
+          <h4><code>JsonResponse</code></h4>
+        </div>
+        <a class="anchor-link" href="#apps-api-src-support-jsonresponse-php-jsonresponse">#</a>
+      </div>
+      <p class="symbol-signature"><code>final class JsonResponse</code></p>
+      <p class="overview">No dedicated symbol docblock found; inherits file intent: Uniform JSON response envelope builder for success/error payloads.</p>
+      
+    </section>
+    <section class="symbol-card searchable" id="apps-api-src-support-jsonresponse-php-success" data-search="function success No descriptive summary was found for this symbol. public static function success(mixed $data = null, int $status = 200, array $meta = []): never param array&lt;string, mixed&gt; $meta">
+      <div class="symbol-head">
+        <div>
+          <p class="eyebrow">function · line 13</p>
+          <h4><code>success</code></h4>
+        </div>
+        <a class="anchor-link" href="#apps-api-src-support-jsonresponse-php-success">#</a>
+      </div>
+      <p class="symbol-signature"><code>public static function success(mixed $data = null, int $status = 200, array $meta = []): never</code></p>
+      <p class="overview">No descriptive summary was found for this symbol.</p>
+      <details class="tags-block"><summary>Doc tags</summary><ul><li><code>@param</code> array&lt;string, mixed&gt; $meta</li></ul></details>
+    </section>
+    <section class="symbol-card searchable" id="apps-api-src-support-jsonresponse-php-error" data-search="function error No descriptive summary was found for this symbol. public static function error(string $code, string $message, int $status = 400, array $details = [], array $meta = []): never param array&lt;string, mixed&gt; $details param array&lt;string, mixed&gt; $meta">
+      <div class="symbol-head">
+        <div>
+          <p class="eyebrow">function · line 25</p>
+          <h4><code>error</code></h4>
+        </div>
+        <a class="anchor-link" href="#apps-api-src-support-jsonresponse-php-error">#</a>
+      </div>
+      <p class="symbol-signature"><code>public static function error(string $code, string $message, int $status = 400, array $details = [], array $meta = []): never</code></p>
+      <p class="overview">No descriptive summary was found for this symbol.</p>
+      <details class="tags-block"><summary>Doc tags</summary><ul><li><code>@param</code> array&lt;string, mixed&gt; $details</li><li><code>@param</code> array&lt;string, mixed&gt; $meta</li></ul></details>
+    </section>
+    <section class="symbol-card searchable" id="apps-api-src-support-jsonresponse-php-send" data-search="function send No descriptive summary was found for this symbol. public static function send(array $payload, int $status = 200): never param array&lt;string, mixed&gt; $payload">
+      <div class="symbol-head">
+        <div>
+          <p class="eyebrow">function · line 46</p>
+          <h4><code>send</code></h4>
+        </div>
+        <a class="anchor-link" href="#apps-api-src-support-jsonresponse-php-send">#</a>
+      </div>
+      <p class="symbol-signature"><code>public static function send(array $payload, int $status = 200): never</code></p>
+      <p class="overview">No descriptive summary was found for this symbol.</p>
+      <details class="tags-block"><summary>Doc tags</summary><ul><li><code>@param</code> array&lt;string, mixed&gt; $payload</li></ul></details>
+    </section></div>
+              </div>
             </article>
-            <article class="card">
+            <article class="file-card searchable" id="apps-api-src-support-request-php" data-search="apps/api/src/Support/Request.php HTTP request value object parsed from PHP globals.  Request __construct fromGlobals header ">
               <div class="card-head">
-                <h3><code>apps/api/src/Support/Request.php</code></h3>
-                <span class="count-pill">1.4 KB</span>
+                <div>
+                  <p class="eyebrow">PHP · 1.4 KB</p>
+                  <h3><code>apps/api/src/Support/Request.php</code></h3>
+                </div>
+                <a class="anchor-link" href="#apps-api-src-support-request-php">#</a>
               </div>
               <p class="overview">HTTP request value object parsed from PHP globals.</p>
-              <p><strong>Declared symbols:</strong> <code>Request</code>, <code>__construct</code>, <code>fromGlobals</code>, <code>header</code></p>
-              
+              <div class="meta-grid">
+                <p><strong>Detected symbols:</strong> <code>Request</code>, <code>__construct</code>, <code>fromGlobals</code>, <code>header</code></p>
+                
+                <p class="muted tiny">Snapshot timestamp: 2026-03-15T09:46:57.000Z</p>
+              </div>
               <details>
                 <summary>Comment highlights</summary>
                 <p class="muted">No additional comment blocks were extracted from this file.</p>
               </details>
-              <p class="muted tiny">Snapshot timestamp: 2026-03-15T09:46:57.000Z</p>
+              <div class="symbol-section">
+                <div class="symbol-section-head">
+                  <h4>Documented symbols</h4>
+                  <span class="count-pill">2</span>
+                </div>
+                <div class="symbol-grid">
+    <section class="symbol-card searchable" id="apps-api-src-support-request-php-request" data-search="class Request No dedicated symbol docblock found; inherits file intent: HTTP request value object parsed from PHP globals. final class Request ">
+      <div class="symbol-head">
+        <div>
+          <p class="eyebrow">class · line 11</p>
+          <h4><code>Request</code></h4>
+        </div>
+        <a class="anchor-link" href="#apps-api-src-support-request-php-request">#</a>
+      </div>
+      <p class="symbol-signature"><code>final class Request</code></p>
+      <p class="overview">No dedicated symbol docblock found; inherits file intent: HTTP request value object parsed from PHP globals.</p>
+      
+    </section>
+    <section class="symbol-card searchable" id="apps-api-src-support-request-php-construct" data-search="function __construct No descriptive summary was found for this symbol. public function __construct( param array&lt;string, string&gt; $headers">
+      <div class="symbol-head">
+        <div>
+          <p class="eyebrow">function · line 13</p>
+          <h4><code>__construct</code></h4>
+        </div>
+        <a class="anchor-link" href="#apps-api-src-support-request-php-construct">#</a>
+      </div>
+      <p class="symbol-signature"><code>public function __construct(</code></p>
+      <p class="overview">No descriptive summary was found for this symbol.</p>
+      <details class="tags-block"><summary>Doc tags</summary><ul><li><code>@param</code> array&lt;string, string&gt; $headers</li></ul></details>
+    </section></div>
+              </div>
             </article>
-            <article class="card">
+            <article class="file-card searchable" id="apps-api-src-support-requestcontext-php" data-search="apps/api/src/Support/RequestContext.php Per-request metadata holder: request ID, method/path, and response timing metadata.  RequestContext __construct init current responseMeta requestIdHeader ">
               <div class="card-head">
-                <h3><code>apps/api/src/Support/RequestContext.php</code></h3>
-                <span class="count-pill">1.6 KB</span>
+                <div>
+                  <p class="eyebrow">PHP · 1.6 KB</p>
+                  <h3><code>apps/api/src/Support/RequestContext.php</code></h3>
+                </div>
+                <a class="anchor-link" href="#apps-api-src-support-requestcontext-php">#</a>
               </div>
               <p class="overview">Per-request metadata holder: request ID, method/path, and response timing metadata.</p>
-              <p><strong>Declared symbols:</strong> <code>RequestContext</code>, <code>__construct</code>, <code>init</code>, <code>current</code>, <code>responseMeta</code>, <code>requestIdHeader</code></p>
-              
+              <div class="meta-grid">
+                <p><strong>Detected symbols:</strong> <code>RequestContext</code>, <code>__construct</code>, <code>init</code>, <code>current</code>, <code>responseMeta</code>, <code>requestIdHeader</code></p>
+                
+                <p class="muted tiny">Snapshot timestamp: 2026-03-15T09:46:57.000Z</p>
+              </div>
               <details>
                 <summary>Comment highlights</summary>
                 <p class="muted">No additional comment blocks were extracted from this file.</p>
               </details>
-              <p class="muted tiny">Snapshot timestamp: 2026-03-15T09:46:57.000Z</p>
+              <div class="symbol-section">
+                <div class="symbol-section-head">
+                  <h4>Documented symbols</h4>
+                  <span class="count-pill">2</span>
+                </div>
+                <div class="symbol-grid">
+    <section class="symbol-card searchable" id="apps-api-src-support-requestcontext-php-requestcontext" data-search="class RequestContext No dedicated symbol docblock found; inherits file intent: Per-request metadata holder: request ID, method/path, and response timing metadata. final class RequestContext ">
+      <div class="symbol-head">
+        <div>
+          <p class="eyebrow">class · line 11</p>
+          <h4><code>RequestContext</code></h4>
+        </div>
+        <a class="anchor-link" href="#apps-api-src-support-requestcontext-php-requestcontext">#</a>
+      </div>
+      <p class="symbol-signature"><code>final class RequestContext</code></p>
+      <p class="overview">No dedicated symbol docblock found; inherits file intent: Per-request metadata holder: request ID, method/path, and response timing metadata.</p>
+      
+    </section>
+    <section class="symbol-card searchable" id="apps-api-src-support-requestcontext-php-responsemeta" data-search="function responseMeta No descriptive summary was found for this symbol. public function responseMeta(array $extra = []): array param array&lt;string, mixed&gt; $extra">
+      <div class="symbol-head">
+        <div>
+          <p class="eyebrow">function · line 44</p>
+          <h4><code>responseMeta</code></h4>
+        </div>
+        <a class="anchor-link" href="#apps-api-src-support-requestcontext-php-responsemeta">#</a>
+      </div>
+      <p class="symbol-signature"><code>public function responseMeta(array $extra = []): array</code></p>
+      <p class="overview">No descriptive summary was found for this symbol.</p>
+      <details class="tags-block"><summary>Doc tags</summary><ul><li><code>@param</code> array&lt;string, mixed&gt; $extra</li></ul></details>
+    </section></div>
+              </div>
             </article>
-            <article class="card">
+            <article class="file-card searchable" id="apps-api-src-support-router-php" data-search="apps/api/src/Support/Router.php Minimal regex-based HTTP router used by the native PHP API entrypoint. @var array&lt;int, array{method:string, pattern:string, handler:callable|array}&gt; Router get post patch delete add dispatch ">
               <div class="card-head">
-                <h3><code>apps/api/src/Support/Router.php</code></h3>
-                <span class="count-pill">1.8 KB</span>
+                <div>
+                  <p class="eyebrow">PHP · 1.8 KB</p>
+                  <h3><code>apps/api/src/Support/Router.php</code></h3>
+                </div>
+                <a class="anchor-link" href="#apps-api-src-support-router-php">#</a>
               </div>
               <p class="overview">Minimal regex-based HTTP router used by the native PHP API entrypoint.</p>
-              <p><strong>Declared symbols:</strong> <code>Router</code>, <code>get</code>, <code>post</code>, <code>patch</code>, <code>delete</code>, <code>add</code>, <code>dispatch</code></p>
-              
+              <div class="meta-grid">
+                <p><strong>Detected symbols:</strong> <code>Router</code>, <code>get</code>, <code>post</code>, <code>patch</code>, <code>delete</code>, <code>add</code>, <code>dispatch</code></p>
+                
+                <p class="muted tiny">Snapshot timestamp: 2026-03-15T09:46:57.000Z</p>
+              </div>
               <details>
                 <summary>Comment highlights</summary>
                 <ul><li>@var array&lt;int, array{method:string, pattern:string, handler:callable|array}&gt;</li></ul>
               </details>
-              <p class="muted tiny">Snapshot timestamp: 2026-03-15T09:46:57.000Z</p>
+              <div class="symbol-section">
+                <div class="symbol-section-head">
+                  <h4>Documented symbols</h4>
+                  <span class="count-pill">1</span>
+                </div>
+                <div class="symbol-grid">
+    <section class="symbol-card searchable" id="apps-api-src-support-router-php-router" data-search="class Router No dedicated symbol docblock found; inherits file intent: Minimal regex-based HTTP router used by the native PHP API entrypoint. final class Router ">
+      <div class="symbol-head">
+        <div>
+          <p class="eyebrow">class · line 11</p>
+          <h4><code>Router</code></h4>
+        </div>
+        <a class="anchor-link" href="#apps-api-src-support-router-php-router">#</a>
+      </div>
+      <p class="symbol-signature"><code>final class Router</code></p>
+      <p class="overview">No dedicated symbol docblock found; inherits file intent: Minimal regex-based HTTP router used by the native PHP API entrypoint.</p>
+      
+    </section></div>
+              </div>
             </article>
-            <article class="card">
+            <article class="file-card searchable" id="apps-api-src-support-sessionauth-php" data-search="apps/api/src/Support/SessionAuth.php Session helper for login state and current authenticated customer lookup.  SessionAuth login logout user ">
               <div class="card-head">
-                <h3><code>apps/api/src/Support/SessionAuth.php</code></h3>
-                <span class="count-pill">0.8 KB</span>
+                <div>
+                  <p class="eyebrow">PHP · 0.8 KB</p>
+                  <h3><code>apps/api/src/Support/SessionAuth.php</code></h3>
+                </div>
+                <a class="anchor-link" href="#apps-api-src-support-sessionauth-php">#</a>
               </div>
               <p class="overview">Session helper for login state and current authenticated customer lookup.</p>
-              <p><strong>Declared symbols:</strong> <code>SessionAuth</code>, <code>login</code>, <code>logout</code>, <code>user</code></p>
-              
+              <div class="meta-grid">
+                <p><strong>Detected symbols:</strong> <code>SessionAuth</code>, <code>login</code>, <code>logout</code>, <code>user</code></p>
+                
+                <p class="muted tiny">Snapshot timestamp: 2026-03-15T09:46:57.000Z</p>
+              </div>
               <details>
                 <summary>Comment highlights</summary>
                 <p class="muted">No additional comment blocks were extracted from this file.</p>
               </details>
-              <p class="muted tiny">Snapshot timestamp: 2026-03-15T09:46:57.000Z</p>
+              <div class="symbol-section">
+                <div class="symbol-section-head">
+                  <h4>Documented symbols</h4>
+                  <span class="count-pill">1</span>
+                </div>
+                <div class="symbol-grid">
+    <section class="symbol-card searchable" id="apps-api-src-support-sessionauth-php-sessionauth" data-search="class SessionAuth No dedicated symbol docblock found; inherits file intent: Session helper for login state and current authenticated customer lookup. final class SessionAuth ">
+      <div class="symbol-head">
+        <div>
+          <p class="eyebrow">class · line 11</p>
+          <h4><code>SessionAuth</code></h4>
+        </div>
+        <a class="anchor-link" href="#apps-api-src-support-sessionauth-php-sessionauth">#</a>
+      </div>
+      <p class="symbol-signature"><code>final class SessionAuth</code></p>
+      <p class="overview">No dedicated symbol docblock found; inherits file intent: Session helper for login state and current authenticated customer lookup.</p>
+      
+    </section></div>
+              </div>
             </article>
         </div>
       </section>
+        </div>
+      </div>
     </main>
+    <script>
+      const searchInput = document.getElementById('page-search');
+      const searchable = Array.from(document.querySelectorAll('.searchable'));
+      if (searchInput) {
+        searchInput.addEventListener('input', () => {
+          const query = searchInput.value.trim().toLowerCase();
+          searchable.forEach((element) => {
+            const haystack = (element.getAttribute('data-search') || '').toLowerCase();
+            element.classList.toggle('is-hidden', query && !haystack.includes(query));
+          });
+        });
+      }
+    </script>
   </body>
 </html>

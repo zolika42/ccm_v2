@@ -1,6 +1,26 @@
 # Docs Index
 
+- [Developer Handbook](./DEVELOPER_HANDBOOK.md)
 - [OpenAPI Spec](./openapi.yaml)
-- [Code Reference (HTML)](./code-reference/index.html)
+- [Code Reference Index (HTML)](./code-reference/index.html)
+- [Backend Code Reference (HTML)](./code-reference/backend.html)
+- [Frontend Code Reference (HTML)](./code-reference/frontend.html)
+- [Tooling Code Reference (HTML)](./code-reference/tooling.html)
 
-Run `make docs` or `cd apps/web && npm install` to regenerate the HTML code reference.
+The HTML code reference is generated from first-party source comments and now includes:
+- file-level summaries
+- symbol-level blocks for classes/functions/constants
+- clickable sidebar navigation
+- in-page search
+
+Regenerate everything with:
+
+```bash
+make docs
+```
+
+Or from the frontend install workflow:
+
+```bash
+cd apps/web && npm install
+```
