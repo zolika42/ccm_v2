@@ -1,0 +1,70 @@
+
+:root {
+  font-family: Arial, Helvetica, sans-serif;
+  color-scheme: light;
+}
+body {
+  margin: 0;
+  background: #f4f1ea;
+  color: #1f1f1f;
+}
+* { box-sizing: border-box; }
+.header {
+  background: #7b1113;
+  color: white;
+  border-bottom: 4px solid #c7a55b;
+}
+.header-inner {
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 18px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+}
+.brand { font-size: 28px; font-weight: 700; }
+.nav { display: flex; gap: 16px; flex-wrap: wrap; font-size: 14px; }
+.nav a { color: white; text-decoration: none; }
+.container { max-width: 1180px; margin: 0 auto; padding: 28px 24px 40px; }
+.panel {
+  background: white;
+  border: 1px solid #d7d2c8;
+  box-shadow: 0 10px 28px rgba(0,0,0,0.05);
+  padding: 24px;
+}
+.muted { color: #666; font-size: 14px; }
+.grid-3 { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px; }
+.card { background: white; border: 1px solid #d7d2c8; padding: 18px; }
+.badge { display: inline-block; padding: 4px 10px; border-radius: 999px; background: #eee4d3; color: #614500; font-size: 12px; margin-right: 8px; }
+.row { display: flex; gap: 16px; align-items: center; }
+.stack > * + * { margin-top: 16px; }
+label { display: block; font-size: 14px; }
+input, select {
+  width: 100%;
+  margin-top: 6px;
+  padding: 11px 12px;
+  border: 1px solid #c7c1b7;
+  border-radius: 4px;
+}
+button, .button {
+  background: #7b1113;
+  color: white;
+  border: 1px solid #7b1113;
+  padding: 11px 14px;
+  border-radius: 4px;
+  text-decoration: none;
+  display: inline-block;
+}
+.secondary { background: white; color: #7b1113; }
+.layout-2 { display: grid; grid-template-columns: minmax(0, 1fr) 320px; gap: 18px; align-items: start; }
+.summary dl { margin: 0; }
+.summary div { display: flex; justify-content: space-between; padding: 8px 0; border-top: 1px solid #ece6da; }
+.summary div:first-child { border-top: 0; }
+.table-row { display: flex; justify-content: space-between; gap: 18px; padding: 16px 0; border-top: 1px solid #ece6da; }
+.table-row:first-child { border-top: 0; }
+.form-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px 18px; }
+.full { grid-column: 1 / -1; }
+.note { background: #f8f7f3; border: 1px solid #ddd5c8; padding: 16px; }
+.small-list { margin: 0; padding-left: 18px; }
+.price { color: #7b1113; font-size: 24px; font-weight: 700; }

@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Product list</title>
+  <link rel="stylesheet" href="./styles.css" />
+</head>
+<body>
+  <header class="header">
+    <div class="header-inner">
+      <div class="brand">ColumbiaGames Rewrite</div>
+      <nav class="nav">
+        <a href="#">Products</a>
+        <a href="#">Cart (3)</a>
+        <a href="#">Checkout</a>
+        <a href="#">Library</a>
+        <a href="#">Login</a>
+      </nav>
+    </div>
+  </header>
+  <main class="container">
+<section class="stack">
+  <div class="panel stack">
+    <div class="row" style="justify-content:space-between;align-items:flex-end;">
+      <div>
+        <h1 style="margin:0 0 8px;">Products</h1>
+        <div class="muted">Catalog-first storefront with category browsing and add-to-cart actions.</div>
+      </div>
+      <span class="button secondary">Refresh list</span>
+    </div>
+    <div class="form-grid" style="grid-template-columns: 2fr 1fr 1fr;">
+      <label>Search<input value="harn" /></label>
+      <label>Category<select><option>Rulebooks</option></select></label>
+      <label>Sub-category<select><option>Digital Editions</option></select></label>
+    </div>
+    <div class="row"><span class="button">Apply filters</span><span class="button secondary">Reset</span><span class="muted">3 categories / 3 sub-categories cached</span></div>
+  </div>
+  <div class="grid-3">
+    <article class="card stack"><div><div class="muted">Miniatures / Space Fleets</div><h3 style="margin:6px 0;">Atlas Carrier Fleet</h3><div class="muted">CG-ATLAS</div></div><div class="price">$59.99</div><div><span class="badge">Physical</span></div><div class="row"><span class="button">Add to cart</span><span class="button secondary">View</span></div></article>
+    <article class="card stack"><div><div class="muted">Rulebooks / Digital Editions</div><h3 style="margin:6px 0;">Nebula Border Wars PDF</h3><div class="muted">CG-NEBULA</div></div><div class="price">$19.99</div><div><span class="badge">Downloadable</span></div><div class="row"><span class="button">Add to cart</span><span class="button secondary">View</span></div></article>
+    <article class="card stack"><div><div class="muted">Board Games / Starter Sets</div><h3 style="margin:6px 0;">Orbit Siege Command Pack</h3><div class="muted">CG-ORBIT</div></div><div class="price">$34.50</div><div><span class="badge">Physical</span></div><div class="row"><span class="button">Add to cart</span><span class="button secondary">View</span></div></article>
+  </div>
+</section>
+</main>
+</body>
+</html>

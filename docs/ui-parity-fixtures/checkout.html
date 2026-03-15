@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Checkout</title>
+  <link rel="stylesheet" href="./styles.css" />
+</head>
+<body>
+  <header class="header">
+    <div class="header-inner">
+      <div class="brand">ColumbiaGames Rewrite</div>
+      <nav class="nav">
+        <a href="#">Products</a>
+        <a href="#">Cart (3)</a>
+        <a href="#">Checkout</a>
+        <a href="#">Library</a>
+        <a href="#">Login</a>
+      </nav>
+    </div>
+  </header>
+  <main class="container">
+<section class="layout-2">
+  <div class="stack">
+    <div class="panel stack">
+      <div class="row" style="justify-content:space-between;align-items:flex-end;">
+        <div><h1 style="margin:0 0 8px;">Checkout</h1><div class="muted">Order FIXTURE-ORDER-1001 · Storage mode fixture-memory</div></div>
+        <div class="row"><span class="button secondary">Reload summary</span><span class="button secondary">Validate checkout</span><span class="button">Submit order</span></div>
+      </div>
+      <div class="note"><strong>Current status</strong><ul class="small-list"><li>Shipping required: yes</li><li>Payment required: yes</li><li>Available payment types: visa, mastercard, paypal</li><li>Customer points available: 180</li><li>PayflowPro config present: yes</li></ul></div>
+      <div class="muted">Logged in as <strong>Alex Fixture</strong> (fixture-library@example.invalid)</div>
+    </div>
+    <div class="panel"><h2 style="margin-top:0;">Shipping</h2><div class="form-grid"><label>Full name<input value="Alex Fixture" /></label><label>Email<input value="fixture-library@example.invalid" /></label><label>Phone<input value="555-0104" /></label><label>Method<input value="UPS Ground" /></label><label class="full">Street<input value="101 Demo Street" /></label><label>City<input value="Hudson" /></label><label>State<input value="NY" /></label><label>Zip<input value="10001" /></label><label>Country<input value="US" /></label></div></div>
+    <div class="panel"><h2 style="margin-top:0;">Billing & payment</h2><div class="form-grid"><label>Billing name<input value="Alex Fixture" /></label><label>Payment type<select><option>Select</option></select></label><label class="full">Billing street<input value="101 Demo Street" /></label><label>Billing city<input value="Hudson" /></label><label>Billing state<input value="NY" /></label><label>Billing zip<input value="10001" /></label><label>Billing country<input value="US" /></label><label>Promo code<input value="SPRING" /></label><label>Apply points<input value="25" /></label></div></div>
+  </div>
+  <aside class="panel summary stack">
+    <div>
+      <h2 style="margin-top:0;">Order preview</h2>
+      <dl>
+        <div><dt>Items</dt><dd>3</dd></div>
+        <div><dt>Subtotal</dt><dd>99.97 USD</dd></div>
+        <div><dt>Paid lines</dt><dd>2</dd></div>
+        <div><dt>Downloadable qty</dt><dd>2</dd></div>
+        <div><dt>Shippable subtotal</dt><dd>59.99 USD</dd></div>
+      </dl>
+    </div>
+    <div class="note"><strong>Validation</strong><ul class="small-list"><li>Payment type: Choose a payment type for paid orders.</li></ul></div>
+    <div class="note"><strong>Cart items</strong><ul class="small-list"><li>Atlas Carrier Fleet — Qty 1 · 59.99 USD</li><li>Nebula Border Wars PDF — Qty 2 · 39.98 USD</li></ul></div>
+  </aside>
+</section>
+</main>
+</body>
+</html>

@@ -9,74 +9,83 @@ import type {
   CheckoutSubmission,
   CheckoutState,
 } from '../types';
+import * as mockApi from '../fixtures/mockApi';
 import { generatedApiClient } from './generated';
 import { buildApiUrl } from './runtime';
 
+const USE_FIXTURE_API = import.meta.env.VITE_USE_FIXTURE_API === '1'
+  || (typeof window !== 'undefined' && new URLSearchParams(window.location.search).get('fixtureApi') === '1');
+
 export async function login(email: string, password: string): Promise<AuthUser> {
-  const payload = await generatedApiClient.login({ email, password });
+  const payload = USE_FIXTURE_API ? await mockApi.login(email) : await generatedApiClient.login({ email, password });
   return payload.data.user;
 }
 
 export async function me(): Promise<AuthUser> {
-  const payload = await generatedApiClient.me();
+  const payload = USE_FIXTURE_API ? await mockApi.me() : await generatedApiClient.me();
   return payload.data.user;
 }
 
 export async function getCatalogCategories(): Promise<{ categories: CatalogCategory[]; meta: { categoryCount: number; subCategoryCount: number } }> {
-  const payload = await generatedApiClient.getCatalogCategories();
+  const payload = USE_FIXTURE_API ? await mockApi.getCatalogCategories() : await generatedApiClient.getCatalogCategories();
   return payload.data;
 }
 
 export async function logout(): Promise<void> {
+  if (USE_FIXTURE_API) {
+    await mockApi.logout();
+    return;
+  }
+
   await generatedApiClient.logout();
 }
 
 export async function listProducts(params: { limit?: number; offset?: number; q?: string; category?: string; sub_category?: string } = {}) {
-  return generatedApiClient.listProducts(params);
+  return USE_FIXTURE_API ? mockApi.listProducts(params) : generatedApiClient.listProducts(params);
 }
 
 export async function getProduct(productId: string) {
-  return generatedApiClient.getProduct(productId);
+  return USE_FIXTURE_API ? mockApi.getProduct(productId) : generatedApiClient.getProduct(productId);
 }
 
 export async function getRelated(productId: string) {
-  return generatedApiClient.getRelatedProducts(productId);
+  return USE_FIXTURE_API ? mockApi.getRelated(productId) : generatedApiClient.getRelatedProducts(productId);
 }
 
 export async function getCartIdentity() {
-  return generatedApiClient.getCartIdentity();
+  return USE_FIXTURE_API ? mockApi.getCartIdentity() : generatedApiClient.getCartIdentity();
 }
 
 export async function getCart() {
-  return generatedApiClient.getCart();
+  return USE_FIXTURE_API ? mockApi.getCart() : generatedApiClient.getCart();
 }
 
 export async function getCartSummary() {
-  return generatedApiClient.getCartSummary();
+  return USE_FIXTURE_API ? mockApi.getCartSummary() : generatedApiClient.getCartSummary();
 }
 
 export async function addCartItem(productId: string, quantity = 1) {
-  return generatedApiClient.addCartItem({ productId, quantity });
+  return USE_FIXTURE_API ? mockApi.addCartItem(productId, quantity) : generatedApiClient.addCartItem({ productId, quantity });
 }
 
 export async function updateCartItem(productId: string, quantity: number) {
-  return generatedApiClient.updateCartItem(productId, { quantity });
+  return USE_FIXTURE_API ? mockApi.updateCartItem(productId, quantity) : generatedApiClient.updateCartItem(productId, { quantity });
 }
 
 export async function removeCartItem(productId: string) {
-  return generatedApiClient.removeCartItem(productId);
+  return USE_FIXTURE_API ? mockApi.removeCartItem(productId) : generatedApiClient.removeCartItem(productId);
 }
 
 export async function getCheckoutSummary() {
-  return generatedApiClient.getCheckoutSummary();
+  return USE_FIXTURE_API ? mockApi.getCheckoutSummary() : generatedApiClient.getCheckoutSummary();
 }
 
 export async function validateCheckout(draft: Partial<CheckoutDraft>) {
-  return generatedApiClient.validateCheckout(draft);
+  return USE_FIXTURE_API ? mockApi.validateCheckout(draft) : generatedApiClient.validateCheckout(draft);
 }
 
 export async function submitCheckout(draft: Partial<CheckoutDraft>) {
-  const json = await generatedApiClient.submitCheckout(draft);
+  const json = USE_FIXTURE_API ? await mockApi.submitCheckout(draft) : await generatedApiClient.submitCheckout(draft);
   return {
     ok: json.ok,
     meta: json.meta,
@@ -86,13 +95,12 @@ export async function submitCheckout(draft: Partial<CheckoutDraft>) {
 }
 
 export async function getLibrary() {
-  return generatedApiClient.getLibrary();
+  return USE_FIXTURE_API ? mockApi.getLibrary() : generatedApiClient.getLibrary();
 }
 
 export { generatedApiClient };
 export type { Cart };
 
-
 export function getLibraryDownloadUrl(productId: string) {
-  return buildApiUrl(`/library/${encodeURIComponent(productId)}/download`);
+  return USE_FIXTURE_API ? mockApi.getLibraryDownloadUrl(productId) : buildApiUrl(`/library/${encodeURIComponent(productId)}/download`);
 }
