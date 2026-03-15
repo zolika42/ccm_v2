@@ -1,4 +1,4 @@
-.PHONY: up down logs api-logs web-logs ps restore verify smoke native-api native-web
+.PHONY: up down logs api-logs web-logs ps restore verify smoke legacy-refresh native-api native-web
 
 up:
 	docker compose up --build -d
@@ -29,6 +29,15 @@ verify:
 	@./scripts/db/verify-legacy.sh
 
 smoke:
+	@./scripts/db/smoke-api.sh
+
+legacy-refresh:
+	@if [ -z "$(CCM_DUMP)" ] || [ -z "$(STORE_DUMP)" ]; then \
+		echo "Usage: make legacy-refresh CCM_DUMP=/abs/path/ccm.sql.gz STORE_DUMP=/abs/path/columbia_games.sql.gz"; \
+		exit 1; \
+	fi
+	@./scripts/db/restore-legacy.sh "$(CCM_DUMP)" "$(STORE_DUMP)"
+	@./scripts/db/verify-legacy.sh
 	@./scripts/db/smoke-api.sh
 
 native-api:

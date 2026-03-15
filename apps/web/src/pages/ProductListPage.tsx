@@ -1,6 +1,8 @@
+import React from 'react';
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { listProducts } from '../api/client';
+import { addCartItem, listProducts } from '../api/client';
+import { useCart } from '../cart/CartContext';
 import type { Product } from '../types';
 
 export function ProductListPage() {
@@ -8,6 +10,9 @@ export function ProductListPage() {
   const [query, setQuery] = useState('');
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [message, setMessage] = useState<string | null>(null);
+  const [busyProductId, setBusyProductId] = useState<string | null>(null);
+  const { refresh } = useCart();
 
   async function load(search = '') {
     setLoading(true);
@@ -22,8 +27,23 @@ export function ProductListPage() {
     }
   }
 
+  async function handleAddToCart(productId: string) {
+    setBusyProductId(productId);
+    setMessage(null);
+    setError(null);
+    try {
+      await addCartItem(productId, 1);
+      await refresh();
+      setMessage(`${productId} added to cart.`);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to add item');
+    } finally {
+      setBusyProductId(null);
+    }
+  }
+
   useEffect(() => {
-    load();
+    void load();
   }, []);
 
   return (
@@ -32,9 +52,10 @@ export function ProductListPage() {
         <h2>Products</h2>
         <div className="row search-row">
           <input value={query} onChange={(e) => setQuery(e.target.value)} placeholder="Search products…" />
-          <button onClick={() => load(query)}>Search</button>
+          <button onClick={() => void load(query)}>Search</button>
         </div>
       </div>
+      {message && <p className="success">{message}</p>}
       {loading && <p>Loading…</p>}
       {error && <p className="error">{error}</p>}
       <div className="product-grid">
@@ -48,7 +69,12 @@ export function ProductListPage() {
               {product.isDownloadable && <span className="badge">Downloadable</span>}
               {product.status && <span className="badge subtle">{product.status}</span>}
             </div>
-            <Link to={`/products/${encodeURIComponent(product.productId)}`}>Open</Link>
+            <div className="product-actions">
+              <Link to={`/products/${encodeURIComponent(product.productId)}`}>Open</Link>
+              <button type="button" disabled={busyProductId === product.productId} onClick={() => void handleAddToCart(product.productId)}>
+                {busyProductId === product.productId ? 'Adding…' : 'Add to cart'}
+              </button>
+            </div>
           </article>
         ))}
       </div>

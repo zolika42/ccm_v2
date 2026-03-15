@@ -1,6 +1,8 @@
+import React from 'react';
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { getProduct, getRelated } from '../api/client';
+import { addCartItem, getProduct, getRelated } from '../api/client';
+import { useCart } from '../cart/CartContext';
 import type { Product } from '../types';
 
 export function ProductDetailPage() {
@@ -8,6 +10,10 @@ export function ProductDetailPage() {
   const [product, setProduct] = useState<Product | null>(null);
   const [related, setRelated] = useState<Product[]>([]);
   const [error, setError] = useState<string | null>(null);
+  const [quantity, setQuantity] = useState(1);
+  const [message, setMessage] = useState<string | null>(null);
+  const [adding, setAdding] = useState(false);
+  const { refresh } = useCart();
 
   useEffect(() => {
     async function load() {
@@ -26,6 +32,22 @@ export function ProductDetailPage() {
     void load();
   }, [productId]);
 
+  async function handleAddToCart() {
+    if (!product) return;
+    setAdding(true);
+    setMessage(null);
+    setError(null);
+    try {
+      await addCartItem(product.productId, quantity);
+      await refresh();
+      setMessage(`${product.productId} added to cart.`);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to add item');
+    } finally {
+      setAdding(false);
+    }
+  }
+
   if (error) return <p className="error">{error}</p>;
   if (!product) return <p>Loading…</p>;
 
@@ -42,6 +64,14 @@ export function ProductDetailPage() {
 
       <div className="stack">
         {product.extendedDescription && <p>{product.extendedDescription}</p>}
+        <div className="purchase-row">
+          <label className="qty-input">
+            Quantity
+            <input type="number" min={1} max={999} value={quantity} onChange={(e) => setQuantity(Math.max(1, Number(e.target.value) || 1))} />
+          </label>
+          <button type="button" disabled={adding} onClick={() => void handleAddToCart()}>{adding ? 'Adding…' : 'Add to cart'}</button>
+        </div>
+        {message && <p className="success">{message}</p>}
         {product.specs && (
           <div>
             <h3>Specs</h3>

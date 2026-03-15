@@ -1,3 +1,4 @@
+import React from 'react';
 import { FormEvent, useState } from 'react';
 import { login, logout, me } from '../api/client';
 import type { AuthUser } from '../types';
