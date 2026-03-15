@@ -20,10 +20,8 @@ final class CheckoutController
         $payload = $this->checkout->summary(CookieBridge::currentBrowserId());
         CookieBridge::persistBrowserId($payload['identity']['browserId']);
 
-        JsonResponse::send([
-            'ok' => true,
+        JsonResponse::success($payload['checkout'], 200, [
             'identity' => $payload['identity'],
-            'data' => $payload['checkout'],
         ]);
     }
 
@@ -32,13 +30,10 @@ final class CheckoutController
         $payload = $this->checkout->validate(CookieBridge::currentBrowserId(), $request->body);
         CookieBridge::persistBrowserId($payload['identity']['browserId']);
 
-        JsonResponse::send([
-            'ok' => true,
+        JsonResponse::success($payload['checkout'], 200, [
             'identity' => $payload['identity'],
-            'data' => $payload['checkout'],
         ]);
     }
-
 
     public function submit(Request $request): void
     {
@@ -46,19 +41,18 @@ final class CheckoutController
         CookieBridge::persistBrowserId($payload['identity']['browserId']);
 
         if (!$payload['submitted']) {
-            JsonResponse::send([
-                'ok' => false,
+            JsonResponse::error('validation_error', 'Checkout submit failed.', (int) ($payload['status'] ?? 422), [
                 'identity' => $payload['identity'],
-                'data' => $payload['checkout'],
+                'checkout' => $payload['checkout'],
                 'submission' => null,
-            ], (int) ($payload['status'] ?? 422));
+            ]);
         }
 
-        JsonResponse::send([
-            'ok' => true,
-            'identity' => $payload['identity'],
-            'data' => $payload['checkout'],
+        JsonResponse::success([
+            'checkout' => $payload['checkout'],
             'submission' => $payload['submission'],
+        ], 200, [
+            'identity' => $payload['identity'],
         ]);
     }
 }

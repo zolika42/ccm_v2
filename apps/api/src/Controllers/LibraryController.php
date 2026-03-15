@@ -18,12 +18,9 @@ final class LibraryController
     public function index(Request $request): void
     {
         try {
-            JsonResponse::send([
-                'ok' => true,
-                'data' => $this->library->ownedDownloads(),
-            ]);
+            JsonResponse::success($this->library->ownedDownloads());
         } catch (RuntimeException $e) {
-            JsonResponse::error($e->getMessage(), 401);
+            JsonResponse::error('unauthorized', $e->getMessage(), 401);
         }
     }
 }

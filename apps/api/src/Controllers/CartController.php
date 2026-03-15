@@ -21,9 +21,8 @@ final class CartController
         $payload = $this->cart->identity(CookieBridge::currentBrowserId());
         CookieBridge::persistBrowserId($payload['identity']['browserId']);
 
-        JsonResponse::send([
-            'ok' => true,
-            'data' => $payload['identity'],
+        JsonResponse::success($payload['identity'], 200, [
+            'identity' => $payload['identity'],
         ]);
     }
 
@@ -32,10 +31,8 @@ final class CartController
         $payload = $this->cart->getCart(CookieBridge::currentBrowserId());
         CookieBridge::persistBrowserId($payload['identity']['browserId']);
 
-        JsonResponse::send([
-            'ok' => true,
+        JsonResponse::success($payload['cart'], 200, [
             'identity' => $payload['identity'],
-            'data' => $payload['cart'],
         ]);
     }
 
@@ -44,10 +41,8 @@ final class CartController
         $payload = $this->cart->getSummary(CookieBridge::currentBrowserId());
         CookieBridge::persistBrowserId($payload['identity']['browserId']);
 
-        JsonResponse::send([
-            'ok' => true,
+        JsonResponse::success($payload['summary'], 200, [
             'identity' => $payload['identity'],
-            'data' => $payload['summary'],
         ]);
     }
 
@@ -57,22 +52,27 @@ final class CartController
         $quantity = (int) ($request->body['quantity'] ?? 1);
 
         if ($productId === '') {
-            JsonResponse::error('Product ID is required.', 422);
+            JsonResponse::error('validation_error', 'Product ID is required.', 422, [
+                'fields' => ['productId'],
+            ]);
         }
         if ($quantity < 1) {
-            JsonResponse::error('Quantity must be at least 1.', 422);
+            JsonResponse::error('validation_error', 'Quantity must be at least 1.', 422, [
+                'fields' => ['quantity'],
+            ]);
         }
 
         try {
             $payload = $this->cart->addItem(CookieBridge::currentBrowserId(), $productId, $quantity);
             CookieBridge::persistBrowserId($payload['identity']['browserId']);
-            JsonResponse::send([
-                'ok' => true,
+            JsonResponse::success($payload['cart'], 200, [
                 'identity' => $payload['identity'],
-                'data' => $payload['cart'],
             ]);
         } catch (RuntimeException $e) {
-            JsonResponse::error($e->getMessage(), 422);
+            JsonResponse::error('validation_error', $e->getMessage(), 422, [
+                'productId' => $productId,
+                'quantity' => $quantity,
+            ]);
         }
     }
 
@@ -82,19 +82,22 @@ final class CartController
         $quantity = (int) ($request->body['quantity'] ?? 0);
 
         if ($productId === '') {
-            JsonResponse::error('Product ID is required.', 422);
+            JsonResponse::error('validation_error', 'Product ID is required.', 422, [
+                'fields' => ['productId'],
+            ]);
         }
 
         try {
             $payload = $this->cart->updateItem(CookieBridge::currentBrowserId(), $productId, $quantity);
             CookieBridge::persistBrowserId($payload['identity']['browserId']);
-            JsonResponse::send([
-                'ok' => true,
+            JsonResponse::success($payload['cart'], 200, [
                 'identity' => $payload['identity'],
-                'data' => $payload['cart'],
             ]);
         } catch (RuntimeException $e) {
-            JsonResponse::error($e->getMessage(), 422);
+            JsonResponse::error('validation_error', $e->getMessage(), 422, [
+                'productId' => $productId,
+                'quantity' => $quantity,
+            ]);
         }
     }
 
@@ -102,15 +105,15 @@ final class CartController
     {
         $productId = trim((string) ($params['productId'] ?? ''));
         if ($productId === '') {
-            JsonResponse::error('Product ID is required.', 422);
+            JsonResponse::error('validation_error', 'Product ID is required.', 422, [
+                'fields' => ['productId'],
+            ]);
         }
 
         $payload = $this->cart->removeItem(CookieBridge::currentBrowserId(), $productId);
         CookieBridge::persistBrowserId($payload['identity']['browserId']);
-        JsonResponse::send([
-            'ok' => true,
+        JsonResponse::success($payload['cart'], 200, [
             'identity' => $payload['identity'],
-            'data' => $payload['cart'],
         ]);
     }
 }

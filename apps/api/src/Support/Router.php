@@ -52,6 +52,6 @@ final class Router
             return;
         }
 
-        JsonResponse::error('Route not found', 404);
+        JsonResponse::error('not_found', 'Route not found.', 404, ['route' => $request->path]);
     }
 }

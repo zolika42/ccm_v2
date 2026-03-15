@@ -18,9 +18,11 @@ use ColumbiaGames\Api\Services\CartService;
 use ColumbiaGames\Api\Services\CatalogService;
 use ColumbiaGames\Api\Services\CheckoutService;
 use ColumbiaGames\Api\Services\LibraryService;
+use ColumbiaGames\Api\Support\ApiLogger;
 use ColumbiaGames\Api\Support\Cors;
 use ColumbiaGames\Api\Support\JsonResponse;
 use ColumbiaGames\Api\Support\Request;
+use ColumbiaGames\Api\Support\RequestContext;
 use ColumbiaGames\Api\Support\Router;
 
 require_once __DIR__ . '/../bootstrap.php';
@@ -29,6 +31,13 @@ Cors::apply();
 Cors::maybeHandlePreflight();
 
 $request = Request::fromGlobals();
+RequestContext::init($request);
+
+set_exception_handler(static function (Throwable $throwable): void {
+    ApiLogger::exception($throwable);
+    JsonResponse::error('internal_error', 'Unexpected server error.', 500);
+});
+
 $router = new Router();
 $connections = new ConnectionFactory();
 
@@ -50,13 +59,19 @@ $checkoutController = new CheckoutController($checkoutService);
 $libraryController = new LibraryController($libraryService);
 
 $router->get('/health', function () use ($connections): void {
-    JsonResponse::send([
-        'ok' => true,
+    JsonResponse::success([
         'databases' => [
             'ccm' => $connections->ping('ccm'),
             'columbia_games' => $connections->ping('store'),
         ],
     ]);
+});
+
+$router->get('/openapi', static function (): void {
+    header('Content-Type: application/yaml; charset=utf-8');
+    header('X-Request-Id: ' . RequestContext::current()->requestIdHeader());
+    readfile(__DIR__ . '/openapi.yaml');
+    exit;
 });
 
 $router->post('/auth/login', [$authController, 'login']);

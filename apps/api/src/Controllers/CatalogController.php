@@ -16,10 +16,7 @@ final class CatalogController
 
     public function index(Request $request): void
     {
-        JsonResponse::send([
-            'ok' => true,
-            'data' => $this->catalog->list($request->query),
-        ]);
+        JsonResponse::success($this->catalog->list($request->query));
     }
 
     public function show(Request $request, array $params): void
@@ -27,18 +24,17 @@ final class CatalogController
         $productId = $params['productId'] ?? '';
         $product = $this->catalog->show($productId);
         if ($product === null) {
-            JsonResponse::error('Product not found.', 404);
+            JsonResponse::error('not_found', 'Product not found.', 404, [
+                'productId' => $productId,
+            ]);
         }
 
-        JsonResponse::send(['ok' => true, 'data' => $product]);
+        JsonResponse::success($product);
     }
 
     public function related(Request $request, array $params): void
     {
         $productId = $params['productId'] ?? '';
-        JsonResponse::send([
-            'ok' => true,
-            'data' => $this->catalog->related($productId),
-        ]);
+        JsonResponse::success($this->catalog->related($productId));
     }
 }

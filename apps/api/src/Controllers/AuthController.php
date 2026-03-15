@@ -21,30 +21,32 @@ final class AuthController
         $password = (string) ($request->body['password'] ?? '');
 
         if ($email === '' || $password === '') {
-            JsonResponse::error('Email and password are required.', 422);
+            JsonResponse::error('validation_error', 'Email and password are required.', 422, [
+                'fields' => ['email', 'password'],
+            ]);
         }
 
         try {
             $user = $this->auth->login($email, $password);
-            JsonResponse::send(['ok' => true, 'user' => $user]);
+            JsonResponse::success(['user' => $user]);
         } catch (RuntimeException $e) {
-            JsonResponse::error($e->getMessage(), 401);
+            JsonResponse::error('unauthorized', $e->getMessage(), 401);
         }
     }
 
     public function logout(Request $request): void
     {
         $this->auth->logout();
-        JsonResponse::send(['ok' => true]);
+        JsonResponse::success(['loggedOut' => true]);
     }
 
     public function me(Request $request): void
     {
         $user = $this->auth->me();
         if ($user === null) {
-            JsonResponse::error('Not authenticated.', 401);
+            JsonResponse::error('unauthorized', 'Not authenticated.', 401);
         }
 
-        JsonResponse::send(['ok' => true, 'user' => $user]);
+        JsonResponse::success(['user' => $user]);
     }
 }

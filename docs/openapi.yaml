@@ -1,0 +1,342 @@
+openapi: 3.1.0
+info:
+  title: ColumbiaGames Rewrite API
+  version: 0.1.0
+  description: >-
+    Starter contract for auth, catalog, cart, checkout and library endpoints.
+servers:
+  - url: http://localhost:8080
+components:
+  securitySchemes:
+    sessionCookie:
+      type: apiKey
+      in: cookie
+      name: columbiagames_session
+  schemas:
+    Meta:
+      type: object
+      required: [requestId, method, path, durationMs]
+      properties:
+        requestId:
+          type: string
+        method:
+          type: string
+        path:
+          type: string
+        durationMs:
+          type: integer
+        identity:
+          type: object
+          additionalProperties: true
+    Error:
+      type: object
+      required: [code, message, details]
+      properties:
+        code:
+          type: string
+        message:
+          type: string
+        details:
+          type: object
+          additionalProperties: true
+    EnvelopeSuccess:
+      type: object
+      required: [ok, data, meta]
+      properties:
+        ok:
+          type: boolean
+          const: true
+        data: {}
+        meta:
+          $ref: '#/components/schemas/Meta'
+    EnvelopeError:
+      type: object
+      required: [ok, error, meta]
+      properties:
+        ok:
+          type: boolean
+          const: false
+        error:
+          $ref: '#/components/schemas/Error'
+        meta:
+          $ref: '#/components/schemas/Meta'
+    AuthUser:
+      type: object
+      required: [customerId, email, name, points]
+      properties:
+        customerId:
+          type: integer
+        email:
+          type: string
+        name:
+          type: string
+        points:
+          type: integer
+    Product:
+      type: object
+      properties:
+        productId:
+          type: string
+        description:
+          type: string
+        price:
+          type: string
+        category:
+          type: string
+        subCategory:
+          type: string
+        isDownloadable:
+          type: boolean
+        downloadableFilename:
+          type: string
+    CartSummary:
+      type: object
+      properties:
+        itemCount:
+          type: integer
+        uniqueItemCount:
+          type: integer
+        subtotal:
+          type: number
+        subtotalFormatted:
+          type: string
+        currency:
+          type: string
+        hasItems:
+          type: boolean
+    Cart:
+      type: object
+      properties:
+        browserId:
+          type: string
+        orderId:
+          oneOf:
+            - type: string
+            - type: integer
+            - type: 'null'
+        storage:
+          type: string
+        items:
+          type: array
+          items:
+            type: object
+            additionalProperties: true
+        summary:
+          $ref: '#/components/schemas/CartSummary'
+    CheckoutState:
+      type: object
+      additionalProperties: true
+    LibraryState:
+      type: object
+      additionalProperties: true
+paths:
+  /health:
+    get:
+      summary: Health check
+      responses:
+        '200':
+          description: OK
+  /openapi:
+    get:
+      summary: Download OpenAPI contract
+      responses:
+        '200':
+          description: YAML document
+  /auth/login:
+    post:
+      summary: Login
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [email, password]
+              properties:
+                email:
+                  type: string
+                password:
+                  type: string
+      responses:
+        '200':
+          description: Logged in
+        '401':
+          description: Invalid credentials
+  /auth/logout:
+    post:
+      summary: Logout
+      responses:
+        '200':
+          description: Logged out
+  /auth/me:
+    get:
+      summary: Current user
+      responses:
+        '200':
+          description: Current user profile
+        '401':
+          description: Not authenticated
+  /catalog/products:
+    get:
+      summary: List products
+      parameters:
+        - in: query
+          name: limit
+          schema:
+            type: integer
+        - in: query
+          name: offset
+          schema:
+            type: integer
+        - in: query
+          name: search
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Product list
+  /catalog/products/{productId}:
+    get:
+      summary: Product details
+      parameters:
+        - in: path
+          name: productId
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Product details
+        '404':
+          description: Product not found
+  /catalog/products/{productId}/related:
+    get:
+      summary: Related products
+      parameters:
+        - in: path
+          name: productId
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Related products
+  /cart/identity:
+    get:
+      summary: Resolve cart identity
+      responses:
+        '200':
+          description: Identity
+  /cart:
+    get:
+      summary: Read active cart
+      responses:
+        '200':
+          description: Cart state
+  /cart/summary:
+    get:
+      summary: Read cart summary
+      responses:
+        '200':
+          description: Cart summary
+  /cart/items:
+    post:
+      summary: Add item to cart
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [productId, quantity]
+              properties:
+                productId:
+                  type: string
+                quantity:
+                  type: integer
+      responses:
+        '200':
+          description: Updated cart
+        '422':
+          description: Validation error
+  /cart/items/{productId}:
+    patch:
+      summary: Update item quantity
+      parameters:
+        - in: path
+          name: productId
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [quantity]
+              properties:
+                quantity:
+                  type: integer
+      responses:
+        '200':
+          description: Updated cart
+        '422':
+          description: Validation error
+    delete:
+      summary: Remove item from cart
+      parameters:
+        - in: path
+          name: productId
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Updated cart
+  /checkout/summary:
+    get:
+      summary: Checkout summary
+      responses:
+        '200':
+          description: Checkout state
+  /checkout/validate:
+    post:
+      summary: Validate checkout draft
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: true
+      responses:
+        '200':
+          description: Checkout validation result
+  /checkout/submit:
+    post:
+      summary: Submit order
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: true
+      responses:
+        '200':
+          description: Submitted order
+        '401':
+          description: Not authenticated
+        '422':
+          description: Checkout validation error
+  /library:
+    get:
+      summary: Owned downloadable products
+      security:
+        - sessionCookie: []
+      responses:
+        '200':
+          description: Owned downloads
+        '401':
+          description: Not authenticated

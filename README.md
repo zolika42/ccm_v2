@@ -54,3 +54,10 @@ A `.ddev/` mappa opcionális kényelmi réteg. A source of truth továbbra is a 
 - add/update/remove cart items
 - checkout field mapping
 - digital library listing
+
+
+## API contract
+
+- OpenAPI spec: `apps/api/public/openapi.yaml`
+- Runtime endpoint: `GET /openapi`
+- Every JSON response now carries a `meta.requestId` and error payloads use `error.code/message/details`.

@@ -241,7 +241,29 @@ export type CheckoutSubmission = {
 
 export type CheckoutSubmitResponse = {
   ok: boolean;
-  identity?: CartIdentity;
+  meta: ApiMeta;
   data: CheckoutState;
   submission: CheckoutSubmission | null;
+};
+
+
+export type ApiMeta = {
+  requestId: string;
+  method: string;
+  path: string;
+  durationMs: number;
+  identity?: CartIdentity;
+};
+
+export type ApiError = {
+  code: string;
+  message: string;
+  details: Record<string, unknown>;
+};
+
+export type ApiEnvelope<T> = {
+  ok: boolean;
+  data: T;
+  meta: ApiMeta;
+  error?: ApiError;
 };
