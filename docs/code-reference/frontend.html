@@ -1,0 +1,333 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Frontend Code Reference</title>
+    <style>
+      :root {
+        color-scheme: light dark;
+        --bg: #020617;
+        --panel: rgba(15, 23, 42, 0.92);
+        --panel-strong: rgba(17, 24, 39, 0.94);
+        --text: #e5e7eb;
+        --muted: #94a3b8;
+        --accent: #60a5fa;
+        --border: rgba(148, 163, 184, 0.24);
+      }
+      * { box-sizing: border-box; }
+      body {
+        margin: 0;
+        font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        background: linear-gradient(180deg, #020617 0%, #111827 100%);
+        color: var(--text);
+      }
+      a { color: var(--accent); }
+      .shell { max-width: 1280px; margin: 0 auto; padding: 32px 20px 64px; }
+      .hero, .group, .card {
+        border: 1px solid var(--border);
+        border-radius: 24px;
+        background: var(--panel);
+        box-shadow: 0 18px 40px rgba(0, 0, 0, 0.22);
+      }
+      .hero { padding: 28px; }
+      .hero h1 { margin: 0 0 10px; font-size: 2rem; }
+      .hero p { margin: 0 0 10px; line-height: 1.6; color: var(--muted); }
+      .nav-row { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 18px; }
+      .nav-pill {
+        display: inline-flex; align-items: center; justify-content: center; text-decoration: none;
+        border-radius: 999px; border: 1px solid var(--border); padding: 8px 12px; background: rgba(30, 41, 59, 0.8);
+      }
+      .nav-pill.active { background: rgba(96, 165, 250, 0.16); color: #dbeafe; }
+      .group { margin-top: 24px; padding: 20px; }
+      .group-head, .card-head {
+        display: flex; align-items: center; justify-content: space-between; gap: 12px;
+      }
+      .card-grid {
+        display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 16px; margin-top: 16px;
+      }
+      .card { background: var(--panel-strong); padding: 18px; }
+      .card h3, .group h2 { margin: 0; }
+      .overview { line-height: 1.6; }
+      .count-pill {
+        display: inline-flex; align-items: center; justify-content: center; padding: 4px 10px; border-radius: 999px;
+        background: rgba(96, 165, 250, 0.15); color: #bfdbfe; font-size: 0.85rem;
+      }
+      .muted { color: var(--muted); }
+      .tiny { font-size: 0.8rem; }
+      details { margin-top: 14px; border-top: 1px solid var(--border); padding-top: 12px; }
+      summary { cursor: pointer; }
+      code { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; }
+      ul { padding-left: 18px; line-height: 1.5; }
+    </style>
+  </head>
+  <body>
+    <main class="shell">
+      <section class="hero">
+        <h1>Frontend Code Reference</h1>
+        <p>React/web API client code, runtime adapters, and frontend support scripts.</p>
+        <p class="muted">Generated automatically by <code>scripts/docs/generate-code-reference.mjs</code>.</p>
+        <div class="nav-row">
+          <a class="nav-pill" href="./index.html">Index</a>
+          <a class="nav-pill" href="./backend.html">Backend Code Reference</a><span class="nav-pill active">Frontend Code Reference</span><a class="nav-pill" href="./tooling.html">Tooling Code Reference</a>
+        </div>
+      </section>
+      
+      <section class="group">
+        <div class="group-head">
+          <h2>apps/web/scripts</h2>
+          <span class="count-pill">1 file(s)</span>
+        </div>
+        <div class="card-grid">
+          
+            <article class="card">
+              <div class="card-head">
+                <h3><code>apps/web/scripts/generate-api-client.mjs</code></h3>
+                <span class="count-pill">5.3 KB</span>
+              </div>
+              <p class="overview">Regenerates the typed frontend API client from the published OpenAPI contract.</p>
+              <p><strong>Declared symbols:</strong> <code>parseOperations</code>, <code>interpolatePath</code>, <code>buildMethod</code></p>
+              <p><strong>Dependencies:</strong> <code>node:fs</code>, <code>node:path</code>, <code>node:url</code>, <code>./runtime</code></p>
+              <details>
+                <summary>Comment highlights</summary>
+                <ul><li>AUTO-GENERATED FILE. DO NOT EDIT MANUALLY. Source: apps/api/public/openapi.yaml Generator: apps/web/scripts/generate-api-client.mjs</li></ul>
+              </details>
+              <p class="muted tiny">Snapshot timestamp: 2026-03-15T10:09:58.000Z</p>
+            </article>
+        </div>
+      </section>
+      <section class="group">
+        <div class="group-head">
+          <h2>apps/web/src</h2>
+          <span class="count-pill">4 file(s)</span>
+        </div>
+        <div class="card-grid">
+          
+            <article class="card">
+              <div class="card-head">
+                <h3><code>apps/web/src/App.tsx</code></h3>
+                <span class="count-pill">1.8 KB</span>
+              </div>
+              <p class="overview">Application shell: top navigation and route table for the React frontend.</p>
+              <p><strong>Declared symbols:</strong> <code>App</code>, <code>CartLinkLabel</code></p>
+              <p><strong>Dependencies:</strong> <code>react</code>, <code>react-router-dom</code>, <code>./cart/CartContext</code>, <code>./pages/CartPage</code>, <code>./pages/CheckoutPage</code>, <code>./pages/LibraryPage</code>, <code>./pages/LoginPage</code>, <code>./pages/ProductDetailPage</code>, <code>./pages/ProductListPage</code></p>
+              <details>
+                <summary>Comment highlights</summary>
+                <p class="muted">No additional comment blocks were extracted from this file.</p>
+              </details>
+              <p class="muted tiny">Snapshot timestamp: 2026-03-15T09:46:57.000Z</p>
+            </article>
+            <article class="card">
+              <div class="card-head">
+                <h3><code>apps/web/src/main.tsx</code></h3>
+                <span class="count-pill">0.5 KB</span>
+              </div>
+              <p class="overview">React frontend bootstrap: router + global providers mount here.</p>
+              
+              <p><strong>Dependencies:</strong> <code>react</code>, <code>react-dom/client</code>, <code>react-router-dom</code>, <code>./App</code>, <code>./cart/CartContext</code></p>
+              <details>
+                <summary>Comment highlights</summary>
+                <p class="muted">No additional comment blocks were extracted from this file.</p>
+              </details>
+              <p class="muted tiny">Snapshot timestamp: 2026-03-15T09:46:57.000Z</p>
+            </article>
+            <article class="card">
+              <div class="card-head">
+                <h3><code>apps/web/src/types.ts</code></h3>
+                <span class="count-pill">5.5 KB</span>
+              </div>
+              <p class="overview">Shared TypeScript domain types used across frontend pages and API clients.</p>
+              
+              
+              <details>
+                <summary>Comment highlights</summary>
+                <p class="muted">No additional comment blocks were extracted from this file.</p>
+              </details>
+              <p class="muted tiny">Snapshot timestamp: 2026-03-15T09:46:57.000Z</p>
+            </article>
+            <article class="card">
+              <div class="card-head">
+                <h3><code>apps/web/src/vite-env.d.ts</code></h3>
+                <span class="count-pill">0.1 KB</span>
+              </div>
+              <p class="overview">Vite type declarations for TypeScript builds.</p>
+              
+              
+              <details>
+                <summary>Comment highlights</summary>
+                <p class="muted">No additional comment blocks were extracted from this file.</p>
+              </details>
+              <p class="muted tiny">Snapshot timestamp: 2026-03-15T09:46:57.000Z</p>
+            </article>
+        </div>
+      </section>
+      <section class="group">
+        <div class="group-head">
+          <h2>apps/web/src/api</h2>
+          <span class="count-pill">3 file(s)</span>
+        </div>
+        <div class="card-grid">
+          
+            <article class="card">
+              <div class="card-head">
+                <h3><code>apps/web/src/api/client.ts</code></h3>
+                <span class="count-pill">2.4 KB</span>
+              </div>
+              <p class="overview">Ergonomic frontend API wrapper that exposes app-friendly calls on top of the generated client.</p>
+              <p><strong>Declared symbols:</strong> <code>login</code>, <code>me</code>, <code>logout</code>, <code>listProducts</code>, <code>getProduct</code>, <code>getRelated</code>, <code>getCartIdentity</code>, <code>getCart</code>, <code>getCartSummary</code>, <code>addCartItem</code>, <code>updateCartItem</code>, <code>removeCartItem</code></p>
+              <p><strong>Dependencies:</strong> <code>./generated</code></p>
+              <details>
+                <summary>Comment highlights</summary>
+                <p class="muted">No additional comment blocks were extracted from this file.</p>
+              </details>
+              <p class="muted tiny">Snapshot timestamp: 2026-03-15T10:09:58.000Z</p>
+            </article>
+            <article class="card">
+              <div class="card-head">
+                <h3><code>apps/web/src/api/generated.ts</code></h3>
+                <span class="count-pill">4.5 KB</span>
+              </div>
+              <p class="overview">AUTO-GENERATED FILE. DO NOT EDIT MANUALLY.</p>
+              <p><strong>Declared symbols:</strong> <code>GeneratedApiClient</code>, <code>generatedApiClient</code></p>
+              <p><strong>Dependencies:</strong> <code>./runtime</code></p>
+              <details>
+                <summary>Comment highlights</summary>
+                <ul><li>AUTO-GENERATED FILE. DO NOT EDIT MANUALLY. Source: apps/api/public/openapi.yaml Generator: apps/web/scripts/generate-api-client.mjs</li></ul>
+              </details>
+              <p class="muted tiny">Snapshot timestamp: 2026-03-15T09:51:20.000Z</p>
+            </article>
+            <article class="card">
+              <div class="card-head">
+                <h3><code>apps/web/src/api/runtime.ts</code></h3>
+                <span class="count-pill">2.3 KB</span>
+              </div>
+              <p class="overview">Shared fetch/runtime helpers used by the generated and ergonomic frontend API clients.</p>
+              <p><strong>Declared symbols:</strong> <code>extractErrorMessage</code>, <code>requestText</code>, <code>buildUrl</code>, <code>buildInit</code></p>
+              <p><strong>Dependencies:</strong> <code>../types</code></p>
+              <details>
+                <summary>Comment highlights</summary>
+                <p class="muted">No additional comment blocks were extracted from this file.</p>
+              </details>
+              <p class="muted tiny">Snapshot timestamp: 2026-03-15T10:09:58.000Z</p>
+            </article>
+        </div>
+      </section>
+      <section class="group">
+        <div class="group-head">
+          <h2>apps/web/src/cart</h2>
+          <span class="count-pill">1 file(s)</span>
+        </div>
+        <div class="card-grid">
+          
+            <article class="card">
+              <div class="card-head">
+                <h3><code>apps/web/src/cart/CartContext.tsx</code></h3>
+                <span class="count-pill">1.3 KB</span>
+              </div>
+              <p class="overview">React context that keeps the header cart summary in sync with backend cart state.</p>
+              <p><strong>Declared symbols:</strong> <code>CartProvider</code>, <code>useCart</code></p>
+              <p><strong>Dependencies:</strong> <code>react</code>, <code>../api/client</code>, <code>../types</code></p>
+              <details>
+                <summary>Comment highlights</summary>
+                <p class="muted">No additional comment blocks were extracted from this file.</p>
+              </details>
+              <p class="muted tiny">Snapshot timestamp: 2026-03-15T09:46:57.000Z</p>
+            </article>
+        </div>
+      </section>
+      <section class="group">
+        <div class="group-head">
+          <h2>apps/web/src/pages</h2>
+          <span class="count-pill">6 file(s)</span>
+        </div>
+        <div class="card-grid">
+          
+            <article class="card">
+              <div class="card-head">
+                <h3><code>apps/web/src/pages/CartPage.tsx</code></h3>
+                <span class="count-pill">4.6 KB</span>
+              </div>
+              <p class="overview">Cart UI for inspecting items, changing quantities, and navigating to checkout.</p>
+              <p><strong>Declared symbols:</strong> <code>CartPage</code>, <code>loadCart</code>, <code>changeQuantity</code>, <code>remove</code></p>
+              <p><strong>Dependencies:</strong> <code>react</code>, <code>react-router-dom</code>, <code>../api/client</code>, <code>../cart/CartContext</code>, <code>../types</code></p>
+              <details>
+                <summary>Comment highlights</summary>
+                <p class="muted">No additional comment blocks were extracted from this file.</p>
+              </details>
+              <p class="muted tiny">Snapshot timestamp: 2026-03-15T09:46:57.000Z</p>
+            </article>
+            <article class="card">
+              <div class="card-head">
+                <h3><code>apps/web/src/pages/CheckoutPage.tsx</code></h3>
+                <span class="count-pill">11.8 KB</span>
+              </div>
+              <p class="overview">Checkout UI for summary, validation feedback, and order submission.</p>
+              <p><strong>Declared symbols:</strong> <code>CheckoutPage</code>, <code>fieldLabel</code>, <code>loadSummary</code>, <code>runValidation</code>, <code>submitOrder</code></p>
+              <p><strong>Dependencies:</strong> <code>react</code>, <code>react-router-dom</code>, <code>../api/client</code>, <code>../types</code></p>
+              <details>
+                <summary>Comment highlights</summary>
+                <p class="muted">No additional comment blocks were extracted from this file.</p>
+              </details>
+              <p class="muted tiny">Snapshot timestamp: 2026-03-15T09:46:57.000Z</p>
+            </article>
+            <article class="card">
+              <div class="card-head">
+                <h3><code>apps/web/src/pages/LibraryPage.tsx</code></h3>
+                <span class="count-pill">4.3 KB</span>
+              </div>
+              <p class="overview">Authenticated digital library screen for owned downloadable products.</p>
+              <p><strong>Declared symbols:</strong> <code>LibraryPage</code>, <code>loadLibrary</code></p>
+              <p><strong>Dependencies:</strong> <code>react</code>, <code>react-router-dom</code>, <code>../api/client</code>, <code>../types</code></p>
+              <details>
+                <summary>Comment highlights</summary>
+                <p class="muted">No additional comment blocks were extracted from this file.</p>
+              </details>
+              <p class="muted tiny">Snapshot timestamp: 2026-03-15T09:46:57.000Z</p>
+            </article>
+            <article class="card">
+              <div class="card-head">
+                <h3><code>apps/web/src/pages/LoginPage.tsx</code></h3>
+                <span class="count-pill">2.3 KB</span>
+              </div>
+              <p class="overview">Simple login form for customer authentication.</p>
+              <p><strong>Declared symbols:</strong> <code>LoginPage</code>, <code>handleSubmit</code>, <code>handleWhoAmI</code>, <code>handleLogout</code></p>
+              <p><strong>Dependencies:</strong> <code>react</code>, <code>../api/client</code>, <code>../types</code></p>
+              <details>
+                <summary>Comment highlights</summary>
+                <p class="muted">No additional comment blocks were extracted from this file.</p>
+              </details>
+              <p class="muted tiny">Snapshot timestamp: 2026-03-15T09:46:57.000Z</p>
+            </article>
+            <article class="card">
+              <div class="card-head">
+                <h3><code>apps/web/src/pages/ProductDetailPage.tsx</code></h3>
+                <span class="count-pill">3.6 KB</span>
+              </div>
+              <p class="overview">Product detail page with related products and add-to-cart action.</p>
+              <p><strong>Declared symbols:</strong> <code>ProductDetailPage</code>, <code>load</code>, <code>handleAddToCart</code></p>
+              <p><strong>Dependencies:</strong> <code>react</code>, <code>react-router-dom</code>, <code>../api/client</code>, <code>../cart/CartContext</code>, <code>../types</code></p>
+              <details>
+                <summary>Comment highlights</summary>
+                <p class="muted">No additional comment blocks were extracted from this file.</p>
+              </details>
+              <p class="muted tiny">Snapshot timestamp: 2026-03-15T09:46:57.000Z</p>
+            </article>
+            <article class="card">
+              <div class="card-head">
+                <h3><code>apps/web/src/pages/ProductListPage.tsx</code></h3>
+                <span class="count-pill">3.1 KB</span>
+              </div>
+              <p class="overview">Product catalog list page used as the storefront landing view.</p>
+              <p><strong>Declared symbols:</strong> <code>ProductListPage</code>, <code>load</code>, <code>handleAddToCart</code></p>
+              <p><strong>Dependencies:</strong> <code>react</code>, <code>react-router-dom</code>, <code>../api/client</code>, <code>../cart/CartContext</code>, <code>../types</code></p>
+              <details>
+                <summary>Comment highlights</summary>
+                <p class="muted">No additional comment blocks were extracted from this file.</p>
+              </details>
+              <p class="muted tiny">Snapshot timestamp: 2026-03-15T09:46:57.000Z</p>
+            </article>
+        </div>
+      </section>
+    </main>
+  </body>
+</html>

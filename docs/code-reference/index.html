@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Code Reference Index</title>
+    <style>
+      :root {
+        color-scheme: light dark;
+        --bg: #020617;
+        --panel: rgba(15, 23, 42, 0.92);
+        --text: #e5e7eb;
+        --muted: #94a3b8;
+        --border: rgba(148, 163, 184, 0.24);
+      }
+      * { box-sizing: border-box; }
+      body {
+        margin: 0;
+        font-family: Inter, ui-sans-serif, system-ui, sans-serif;
+        background: radial-gradient(circle at top, #111827 0%, #020617 70%);
+        color: var(--text);
+      }
+      .shell { max-width: 1120px; margin: 0 auto; padding: 40px 20px 64px; }
+      .hero, .card {
+        border: 1px solid var(--border); border-radius: 24px; background: var(--panel); box-shadow: 0 18px 40px rgba(0,0,0,0.22);
+      }
+      .hero { padding: 28px; }
+      .hero h1 { margin: 0 0 12px; font-size: 2.1rem; }
+      .hero p { margin: 0 0 10px; color: var(--muted); line-height: 1.6; }
+      .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px,1fr)); gap: 18px; margin-top: 24px; }
+      .card { display: block; text-decoration: none; color: inherit; padding: 20px; }
+      .card:hover { transform: translateY(-2px); }
+      .meta { color: var(--muted); margin-top: 12px; }
+      .tag { display: inline-flex; margin-top: 10px; padding: 4px 10px; border-radius: 999px; background: rgba(96, 165, 250, 0.15); color: #bfdbfe; }
+    </style>
+  </head>
+  <body>
+    <main class="shell">
+      <section class="hero">
+        <h1>Code Reference</h1>
+        <p>This HTML reference is generated from source comments and file structure metadata so backend/frontend intent stays easy to browse.</p>
+      </section>
+      <section class="grid">
+        <a class="card" href="./backend.html"><h2>Backend Code Reference</h2><p>PHP entrypoints, API support code, and backend-facing project scripts.</p><div class="tag">25 file(s)</div><div class="meta">2 comment highlight(s)</div></a><a class="card" href="./frontend.html"><h2>Frontend Code Reference</h2><p>React/web API client code, runtime adapters, and frontend support scripts.</p><div class="tag">15 file(s)</div><div class="meta">2 comment highlight(s)</div></a><a class="card" href="./tooling.html"><h2>Tooling Code Reference</h2><p>Restore/smoke/documentation automation that keeps the developer workflow reproducible.</p><div class="tag">6 file(s)</div><div class="meta">0 comment highlight(s)</div></a>
+      </section>
+    </main>
+  </body>
+</html>

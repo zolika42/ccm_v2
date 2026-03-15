@@ -2,6 +2,10 @@
 
 declare(strict_types=1);
 
+/**
+ * @fileoverview Cart application service: validates inputs and composes cart repository + product rules.
+ */
+
 namespace ColumbiaGames\Api\Services;
 
 use ColumbiaGames\Api\Repositories\CartRepository;

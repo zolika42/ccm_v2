@@ -28,7 +28,11 @@ A frontend tartalmaz:
 - login oldal
 - terméklista oldal
 - termék részletező oldal
-- typed API kliens
+- generált typed API kliens az OpenAPI spec alapján
+
+API kliens generálás:
+- `cd apps/web && npm run generate:api`
+- `cd apps/web && npm run check:api-client`
 
 ## Gyors indítás Dockerrel
 1. Másold át a root `.env.example` fájlt `.env` névre.
@@ -61,3 +65,8 @@ A `.ddev/` mappa opcionális kényelmi réteg. A source of truth továbbra is a 
 - OpenAPI spec: `apps/api/public/openapi.yaml`
 - Runtime endpoint: `GET /openapi`
 - Every JSON response now carries a `meta.requestId` and error payloads use `error.code/message/details`.
+
+
+## Code comment reference
+
+A browsable HTML view of frontend/backend/tooling source comments is generated at `docs/code-reference/index.html`.

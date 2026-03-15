@@ -2,6 +2,10 @@
 
 declare(strict_types=1);
 
+/**
+ * @fileoverview Per-request metadata holder: request ID, method/path, and response timing metadata.
+ */
+
 namespace ColumbiaGames\Api\Support;
 
 final class RequestContext

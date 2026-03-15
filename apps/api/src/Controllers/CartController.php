@@ -2,6 +2,10 @@
 
 declare(strict_types=1);
 
+/**
+ * @fileoverview Controller for cart identity, cart reads, and cart mutations. Translates HTTP payloads into cart service calls.
+ */
+
 namespace ColumbiaGames\Api\Controllers;
 
 use ColumbiaGames\Api\Services\CartService;

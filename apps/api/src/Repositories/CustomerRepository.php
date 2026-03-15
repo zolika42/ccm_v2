@@ -2,6 +2,10 @@
 
 declare(strict_types=1);
 
+/**
+ * @fileoverview Store-database customer lookups and customer profile persistence used by auth and checkout.
+ */
+
 namespace ColumbiaGames\Api\Repositories;
 
 use PDO;

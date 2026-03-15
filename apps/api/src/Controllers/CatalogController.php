@@ -2,6 +2,10 @@
 
 declare(strict_types=1);
 
+/**
+ * @fileoverview Controller for product listing, product detail, and related-product catalog endpoints.
+ */
+
 namespace ColumbiaGames\Api\Controllers;
 
 use ColumbiaGames\Api\Services\CatalogService;

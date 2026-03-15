@@ -2,6 +2,10 @@
 
 declare(strict_types=1);
 
+/**
+ * @fileoverview Central CORS policy helper for API requests and preflight handling.
+ */
+
 namespace ColumbiaGames\Api\Support;
 
 final class Cors

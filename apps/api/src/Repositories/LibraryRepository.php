@@ -2,6 +2,10 @@
 
 declare(strict_types=1);
 
+/**
+ * @fileoverview Digital-library read model built from store preorders and products.
+ */
+
 namespace ColumbiaGames\Api\Repositories;
 
 use PDO;

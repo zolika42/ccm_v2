@@ -2,6 +2,10 @@
 
 declare(strict_types=1);
 
+/**
+ * @fileoverview Small logging helper used by the API entrypoint and response layer.
+ */
+
 namespace ColumbiaGames\Api\Support;
 
 use Throwable;

@@ -2,6 +2,10 @@
 
 declare(strict_types=1);
 
+/**
+ * @fileoverview Controller for the authenticated digital library endpoint.
+ */
+
 namespace ColumbiaGames\Api\Controllers;
 
 use ColumbiaGames\Api\Services\LibraryService;

@@ -2,6 +2,10 @@
 
 declare(strict_types=1);
 
+/**
+ * @fileoverview Checkout application service for summary, validation, and submit orchestration.
+ */
+
 namespace ColumbiaGames\Api\Services;
 
 use ColumbiaGames\Api\Repositories\CartRepository;

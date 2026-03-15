@@ -1,3 +1,4 @@
+# @fileoverview Minimal PHP CLI image for running the native API in Docker Compose.
 FROM php:8.3-cli-bookworm
 
 RUN apt-get update \

@@ -1,3 +1,4 @@
+# @fileoverview Exercises the critical API flows after restore so regressions surface immediately.
 #!/usr/bin/env bash
 set -euo pipefail
 

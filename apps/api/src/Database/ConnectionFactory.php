@@ -2,6 +2,10 @@
 
 declare(strict_types=1);
 
+/**
+ * @fileoverview Builds and configures PostgreSQL PDO connections for both legacy CCM and store databases.
+ */
+
 namespace ColumbiaGames\Api\Database;
 
 use PDO;

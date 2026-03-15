@@ -1,0 +1,482 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Backend Code Reference</title>
+    <style>
+      :root {
+        color-scheme: light dark;
+        --bg: #020617;
+        --panel: rgba(15, 23, 42, 0.92);
+        --panel-strong: rgba(17, 24, 39, 0.94);
+        --text: #e5e7eb;
+        --muted: #94a3b8;
+        --accent: #60a5fa;
+        --border: rgba(148, 163, 184, 0.24);
+      }
+      * { box-sizing: border-box; }
+      body {
+        margin: 0;
+        font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        background: linear-gradient(180deg, #020617 0%, #111827 100%);
+        color: var(--text);
+      }
+      a { color: var(--accent); }
+      .shell { max-width: 1280px; margin: 0 auto; padding: 32px 20px 64px; }
+      .hero, .group, .card {
+        border: 1px solid var(--border);
+        border-radius: 24px;
+        background: var(--panel);
+        box-shadow: 0 18px 40px rgba(0, 0, 0, 0.22);
+      }
+      .hero { padding: 28px; }
+      .hero h1 { margin: 0 0 10px; font-size: 2rem; }
+      .hero p { margin: 0 0 10px; line-height: 1.6; color: var(--muted); }
+      .nav-row { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 18px; }
+      .nav-pill {
+        display: inline-flex; align-items: center; justify-content: center; text-decoration: none;
+        border-radius: 999px; border: 1px solid var(--border); padding: 8px 12px; background: rgba(30, 41, 59, 0.8);
+      }
+      .nav-pill.active { background: rgba(96, 165, 250, 0.16); color: #dbeafe; }
+      .group { margin-top: 24px; padding: 20px; }
+      .group-head, .card-head {
+        display: flex; align-items: center; justify-content: space-between; gap: 12px;
+      }
+      .card-grid {
+        display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 16px; margin-top: 16px;
+      }
+      .card { background: var(--panel-strong); padding: 18px; }
+      .card h3, .group h2 { margin: 0; }
+      .overview { line-height: 1.6; }
+      .count-pill {
+        display: inline-flex; align-items: center; justify-content: center; padding: 4px 10px; border-radius: 999px;
+        background: rgba(96, 165, 250, 0.15); color: #bfdbfe; font-size: 0.85rem;
+      }
+      .muted { color: var(--muted); }
+      .tiny { font-size: 0.8rem; }
+      details { margin-top: 14px; border-top: 1px solid var(--border); padding-top: 12px; }
+      summary { cursor: pointer; }
+      code { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; }
+      ul { padding-left: 18px; line-height: 1.5; }
+    </style>
+  </head>
+  <body>
+    <main class="shell">
+      <section class="hero">
+        <h1>Backend Code Reference</h1>
+        <p>PHP entrypoints, API support code, and backend-facing project scripts.</p>
+        <p class="muted">Generated automatically by <code>scripts/docs/generate-code-reference.mjs</code>.</p>
+        <div class="nav-row">
+          <a class="nav-pill" href="./index.html">Index</a>
+          <span class="nav-pill active">Backend Code Reference</span><a class="nav-pill" href="./frontend.html">Frontend Code Reference</a><a class="nav-pill" href="./tooling.html">Tooling Code Reference</a>
+        </div>
+      </section>
+      
+      <section class="group">
+        <div class="group-head">
+          <h2>apps/api/public</h2>
+          <span class="count-pill">1 file(s)</span>
+        </div>
+        <div class="card-grid">
+          
+            <article class="card">
+              <div class="card-head">
+                <h3><code>apps/api/public/index.php</code></h3>
+                <span class="count-pill">4.1 KB</span>
+              </div>
+              <p class="overview">HTTP entrypoint: wires the request lifecycle, service container, routes, and top-level exception handling.</p>
+              
+              <p><strong>Dependencies:</strong> <code>ColumbiaGames\Api\Controllers\AuthController</code>, <code>ColumbiaGames\Api\Controllers\CatalogController</code>, <code>ColumbiaGames\Api\Controllers\CartController</code>, <code>ColumbiaGames\Api\Controllers\CheckoutController</code>, <code>ColumbiaGames\Api\Controllers\LibraryController</code>, <code>ColumbiaGames\Api\Database\ConnectionFactory</code>, <code>ColumbiaGames\Api\Repositories\CartRepository</code>, <code>ColumbiaGames\Api\Repositories\CheckoutRepository</code>, <code>ColumbiaGames\Api\Repositories\CustomerRepository</code>, <code>ColumbiaGames\Api\Repositories\LibraryRepository</code></p>
+              <details>
+                <summary>Comment highlights</summary>
+                <p class="muted">No additional comment blocks were extracted from this file.</p>
+              </details>
+              <p class="muted tiny">Snapshot timestamp: 2026-03-15T09:46:57.000Z</p>
+            </article>
+        </div>
+      </section>
+      <section class="group">
+        <div class="group-head">
+          <h2>apps/api/src/Controllers</h2>
+          <span class="count-pill">5 file(s)</span>
+        </div>
+        <div class="card-grid">
+          
+            <article class="card">
+              <div class="card-head">
+                <h3><code>apps/api/src/Controllers/AuthController.php</code></h3>
+                <span class="count-pill">1.5 KB</span>
+              </div>
+              <p class="overview">Controller for login/logout/session lookup endpoints. Keeps HTTP validation separate from auth business rules.</p>
+              <p><strong>Declared symbols:</strong> <code>AuthController</code>, <code>__construct</code>, <code>login</code>, <code>logout</code>, <code>me</code></p>
+              <p><strong>Dependencies:</strong> <code>ColumbiaGames\Api\Services\AuthService</code>, <code>ColumbiaGames\Api\Support\JsonResponse</code>, <code>ColumbiaGames\Api\Support\Request</code>, <code>RuntimeException</code></p>
+              <details>
+                <summary>Comment highlights</summary>
+                <p class="muted">No additional comment blocks were extracted from this file.</p>
+              </details>
+              <p class="muted tiny">Snapshot timestamp: 2026-03-15T09:46:57.000Z</p>
+            </article>
+            <article class="card">
+              <div class="card-head">
+                <h3><code>apps/api/src/Controllers/CartController.php</code></h3>
+                <span class="count-pill">4.1 KB</span>
+              </div>
+              <p class="overview">Controller for cart identity, cart reads, and cart mutations. Translates HTTP payloads into cart service calls.</p>
+              <p><strong>Declared symbols:</strong> <code>CartController</code>, <code>__construct</code>, <code>identity</code>, <code>show</code>, <code>summary</code>, <code>addItem</code>, <code>updateItem</code>, <code>removeItem</code></p>
+              <p><strong>Dependencies:</strong> <code>ColumbiaGames\Api\Services\CartService</code>, <code>ColumbiaGames\Api\Support\CookieBridge</code>, <code>ColumbiaGames\Api\Support\JsonResponse</code>, <code>ColumbiaGames\Api\Support\Request</code>, <code>RuntimeException</code></p>
+              <details>
+                <summary>Comment highlights</summary>
+                <p class="muted">No additional comment blocks were extracted from this file.</p>
+              </details>
+              <p class="muted tiny">Snapshot timestamp: 2026-03-15T09:46:57.000Z</p>
+            </article>
+            <article class="card">
+              <div class="card-head">
+                <h3><code>apps/api/src/Controllers/CatalogController.php</code></h3>
+                <span class="count-pill">1.1 KB</span>
+              </div>
+              <p class="overview">Controller for product listing, product detail, and related-product catalog endpoints.</p>
+              <p><strong>Declared symbols:</strong> <code>CatalogController</code>, <code>__construct</code>, <code>index</code>, <code>show</code>, <code>related</code></p>
+              <p><strong>Dependencies:</strong> <code>ColumbiaGames\Api\Services\CatalogService</code>, <code>ColumbiaGames\Api\Support\JsonResponse</code>, <code>ColumbiaGames\Api\Support\Request</code></p>
+              <details>
+                <summary>Comment highlights</summary>
+                <p class="muted">No additional comment blocks were extracted from this file.</p>
+              </details>
+              <p class="muted tiny">Snapshot timestamp: 2026-03-15T09:46:57.000Z</p>
+            </article>
+            <article class="card">
+              <div class="card-head">
+                <h3><code>apps/api/src/Controllers/CheckoutController.php</code></h3>
+                <span class="count-pill">1.9 KB</span>
+              </div>
+              <p class="overview">Controller for checkout summary, validation, and submit endpoints.</p>
+              <p><strong>Declared symbols:</strong> <code>CheckoutController</code>, <code>__construct</code>, <code>summary</code>, <code>validate</code>, <code>submit</code></p>
+              <p><strong>Dependencies:</strong> <code>ColumbiaGames\Api\Services\CheckoutService</code>, <code>ColumbiaGames\Api\Support\CookieBridge</code>, <code>ColumbiaGames\Api\Support\JsonResponse</code>, <code>ColumbiaGames\Api\Support\Request</code></p>
+              <details>
+                <summary>Comment highlights</summary>
+                <p class="muted">No additional comment blocks were extracted from this file.</p>
+              </details>
+              <p class="muted tiny">Snapshot timestamp: 2026-03-15T09:46:57.000Z</p>
+            </article>
+            <article class="card">
+              <div class="card-head">
+                <h3><code>apps/api/src/Controllers/LibraryController.php</code></h3>
+                <span class="count-pill">0.7 KB</span>
+              </div>
+              <p class="overview">Controller for the authenticated digital library endpoint.</p>
+              <p><strong>Declared symbols:</strong> <code>LibraryController</code>, <code>__construct</code>, <code>index</code></p>
+              <p><strong>Dependencies:</strong> <code>ColumbiaGames\Api\Services\LibraryService</code>, <code>ColumbiaGames\Api\Support\JsonResponse</code>, <code>ColumbiaGames\Api\Support\Request</code>, <code>RuntimeException</code></p>
+              <details>
+                <summary>Comment highlights</summary>
+                <p class="muted">No additional comment blocks were extracted from this file.</p>
+              </details>
+              <p class="muted tiny">Snapshot timestamp: 2026-03-15T09:46:57.000Z</p>
+            </article>
+        </div>
+      </section>
+      <section class="group">
+        <div class="group-head">
+          <h2>apps/api/src/Database</h2>
+          <span class="count-pill">1 file(s)</span>
+        </div>
+        <div class="card-grid">
+          
+            <article class="card">
+              <div class="card-head">
+                <h3><code>apps/api/src/Database/ConnectionFactory.php</code></h3>
+                <span class="count-pill">2.0 KB</span>
+              </div>
+              <p class="overview">Builds and configures PostgreSQL PDO connections for both legacy CCM and store databases.</p>
+              <p><strong>Declared symbols:</strong> <code>ConnectionFactory</code>, <code>ccm</code>, <code>store</code>, <code>ping</code>, <code>connect</code></p>
+              <p><strong>Dependencies:</strong> <code>PDO</code>, <code>PDOException</code></p>
+              <details>
+                <summary>Comment highlights</summary>
+                <p class="muted">No additional comment blocks were extracted from this file.</p>
+              </details>
+              <p class="muted tiny">Snapshot timestamp: 2026-03-15T09:46:57.000Z</p>
+            </article>
+        </div>
+      </section>
+      <section class="group">
+        <div class="group-head">
+          <h2>apps/api/src/Repositories</h2>
+          <span class="count-pill">5 file(s)</span>
+        </div>
+        <div class="card-grid">
+          
+            <article class="card">
+              <div class="card-head">
+                <h3><code>apps/api/src/Repositories/CartRepository.php</code></h3>
+                <span class="count-pill">39.8 KB</span>
+              </div>
+              <p class="overview">Legacy cart adapter: reads and writes the browser-state + CCM EAV cart model.</p>
+              <p><strong>Declared symbols:</strong> <code>CartRepository</code>, <code>__construct</code>, <code>resolveBrowserId</code>, <code>getIdentity</code>, <code>getCart</code>, <code>addItem</code>, <code>updateItem</code>, <code>removeItem</code>, <code>beginTransaction</code>, <code>commitTransaction</code>, <code>rollBackTransaction</code>, <code>submitOrderDraft</code></p>
+              <p><strong>Dependencies:</strong> <code>PDO</code>, <code>RuntimeException</code></p>
+              <details>
+                <summary>Comment highlights</summary>
+                <ul><li>@var array&lt;string, array|null&gt;</li></ul>
+              </details>
+              <p class="muted tiny">Snapshot timestamp: 2026-03-15T09:46:57.000Z</p>
+            </article>
+            <article class="card">
+              <div class="card-head">
+                <h3><code>apps/api/src/Repositories/CheckoutRepository.php</code></h3>
+                <span class="count-pill">9.2 KB</span>
+              </div>
+              <p class="overview">Checkout persistence adapter: maps validated checkout data into legacy order/store records.</p>
+              <p><strong>Declared symbols:</strong> <code>CheckoutRepository</code>, <code>__construct</code>, <code>beginStoreTransaction</code>, <code>commitStoreTransaction</code>, <code>rollBackStoreTransaction</code>, <code>loadOrderFields</code>, <code>loadBrowserStateFields</code>, <code>loadPaymentConfig</code>, <code>submitToLegacyStore</code>, <code>loadCustomerCheckoutProfile</code>, <code>saveCustomerCheckoutProfile</code>, <code>recordOrder</code></p>
+              <p><strong>Dependencies:</strong> <code>PDO</code></p>
+              <details>
+                <summary>Comment highlights</summary>
+                <p class="muted">No additional comment blocks were extracted from this file.</p>
+              </details>
+              <p class="muted tiny">Snapshot timestamp: 2026-03-15T09:46:57.000Z</p>
+            </article>
+            <article class="card">
+              <div class="card-head">
+                <h3><code>apps/api/src/Repositories/CustomerRepository.php</code></h3>
+                <span class="count-pill">1.8 KB</span>
+              </div>
+              <p class="overview">Store-database customer lookups and customer profile persistence used by auth and checkout.</p>
+              <p><strong>Declared symbols:</strong> <code>CustomerRepository</code>, <code>__construct</code>, <code>findByEmail</code>, <code>findPublicProfileById</code>, <code>findCheckoutProfileById</code></p>
+              <p><strong>Dependencies:</strong> <code>PDO</code></p>
+              <details>
+                <summary>Comment highlights</summary>
+                <p class="muted">No additional comment blocks were extracted from this file.</p>
+              </details>
+              <p class="muted tiny">Snapshot timestamp: 2026-03-15T09:46:57.000Z</p>
+            </article>
+            <article class="card">
+              <div class="card-head">
+                <h3><code>apps/api/src/Repositories/LibraryRepository.php</code></h3>
+                <span class="count-pill">2.3 KB</span>
+              </div>
+              <p class="overview">Digital-library read model built from store preorders and products.</p>
+              <p><strong>Declared symbols:</strong> <code>LibraryRepository</code>, <code>__construct</code>, <code>ownedDownloads</code></p>
+              <p><strong>Dependencies:</strong> <code>PDO</code></p>
+              <details>
+                <summary>Comment highlights</summary>
+                <p class="muted">No additional comment blocks were extracted from this file.</p>
+              </details>
+              <p class="muted tiny">Snapshot timestamp: 2026-03-15T09:46:57.000Z</p>
+            </article>
+            <article class="card">
+              <div class="card-head">
+                <h3><code>apps/api/src/Repositories/ProductRepository.php</code></h3>
+                <span class="count-pill">5.6 KB</span>
+              </div>
+              <p class="overview">Store-database product catalog queries and product detail lookups.</p>
+              <p><strong>Declared symbols:</strong> <code>ProductRepository</code>, <code>__construct</code>, <code>paginate</code>, <code>findById</code>, <code>related</code>, <code>normalizeProduct</code></p>
+              <p><strong>Dependencies:</strong> <code>PDO</code></p>
+              <details>
+                <summary>Comment highlights</summary>
+                <p class="muted">No additional comment blocks were extracted from this file.</p>
+              </details>
+              <p class="muted tiny">Snapshot timestamp: 2026-03-15T09:46:57.000Z</p>
+            </article>
+        </div>
+      </section>
+      <section class="group">
+        <div class="group-head">
+          <h2>apps/api/src/Services</h2>
+          <span class="count-pill">5 file(s)</span>
+        </div>
+        <div class="card-grid">
+          
+            <article class="card">
+              <div class="card-head">
+                <h3><code>apps/api/src/Services/AuthService.php</code></h3>
+                <span class="count-pill">1.6 KB</span>
+              </div>
+              <p class="overview">Authentication application service built around customer records and session state.</p>
+              <p><strong>Declared symbols:</strong> <code>AuthService</code>, <code>__construct</code>, <code>login</code>, <code>logout</code>, <code>me</code></p>
+              <p><strong>Dependencies:</strong> <code>ColumbiaGames\Api\Repositories\CustomerRepository</code>, <code>ColumbiaGames\Api\Support\SessionAuth</code>, <code>RuntimeException</code></p>
+              <details>
+                <summary>Comment highlights</summary>
+                <p class="muted">No additional comment blocks were extracted from this file.</p>
+              </details>
+              <p class="muted tiny">Snapshot timestamp: 2026-03-15T09:46:57.000Z</p>
+            </article>
+            <article class="card">
+              <div class="card-head">
+                <h3><code>apps/api/src/Services/CartService.php</code></h3>
+                <span class="count-pill">2.6 KB</span>
+              </div>
+              <p class="overview">Cart application service: validates inputs and composes cart repository + product rules.</p>
+              <p><strong>Declared symbols:</strong> <code>CartService</code>, <code>__construct</code>, <code>identity</code>, <code>getCart</code>, <code>getSummary</code>, <code>addItem</code>, <code>updateItem</code>, <code>removeItem</code>, <code>ensureProductExists</code></p>
+              <p><strong>Dependencies:</strong> <code>ColumbiaGames\Api\Repositories\CartRepository</code>, <code>ColumbiaGames\Api\Repositories\ProductRepository</code>, <code>RuntimeException</code></p>
+              <details>
+                <summary>Comment highlights</summary>
+                <p class="muted">No additional comment blocks were extracted from this file.</p>
+              </details>
+              <p class="muted tiny">Snapshot timestamp: 2026-03-15T09:46:57.000Z</p>
+            </article>
+            <article class="card">
+              <div class="card-head">
+                <h3><code>apps/api/src/Services/CatalogService.php</code></h3>
+                <span class="count-pill">0.7 KB</span>
+              </div>
+              <p class="overview">Catalog application service for product listing/detail use cases.</p>
+              <p><strong>Declared symbols:</strong> <code>CatalogService</code>, <code>__construct</code>, <code>list</code>, <code>show</code>, <code>related</code></p>
+              <p><strong>Dependencies:</strong> <code>ColumbiaGames\Api\Repositories\ProductRepository</code></p>
+              <details>
+                <summary>Comment highlights</summary>
+                <p class="muted">No additional comment blocks were extracted from this file.</p>
+              </details>
+              <p class="muted tiny">Snapshot timestamp: 2026-03-15T09:46:57.000Z</p>
+            </article>
+            <article class="card">
+              <div class="card-head">
+                <h3><code>apps/api/src/Services/CheckoutService.php</code></h3>
+                <span class="count-pill">16.1 KB</span>
+              </div>
+              <p class="overview">Checkout application service for summary, validation, and submit orchestration.</p>
+              <p><strong>Declared symbols:</strong> <code>CheckoutService</code>, <code>__construct</code>, <code>summary</code>, <code>validate</code>, <code>submit</code>, <code>buildCheckoutPayload</code>, <code>loadCheckoutCustomer</code>, <code>buildDraft</code>, <code>normalizeInput</code>, <code>buildRequirements</code>, <code>validateDraft</code>, <code>requireField</code></p>
+              <p><strong>Dependencies:</strong> <code>ColumbiaGames\Api\Repositories\CartRepository</code>, <code>ColumbiaGames\Api\Repositories\CheckoutRepository</code>, <code>ColumbiaGames\Api\Repositories\CustomerRepository</code>, <code>ColumbiaGames\Api\Support\SessionAuth</code></p>
+              <details>
+                <summary>Comment highlights</summary>
+                <p class="muted">No additional comment blocks were extracted from this file.</p>
+              </details>
+              <p class="muted tiny">Snapshot timestamp: 2026-03-15T09:46:57.000Z</p>
+            </article>
+            <article class="card">
+              <div class="card-head">
+                <h3><code>apps/api/src/Services/LibraryService.php</code></h3>
+                <span class="count-pill">1.1 KB</span>
+              </div>
+              <p class="overview">Library application service for owned-download retrieval.</p>
+              <p><strong>Declared symbols:</strong> <code>LibraryService</code>, <code>__construct</code>, <code>ownedDownloads</code></p>
+              <p><strong>Dependencies:</strong> <code>ColumbiaGames\Api\Repositories\LibraryRepository</code>, <code>ColumbiaGames\Api\Support\SessionAuth</code>, <code>RuntimeException</code></p>
+              <details>
+                <summary>Comment highlights</summary>
+                <p class="muted">No additional comment blocks were extracted from this file.</p>
+              </details>
+              <p class="muted tiny">Snapshot timestamp: 2026-03-15T09:46:57.000Z</p>
+            </article>
+        </div>
+      </section>
+      <section class="group">
+        <div class="group-head">
+          <h2>apps/api/src/Support</h2>
+          <span class="count-pill">8 file(s)</span>
+        </div>
+        <div class="card-grid">
+          
+            <article class="card">
+              <div class="card-head">
+                <h3><code>apps/api/src/Support/ApiLogger.php</code></h3>
+                <span class="count-pill">1.4 KB</span>
+              </div>
+              <p class="overview">Small logging helper used by the API entrypoint and response layer.</p>
+              <p><strong>Declared symbols:</strong> <code>ApiLogger</code>, <code>info</code>, <code>error</code>, <code>exception</code>, <code>write</code></p>
+              <p><strong>Dependencies:</strong> <code>Throwable</code></p>
+              <details>
+                <summary>Comment highlights</summary>
+                <p class="muted">No additional comment blocks were extracted from this file.</p>
+              </details>
+              <p class="muted tiny">Snapshot timestamp: 2026-03-15T09:46:57.000Z</p>
+            </article>
+            <article class="card">
+              <div class="card-head">
+                <h3><code>apps/api/src/Support/CookieBridge.php</code></h3>
+                <span class="count-pill">1.4 KB</span>
+              </div>
+              <p class="overview">Legacy cookie bridge for browser identity and cart/session continuity.</p>
+              <p><strong>Declared symbols:</strong> <code>CookieBridge</code>, <code>cookieName</code>, <code>currentBrowserId</code>, <code>persistBrowserId</code></p>
+              
+              <details>
+                <summary>Comment highlights</summary>
+                <p class="muted">No additional comment blocks were extracted from this file.</p>
+              </details>
+              <p class="muted tiny">Snapshot timestamp: 2026-03-15T09:46:57.000Z</p>
+            </article>
+            <article class="card">
+              <div class="card-head">
+                <h3><code>apps/api/src/Support/Cors.php</code></h3>
+                <span class="count-pill">1.4 KB</span>
+              </div>
+              <p class="overview">Central CORS policy helper for API requests and preflight handling.</p>
+              <p><strong>Declared symbols:</strong> <code>Cors</code>, <code>apply</code>, <code>maybeHandlePreflight</code></p>
+              
+              <details>
+                <summary>Comment highlights</summary>
+                <p class="muted">No additional comment blocks were extracted from this file.</p>
+              </details>
+              <p class="muted tiny">Snapshot timestamp: 2026-03-15T09:46:57.000Z</p>
+            </article>
+            <article class="card">
+              <div class="card-head">
+                <h3><code>apps/api/src/Support/JsonResponse.php</code></h3>
+                <span class="count-pill">1.6 KB</span>
+              </div>
+              <p class="overview">Uniform JSON response envelope builder for success/error payloads.</p>
+              <p><strong>Declared symbols:</strong> <code>JsonResponse</code>, <code>success</code>, <code>error</code>, <code>send</code></p>
+              
+              <details>
+                <summary>Comment highlights</summary>
+                <p class="muted">No additional comment blocks were extracted from this file.</p>
+              </details>
+              <p class="muted tiny">Snapshot timestamp: 2026-03-15T09:46:57.000Z</p>
+            </article>
+            <article class="card">
+              <div class="card-head">
+                <h3><code>apps/api/src/Support/Request.php</code></h3>
+                <span class="count-pill">1.4 KB</span>
+              </div>
+              <p class="overview">HTTP request value object parsed from PHP globals.</p>
+              <p><strong>Declared symbols:</strong> <code>Request</code>, <code>__construct</code>, <code>fromGlobals</code>, <code>header</code></p>
+              
+              <details>
+                <summary>Comment highlights</summary>
+                <p class="muted">No additional comment blocks were extracted from this file.</p>
+              </details>
+              <p class="muted tiny">Snapshot timestamp: 2026-03-15T09:46:57.000Z</p>
+            </article>
+            <article class="card">
+              <div class="card-head">
+                <h3><code>apps/api/src/Support/RequestContext.php</code></h3>
+                <span class="count-pill">1.6 KB</span>
+              </div>
+              <p class="overview">Per-request metadata holder: request ID, method/path, and response timing metadata.</p>
+              <p><strong>Declared symbols:</strong> <code>RequestContext</code>, <code>__construct</code>, <code>init</code>, <code>current</code>, <code>responseMeta</code>, <code>requestIdHeader</code></p>
+              
+              <details>
+                <summary>Comment highlights</summary>
+                <p class="muted">No additional comment blocks were extracted from this file.</p>
+              </details>
+              <p class="muted tiny">Snapshot timestamp: 2026-03-15T09:46:57.000Z</p>
+            </article>
+            <article class="card">
+              <div class="card-head">
+                <h3><code>apps/api/src/Support/Router.php</code></h3>
+                <span class="count-pill">1.8 KB</span>
+              </div>
+              <p class="overview">Minimal regex-based HTTP router used by the native PHP API entrypoint.</p>
+              <p><strong>Declared symbols:</strong> <code>Router</code>, <code>get</code>, <code>post</code>, <code>patch</code>, <code>delete</code>, <code>add</code>, <code>dispatch</code></p>
+              
+              <details>
+                <summary>Comment highlights</summary>
+                <ul><li>@var array&lt;int, array{method:string, pattern:string, handler:callable|array}&gt;</li></ul>
+              </details>
+              <p class="muted tiny">Snapshot timestamp: 2026-03-15T09:46:57.000Z</p>
+            </article>
+            <article class="card">
+              <div class="card-head">
+                <h3><code>apps/api/src/Support/SessionAuth.php</code></h3>
+                <span class="count-pill">0.8 KB</span>
+              </div>
+              <p class="overview">Session helper for login state and current authenticated customer lookup.</p>
+              <p><strong>Declared symbols:</strong> <code>SessionAuth</code>, <code>login</code>, <code>logout</code>, <code>user</code></p>
+              
+              <details>
+                <summary>Comment highlights</summary>
+                <p class="muted">No additional comment blocks were extracted from this file.</p>
+              </details>
+              <p class="muted tiny">Snapshot timestamp: 2026-03-15T09:46:57.000Z</p>
+            </article>
+        </div>
+      </section>
+    </main>
+  </body>
+</html>

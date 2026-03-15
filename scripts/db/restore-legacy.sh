@@ -1,3 +1,4 @@
+# @fileoverview Restores the legacy CCM and Columbia Games PostgreSQL dumps into the local development databases.
 #!/usr/bin/env bash
 set -euo pipefail
 

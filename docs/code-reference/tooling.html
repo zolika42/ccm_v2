@@ -1,0 +1,180 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Tooling Code Reference</title>
+    <style>
+      :root {
+        color-scheme: light dark;
+        --bg: #020617;
+        --panel: rgba(15, 23, 42, 0.92);
+        --panel-strong: rgba(17, 24, 39, 0.94);
+        --text: #e5e7eb;
+        --muted: #94a3b8;
+        --accent: #60a5fa;
+        --border: rgba(148, 163, 184, 0.24);
+      }
+      * { box-sizing: border-box; }
+      body {
+        margin: 0;
+        font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        background: linear-gradient(180deg, #020617 0%, #111827 100%);
+        color: var(--text);
+      }
+      a { color: var(--accent); }
+      .shell { max-width: 1280px; margin: 0 auto; padding: 32px 20px 64px; }
+      .hero, .group, .card {
+        border: 1px solid var(--border);
+        border-radius: 24px;
+        background: var(--panel);
+        box-shadow: 0 18px 40px rgba(0, 0, 0, 0.22);
+      }
+      .hero { padding: 28px; }
+      .hero h1 { margin: 0 0 10px; font-size: 2rem; }
+      .hero p { margin: 0 0 10px; line-height: 1.6; color: var(--muted); }
+      .nav-row { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 18px; }
+      .nav-pill {
+        display: inline-flex; align-items: center; justify-content: center; text-decoration: none;
+        border-radius: 999px; border: 1px solid var(--border); padding: 8px 12px; background: rgba(30, 41, 59, 0.8);
+      }
+      .nav-pill.active { background: rgba(96, 165, 250, 0.16); color: #dbeafe; }
+      .group { margin-top: 24px; padding: 20px; }
+      .group-head, .card-head {
+        display: flex; align-items: center; justify-content: space-between; gap: 12px;
+      }
+      .card-grid {
+        display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 16px; margin-top: 16px;
+      }
+      .card { background: var(--panel-strong); padding: 18px; }
+      .card h3, .group h2 { margin: 0; }
+      .overview { line-height: 1.6; }
+      .count-pill {
+        display: inline-flex; align-items: center; justify-content: center; padding: 4px 10px; border-radius: 999px;
+        background: rgba(96, 165, 250, 0.15); color: #bfdbfe; font-size: 0.85rem;
+      }
+      .muted { color: var(--muted); }
+      .tiny { font-size: 0.8rem; }
+      details { margin-top: 14px; border-top: 1px solid var(--border); padding-top: 12px; }
+      summary { cursor: pointer; }
+      code { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; }
+      ul { padding-left: 18px; line-height: 1.5; }
+    </style>
+  </head>
+  <body>
+    <main class="shell">
+      <section class="hero">
+        <h1>Tooling Code Reference</h1>
+        <p>Restore/smoke/documentation automation that keeps the developer workflow reproducible.</p>
+        <p class="muted">Generated automatically by <code>scripts/docs/generate-code-reference.mjs</code>.</p>
+        <div class="nav-row">
+          <a class="nav-pill" href="./index.html">Index</a>
+          <a class="nav-pill" href="./backend.html">Backend Code Reference</a><a class="nav-pill" href="./frontend.html">Frontend Code Reference</a><span class="nav-pill active">Tooling Code Reference</span>
+        </div>
+      </section>
+      
+      <section class="group">
+        <div class="group-head">
+          <h2>scripts/db</h2>
+          <span class="count-pill">3 file(s)</span>
+        </div>
+        <div class="card-grid">
+          
+            <article class="card">
+              <div class="card-head">
+                <h3><code>scripts/db/restore-legacy.sh</code></h3>
+                <span class="count-pill">3.5 KB</span>
+              </div>
+              <p class="overview">Restores the legacy CCM and Columbia Games PostgreSQL dumps into the local development databases.</p>
+              <p><strong>Declared symbols:</strong> <code>psql_exec</code>, <code>filter_sql_dump</code>, <code>stream_sql</code></p>
+              
+              <details>
+                <summary>Comment highlights</summary>
+                <p class="muted">No additional comment blocks were extracted from this file.</p>
+              </details>
+              <p class="muted tiny">Snapshot timestamp: 2026-03-15T10:09:58.000Z</p>
+            </article>
+            <article class="card">
+              <div class="card-head">
+                <h3><code>scripts/db/smoke-api.sh</code></h3>
+                <span class="count-pill">7.5 KB</span>
+              </div>
+              <p class="overview">Exercises the critical API flows after restore so regressions surface immediately.</p>
+              
+              
+              <details>
+                <summary>Comment highlights</summary>
+                <p class="muted">No additional comment blocks were extracted from this file.</p>
+              </details>
+              <p class="muted tiny">Snapshot timestamp: 2026-03-15T10:09:58.000Z</p>
+            </article>
+            <article class="card">
+              <div class="card-head">
+                <h3><code>scripts/db/verify-legacy.sh</code></h3>
+                <span class="count-pill">1.8 KB</span>
+              </div>
+              <p class="overview">Verifies that the expected legacy tables and functions exist before application smoke tests run.</p>
+              <p><strong>Declared symbols:</strong> <code>check_sql</code>, <code>require_equals</code>, <code>require_table</code>, <code>require_function</code></p>
+              
+              <details>
+                <summary>Comment highlights</summary>
+                <p class="muted">No additional comment blocks were extracted from this file.</p>
+              </details>
+              <p class="muted tiny">Snapshot timestamp: 2026-03-15T10:09:58.000Z</p>
+            </article>
+        </div>
+      </section>
+      <section class="group">
+        <div class="group-head">
+          <h2>scripts/docs</h2>
+          <span class="count-pill">3 file(s)</span>
+        </div>
+        <div class="card-grid">
+          
+            <article class="card">
+              <div class="card-head">
+                <h3><code>scripts/docs/generate-code-reference.mjs</code></h3>
+                <span class="count-pill">14.4 KB</span>
+              </div>
+              <p class="overview">Generates a browsable HTML code reference from top-of-file source comments so frontend/backend intent is easy to inspect without opening every source file manually.</p>
+              <p><strong>Declared symbols:</strong> <code>walk</code>, <code>escapeHtml</code>, <code>readText</code>, <code>extractFileOverview</code>, <code>extractCommentHighlights</code>, <code>extractSymbols</code>, <code>extractDependencies</code>, <code>collectEntries</code>, <code>groupEntries</code>, <code>sectionNavigation</code>, <code>renderSection</code>, <code>renderIndex</code></p>
+              <p><strong>Dependencies:</strong> <code>node:fs</code>, <code>node:path</code>, <code>node:url</code></p>
+              <details>
+                <summary>Comment highlights</summary>
+                <p class="muted">No additional comment blocks were extracted from this file.</p>
+              </details>
+              <p class="muted tiny">Snapshot timestamp: 2026-03-15T10:09:56.000Z</p>
+            </article>
+            <article class="card">
+              <div class="card-head">
+                <h3><code>scripts/docs/generate-docs.mjs</code></h3>
+                <span class="count-pill">11.5 KB</span>
+              </div>
+              <p class="overview">Regenerates the developer handbook from the current repository state so docs stay aligned with the codebase.</p>
+              <p><strong>Declared symbols:</strong> <code>readJson</code>, <code>parseMakeTargets</code>, <code>parseOpenapiEndpoints</code>, <code>bulletList</code></p>
+              <p><strong>Dependencies:</strong> <code>node:fs</code>, <code>node:path</code>, <code>node:url</code></p>
+              <details>
+                <summary>Comment highlights</summary>
+                <p class="muted">No additional comment blocks were extracted from this file.</p>
+              </details>
+              <p class="muted tiny">Snapshot timestamp: 2026-03-15T09:49:21.000Z</p>
+            </article>
+            <article class="card">
+              <div class="card-head">
+                <h3><code>scripts/docs/verify-source-comments.mjs</code></h3>
+                <span class="count-pill">1.7 KB</span>
+              </div>
+              <p class="overview">Verifies that first-party source files carry an intent comment at the top so code-reference generation stays meaningful.</p>
+              <p><strong>Declared symbols:</strong> <code>walk</code></p>
+              <p><strong>Dependencies:</strong> <code>node:fs</code>, <code>node:path</code>, <code>node:url</code></p>
+              <details>
+                <summary>Comment highlights</summary>
+                <p class="muted">No additional comment blocks were extracted from this file.</p>
+              </details>
+              <p class="muted tiny">Snapshot timestamp: 2026-03-15T10:09:56.000Z</p>
+            </article>
+        </div>
+      </section>
+    </main>
+  </body>
+</html>

@@ -2,6 +2,10 @@
 
 declare(strict_types=1);
 
+/**
+ * @fileoverview Library application service for owned-download retrieval.
+ */
+
 namespace ColumbiaGames\Api\Services;
 
 use ColumbiaGames\Api\Repositories\LibraryRepository;

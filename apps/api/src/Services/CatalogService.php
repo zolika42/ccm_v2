@@ -2,6 +2,10 @@
 
 declare(strict_types=1);
 
+/**
+ * @fileoverview Catalog application service for product listing/detail use cases.
+ */
+
 namespace ColumbiaGames\Api\Services;
 
 use ColumbiaGames\Api\Repositories\ProductRepository;

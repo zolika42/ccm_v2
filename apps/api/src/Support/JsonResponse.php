@@ -2,6 +2,10 @@
 
 declare(strict_types=1);
 
+/**
+ * @fileoverview Uniform JSON response envelope builder for success/error payloads.
+ */
+
 namespace ColumbiaGames\Api\Support;
 
 final class JsonResponse

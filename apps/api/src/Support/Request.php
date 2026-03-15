@@ -2,6 +2,10 @@
 
 declare(strict_types=1);
 
+/**
+ * @fileoverview HTTP request value object parsed from PHP globals.
+ */
+
 namespace ColumbiaGames\Api\Support;
 
 final class Request

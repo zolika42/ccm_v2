@@ -2,6 +2,10 @@
 
 declare(strict_types=1);
 
+/**
+ * @fileoverview Legacy cart adapter: reads and writes the browser-state + CCM EAV cart model.
+ */
+
 namespace ColumbiaGames\Api\Repositories;
 
 use PDO;

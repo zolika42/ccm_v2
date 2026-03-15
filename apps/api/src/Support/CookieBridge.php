@@ -2,6 +2,10 @@
 
 declare(strict_types=1);
 
+/**
+ * @fileoverview Legacy cookie bridge for browser identity and cart/session continuity.
+ */
+
 namespace ColumbiaGames\Api\Support;
 
 final class CookieBridge

@@ -2,6 +2,10 @@
 
 declare(strict_types=1);
 
+/**
+ * @fileoverview Checkout persistence adapter: maps validated checkout data into legacy order/store records.
+ */
+
 namespace ColumbiaGames\Api\Repositories;
 
 use PDO;

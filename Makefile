@@ -1,6 +1,14 @@
-.PHONY: up down logs api-logs web-logs ps restore verify smoke legacy-refresh native-api native-web
+# @fileoverview Common developer entrypoints for runtime management, restore/verify/smoke, and documentation generation.
+.PHONY: docs docs-check up down logs api-logs web-logs ps restore verify smoke legacy-refresh native-api native-web
 
-up:
+docs:
+	@node ./scripts/docs/generate-code-reference.mjs
+
+docs-check:
+	@node ./scripts/docs/verify-source-comments.mjs
+
+
+up: docs
 	docker compose up --build -d
 
 down:
@@ -18,20 +26,20 @@ web-logs:
 ps:
 	docker compose ps
 
-restore:
+restore: docs
 	@if [ -z "$(CCM_DUMP)" ] || [ -z "$(STORE_DUMP)" ]; then \
 		echo "Usage: make restore CCM_DUMP=/abs/path/ccm.sql.gz STORE_DUMP=/abs/path/columbia_games.sql.gz"; \
 		exit 1; \
 	fi
 	@./scripts/db/restore-legacy.sh "$(CCM_DUMP)" "$(STORE_DUMP)"
 
-verify:
+verify: docs
 	@./scripts/db/verify-legacy.sh
 
-smoke:
+smoke: docs
 	@./scripts/db/smoke-api.sh
 
-legacy-refresh:
+legacy-refresh: docs
 	@if [ -z "$(CCM_DUMP)" ] || [ -z "$(STORE_DUMP)" ]; then \
 		echo "Usage: make legacy-refresh CCM_DUMP=/abs/path/ccm.sql.gz STORE_DUMP=/abs/path/columbia_games.sql.gz"; \
 		exit 1; \
@@ -40,8 +48,8 @@ legacy-refresh:
 	@./scripts/db/verify-legacy.sh
 	@./scripts/db/smoke-api.sh
 
-native-api:
+native-api: docs
 	php -S 0.0.0.0:8080 -t apps/api/public
 
-native-web:
+native-web: docs
 	cd apps/web && npm install && npm run dev -- --host 0.0.0.0 --port 5173

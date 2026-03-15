@@ -2,6 +2,10 @@
 
 declare(strict_types=1);
 
+/**
+ * @fileoverview Session helper for login state and current authenticated customer lookup.
+ */
+
 namespace ColumbiaGames\Api\Support;
 
 final class SessionAuth

@@ -2,6 +2,10 @@
 
 declare(strict_types=1);
 
+/**
+ * @fileoverview Store-database product catalog queries and product detail lookups.
+ */
+
 namespace ColumbiaGames\Api\Repositories;
 
 use PDO;

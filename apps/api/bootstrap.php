@@ -2,6 +2,10 @@
 
 declare(strict_types=1);
 
+/**
+ * @fileoverview API bootstrap file: Composer autoload registration and environment loading shared by the HTTP entrypoint.
+ */
+
 spl_autoload_register(function (string $class): void {
     $prefix = 'ColumbiaGames\\Api\\';
     $baseDir = __DIR__ . '/src/';

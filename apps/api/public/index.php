@@ -2,6 +2,10 @@
 
 declare(strict_types=1);
 
+/**
+ * @fileoverview HTTP entrypoint: wires the request lifecycle, service container, routes, and top-level exception handling.
+ */
+
 use ColumbiaGames\Api\Controllers\AuthController;
 use ColumbiaGames\Api\Controllers\CatalogController;
 use ColumbiaGames\Api\Controllers\CartController;

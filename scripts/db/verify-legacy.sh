@@ -1,3 +1,4 @@
+# @fileoverview Verifies that the expected legacy tables and functions exist before application smoke tests run.
 #!/usr/bin/env bash
 set -euo pipefail
 

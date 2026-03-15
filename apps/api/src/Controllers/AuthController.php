@@ -2,6 +2,10 @@
 
 declare(strict_types=1);
 
+/**
+ * @fileoverview Controller for login/logout/session lookup endpoints. Keeps HTTP validation separate from auth business rules.
+ */
+
 namespace ColumbiaGames\Api\Controllers;
 
 use ColumbiaGames\Api\Services\AuthService;

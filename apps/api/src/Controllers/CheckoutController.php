@@ -2,6 +2,10 @@
 
 declare(strict_types=1);
 
+/**
+ * @fileoverview Controller for checkout summary, validation, and submit endpoints.
+ */
+
 namespace ColumbiaGames\Api\Controllers;
 
 use ColumbiaGames\Api\Services\CheckoutService;

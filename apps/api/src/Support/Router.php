@@ -2,6 +2,10 @@
 
 declare(strict_types=1);
 
+/**
+ * @fileoverview Minimal regex-based HTTP router used by the native PHP API entrypoint.
+ */
+
 namespace ColumbiaGames\Api\Support;
 
 final class Router

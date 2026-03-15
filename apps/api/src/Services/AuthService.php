@@ -2,6 +2,10 @@
 
 declare(strict_types=1);
 
+/**
+ * @fileoverview Authentication application service built around customer records and session state.
+ */
+
 namespace ColumbiaGames\Api\Services;
 
 use ColumbiaGames\Api\Repositories\CustomerRepository;
