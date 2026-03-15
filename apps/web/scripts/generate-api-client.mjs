@@ -1,5 +1,5 @@
 /**
- * @fileoverview Build-time generator that turns the OpenAPI contract into a typed frontend API client.
+ * @fileoverview Regenerates the typed frontend API client from the published OpenAPI contract.
  */
 import fs from 'node:fs';
 import path from 'node:path';
@@ -18,7 +18,7 @@ const operationConfig = {
   me: { responseType: '{ user: AuthUser }' },
   listProducts: {
     responseType: '{ items: Product[]; meta: { total: number; limit: number; offset: number } }',
-    queryType: '{ limit?: number; offset?: number; q?: string; category?: string; sub_category?: string }',
+    queryType: '{ limit?: number; offset?: number; search?: string }',
   },
   getProduct: { responseType: 'Product', pathParams: [{ name: 'productId', type: 'string' }] },
   getRelatedProducts: { responseType: 'Product[]', pathParams: [{ name: 'productId', type: 'string' }] },

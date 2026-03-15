@@ -1,5 +1,5 @@
 /**
- * @fileoverview Shared fetch/runtime helpers used by the generated frontend API client.
+ * @fileoverview Shared fetch/runtime helpers used by the generated and ergonomic frontend API clients.
  */
 import type { ApiEnvelope } from '../types';
 

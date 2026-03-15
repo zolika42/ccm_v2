@@ -1,12 +1,12 @@
 /**
- * @fileoverview Human-friendly frontend API facade layered on top of the generated client.
+ * @fileoverview Ergonomic frontend API wrapper that exposes app-friendly calls on top of the generated client.
  */
 import type {
   AuthUser,
-  CartIdentity,
+  Cart,
   CheckoutDraft,
-  CheckoutState,
   CheckoutSubmission,
+  CheckoutState,
 } from '../types';
 import { generatedApiClient } from './generated';
 
@@ -70,7 +70,6 @@ export async function validateCheckout(draft: Partial<CheckoutDraft>) {
 
 export async function submitCheckout(draft: Partial<CheckoutDraft>) {
   const json = await generatedApiClient.submitCheckout(draft);
-
   return {
     ok: json.ok,
     meta: json.meta,
@@ -82,3 +81,6 @@ export async function submitCheckout(draft: Partial<CheckoutDraft>) {
 export async function getLibrary() {
   return generatedApiClient.getLibrary();
 }
+
+export { generatedApiClient };
+export type { Cart };
