@@ -1,3 +1,6 @@
+/**
+ * @fileoverview Vite dev/build configuration for the React storefront.
+ */
 import { defineConfig } from 'vite';
 
 const port = Number(process.env.WEB_PORT ?? 5173);

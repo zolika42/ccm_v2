@@ -1,3 +1,6 @@
+/**
+ * @fileoverview Shared TypeScript domain types used across frontend pages and API clients.
+ */
 export type AuthUser = {
   customerId: number;
   email: string;

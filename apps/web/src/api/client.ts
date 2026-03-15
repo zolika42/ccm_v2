@@ -1,3 +1,6 @@
+/**
+ * @fileoverview Human-friendly frontend API facade layered on top of the generated client.
+ */
 import type {
   AuthUser,
   CartIdentity,

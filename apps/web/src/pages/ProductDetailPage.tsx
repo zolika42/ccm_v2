@@ -1,3 +1,6 @@
+/**
+ * @fileoverview Product detail page with related products and add-to-cart action.
+ */
 import React from 'react';
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';

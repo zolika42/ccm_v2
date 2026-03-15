@@ -1,3 +1,6 @@
+/**
+ * @fileoverview Product catalog list page used as the storefront landing view.
+ */
 import React from 'react';
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';

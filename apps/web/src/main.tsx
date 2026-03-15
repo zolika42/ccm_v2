@@ -1,3 +1,6 @@
+/**
+ * @fileoverview React frontend bootstrap: router + global providers mount here.
+ */
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { BrowserRouter } from 'react-router-dom';

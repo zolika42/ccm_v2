@@ -1,3 +1,6 @@
+/**
+ * @fileoverview Simple login form for customer authentication.
+ */
 import React from 'react';
 import { FormEvent, useState } from 'react';
 import { login, logout, me } from '../api/client';

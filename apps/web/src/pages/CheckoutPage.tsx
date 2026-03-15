@@ -1,3 +1,6 @@
+/**
+ * @fileoverview Checkout UI for summary, validation feedback, and order submission.
+ */
 import React from 'react';
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';

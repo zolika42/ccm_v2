@@ -1,3 +1,6 @@
+/**
+ * @fileoverview Cart UI for inspecting items, changing quantities, and navigating to checkout.
+ */
 import React from 'react';
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';

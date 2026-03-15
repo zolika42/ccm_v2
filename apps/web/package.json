@@ -4,6 +4,9 @@
   "version": "0.1.0",
   "type": "module",
   "scripts": {
+    "postinstall": "node ../../scripts/docs/generate-docs.mjs && node ../../scripts/docs/verify-source-comments.mjs",
+    "docs:generate": "node ../../scripts/docs/generate-docs.mjs",
+    "docs:check": "node ../../scripts/docs/verify-source-comments.mjs",
     "dev": "node ./node_modules/vite/bin/vite.js",
     "build": "npm run generate:api && node ./node_modules/vite/bin/vite.js build",
     "preview": "node ./node_modules/vite/bin/vite.js preview",

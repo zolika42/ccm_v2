@@ -1,3 +1,6 @@
+/**
+ * @fileoverview React context that keeps the header cart summary in sync with backend cart state.
+ */
 import React from 'react';
 import { createContext, useCallback, useContext, useEffect, useMemo, useState, type ReactNode } from 'react';
 import { getCartSummary } from '../api/client';

@@ -1,3 +1,6 @@
+/**
+ * @fileoverview Application shell: top navigation and route table for the React frontend.
+ */
 import React from 'react';
 import { Link, Route, Routes } from 'react-router-dom';
 import { useCart } from './cart/CartContext';

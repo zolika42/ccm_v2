@@ -1,3 +1,6 @@
+/**
+ * @fileoverview Build-time generator that turns the OpenAPI contract into a typed frontend API client.
+ */
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
