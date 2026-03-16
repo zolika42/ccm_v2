@@ -116,6 +116,49 @@ components:
           oneOf:
             - type: string
             - type: 'null'
+    CatalogSubCategory2:
+      type: object
+      required: [name, productCount]
+      properties:
+        name:
+          type: string
+        productCount:
+          type: integer
+    ThirdPartyImage:
+      type: object
+      properties:
+        url:
+          type: string
+        description:
+          type: string
+    ThirdPartyProductMeta:
+      type: object
+      properties:
+        sourceId:
+          type: integer
+          nullable: true
+        thirdPartyId:
+          type: string
+          nullable: true
+        thumbnail:
+          type: string
+        image:
+          type: string
+        rating:
+          type: string
+          nullable: true
+        description:
+          type: string
+        status:
+          type: integer
+          nullable: true
+        lastCheck:
+          type: string
+          nullable: true
+        gallery:
+          type: array
+          items:
+            $ref: '#/components/schemas/ThirdPartyImage'
     Product:
       type: object
       properties:
@@ -129,10 +172,30 @@ components:
           type: string
         subCategory:
           type: string
+        subCategory2:
+          type: string
+        customerCatalogState:
+          type: string
+          nullable: true
+          enum: [owned, preordered]
+        customerOwnedQuantity:
+          type: integer
+          nullable: true
+        thirdParty:
+          allOf:
+            - $ref: '#/components/schemas/ThirdPartyProductMeta'
+          nullable: true
+        status:
+          type: string
         isDownloadable:
           type: boolean
         downloadableFilename:
           type: string
+        releaseDate:
+          type: string
+        preorder:
+          type: integer
+          nullable: true
     CatalogSubCategory:
       type: object
       required: [name, productCount]
@@ -141,6 +204,10 @@ components:
           type: string
         productCount:
           type: integer
+        subCategory2s:
+          type: array
+          items:
+            $ref: '#/components/schemas/CatalogSubCategory2'
     CatalogCategory:
       type: object
       required: [name, productCount, subCategories]
@@ -332,6 +399,10 @@ paths:
             type: string
         - in: query
           name: sub_category
+          schema:
+            type: string
+        - in: query
+          name: sub_category2
           schema:
             type: string
       responses:

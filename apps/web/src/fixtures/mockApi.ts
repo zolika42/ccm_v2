@@ -31,6 +31,7 @@ const PRODUCTS: Product[] = [
     price: '$59.99',
     category: 'Miniatures',
     subCategory: 'Space Fleets',
+    subCategory2: 'Carriers',
     extendedDescription: 'Flagship starter fleet with capital ships, escorts, and printable campaign reference sheets.',
     specs: 'Scale: 1/3780\nMaterial: Resin + card components\nPlayers: 2+',
     resources: 'Rulebook PDF\nShip cards\nScenario sheet',
@@ -44,6 +45,7 @@ const PRODUCTS: Product[] = [
     price: '$19.99',
     category: 'Rulebooks',
     subCategory: 'Digital Editions',
+    subCategory2: 'Campaign Books',
     extendedDescription: 'Fully searchable PDF campaign book for fast access during play.',
     specs: 'Format: PDF\nPages: 128',
     resources: 'Digital download\nErrata sheet',
@@ -51,6 +53,20 @@ const PRODUCTS: Product[] = [
     downloadableFilename: 'nebula-border-wars.pdf',
     releaseDate: '2026-01-15',
     status: 'Active',
+    thirdParty: {
+      sourceId: 9001,
+      thirdPartyId: 'BGG-NEBULA',
+      thumbnail: 'https://picsum.photos/seed/nebula-thumb/240/180',
+      image: 'https://picsum.photos/seed/nebula/800/600',
+      rating: '7.8',
+      description: 'Mirrored third-party catalog blurb used for PDP enrichment when legacy metadata exists.',
+      status: 0,
+      lastCheck: '1710508800',
+      gallery: [
+        { url: 'https://picsum.photos/seed/nebula-gallery-1/640/480', description: 'Cover art' },
+        { url: 'https://picsum.photos/seed/nebula-gallery-2/640/480', description: 'Interior spread' },
+      ],
+    },
   },
   {
     productId: 'CG-ORBIT',
@@ -58,19 +74,33 @@ const PRODUCTS: Product[] = [
     price: '$34.50',
     category: 'Board Games',
     subCategory: 'Starter Sets',
+    subCategory2: 'Intro Boxes',
     extendedDescription: 'Compact boxed starter intended for first-time players and demos.',
     specs: 'Play time: 45-60 minutes\nPlayers: 2',
     resources: 'Quickstart booklet\nReference cards',
     isDownloadable: false,
     releaseDate: '2025-08-09',
     status: 'Active',
+    preorder: 1,
   },
 ];
 
 const CATEGORIES: CatalogCategory[] = [
-  { name: 'Miniatures', productCount: 1, subCategories: [{ name: 'Space Fleets', productCount: 1 }] },
-  { name: 'Rulebooks', productCount: 1, subCategories: [{ name: 'Digital Editions', productCount: 1 }] },
-  { name: 'Board Games', productCount: 1, subCategories: [{ name: 'Starter Sets', productCount: 1 }] },
+  {
+    name: 'Miniatures',
+    productCount: 1,
+    subCategories: [{ name: 'Space Fleets', productCount: 1, subCategory2s: [{ name: 'Carriers', productCount: 1 }] }],
+  },
+  {
+    name: 'Rulebooks',
+    productCount: 1,
+    subCategories: [{ name: 'Digital Editions', productCount: 1, subCategory2s: [{ name: 'Campaign Books', productCount: 1 }] }],
+  },
+  {
+    name: 'Board Games',
+    productCount: 1,
+    subCategories: [{ name: 'Starter Sets', productCount: 1, subCategory2s: [{ name: 'Intro Boxes', productCount: 1 }] }],
+  },
 ];
 
 const CART: Cart = {
@@ -308,33 +338,56 @@ export async function logout() {
 export async function getCatalogCategories() {
   return ok('/catalog/categories', {
     categories: clone(CATEGORIES),
-    meta: { categoryCount: CATEGORIES.length, subCategoryCount: 3 },
+    meta: { categoryCount: CATEGORIES.length, subCategoryCount: 3, subCategory2Count: 3 },
   });
 }
 
-export async function listProducts(params: { limit?: number; offset?: number; q?: string; category?: string; sub_category?: string } = {}) {
+function enrichFixtureProduct(product: Product): Product {
+  const base = clone(product);
+  if (!signedIn()) {
+    base.customerCatalogState = null;
+    base.customerOwnedQuantity = null;
+    return base;
+  }
+
+  if (base.productId === 'CG-NEBULA') {
+    base.customerCatalogState = 'owned';
+    base.customerOwnedQuantity = 1;
+  }
+
+  if (base.productId === 'CG-ORBIT') {
+    base.customerCatalogState = 'preordered';
+    base.customerOwnedQuantity = 1;
+  }
+
+  return base;
+}
+
+export async function listProducts(params: { limit?: number; offset?: number; q?: string; category?: string; sub_category?: string; sub_category2?: string } = {}) {
   const q = (params.q ?? '').toLowerCase();
   const category = (params.category ?? '').toLowerCase();
   const subCategory = (params.sub_category ?? '').toLowerCase();
+  const subCategory2 = (params.sub_category2 ?? '').toLowerCase();
   const filtered = PRODUCTS.filter((product) => {
-    const matchesQ = !q || `${product.productId} ${product.description} ${product.category} ${product.subCategory}`.toLowerCase().includes(q);
+    const matchesQ = !q || `${product.productId} ${product.description} ${product.category} ${product.subCategory} ${product.subCategory2 ?? ''}`.toLowerCase().includes(q);
     const matchesCategory = !category || product.category.toLowerCase() === category;
     const matchesSub = !subCategory || product.subCategory.toLowerCase() === subCategory;
-    return matchesQ && matchesCategory && matchesSub;
+    const matchesSub2 = !subCategory2 || (product.subCategory2 ?? '').toLowerCase() === subCategory2;
+    return matchesQ && matchesCategory && matchesSub && matchesSub2;
   });
   return ok('/catalog/products', {
-    items: clone(filtered),
+    items: filtered.map(enrichFixtureProduct),
     meta: { total: filtered.length, limit: params.limit ?? 30, offset: params.offset ?? 0 },
   });
 }
 
 export async function getProduct(productId: string) {
-  return ok(`/catalog/products/${productId}`, clone(PRODUCTS.find((item) => item.productId === productId) ?? PRODUCTS[0]));
+  return ok(`/catalog/products/${productId}`, enrichFixtureProduct(PRODUCTS.find((item) => item.productId === productId) ?? PRODUCTS[0]));
 }
 
 export async function getRelated(productId: string) {
   const current = PRODUCTS.find((item) => item.productId === productId) ?? PRODUCTS[0];
-  return ok(`/catalog/products/${productId}/related`, clone(PRODUCTS.filter((item) => item.productId !== current.productId && item.category === current.category)));
+  return ok(`/catalog/products/${productId}/related`, PRODUCTS.filter((item) => item.productId !== current.productId && item.category === current.category).map(enrichFixtureProduct));
 }
 
 export async function getCartIdentity() {

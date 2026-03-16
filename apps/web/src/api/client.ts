@@ -53,7 +53,7 @@ export async function getPasswordRecoveryPolicy(): Promise<PasswordRecoveryPolic
   return response.data.policy;
 }
 
-export async function getCatalogCategories(): Promise<{ categories: CatalogCategory[]; meta: { categoryCount: number; subCategoryCount: number } }> {
+export async function getCatalogCategories(): Promise<{ categories: CatalogCategory[]; meta: { categoryCount: number; subCategoryCount: number; subCategory2Count: number } }> {
   const payload = USE_FIXTURE_API ? await mockApi.getCatalogCategories() : await generatedApiClient.getCatalogCategories();
   return payload.data;
 }
@@ -67,7 +67,7 @@ export async function logout(): Promise<void> {
   await generatedApiClient.logout();
 }
 
-export async function listProducts(params: { limit?: number; offset?: number; q?: string; category?: string; sub_category?: string } = {}) {
+export async function listProducts(params: { limit?: number; offset?: number; q?: string; category?: string; sub_category?: string; sub_category2?: string } = {}) {
   return USE_FIXTURE_API ? mockApi.listProducts(params) : generatedApiClient.listProducts(params);
 }
 

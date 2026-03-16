@@ -60,11 +60,11 @@ export class GeneratedApiClient {
     return requestEnvelope<{ policy: PasswordRecoveryPolicy }>('GET', `/auth/password/recovery-policy`, { options: options });
   }
 
-  async getCatalogCategories(options: RequestOptions = {}): Promise<ApiEnvelope<{ categories: CatalogCategory[]; meta: { categoryCount: number; subCategoryCount: number } }>> {
-    return requestEnvelope<{ categories: CatalogCategory[]; meta: { categoryCount: number; subCategoryCount: number } }>('GET', `/catalog/categories`, { options: options });
+  async getCatalogCategories(options: RequestOptions = {}): Promise<ApiEnvelope<{ categories: CatalogCategory[]; meta: { categoryCount: number; subCategoryCount: number; subCategory2Count: number } }>> {
+    return requestEnvelope<{ categories: CatalogCategory[]; meta: { categoryCount: number; subCategoryCount: number; subCategory2Count: number } }>('GET', `/catalog/categories`, { options: options });
   }
 
-  async listProducts(query: { limit?: number; offset?: number; q?: string; category?: string; sub_category?: string } = {}, options: RequestOptions = {}): Promise<ApiEnvelope<{ items: Product[]; meta: { total: number; limit: number; offset: number } }>> {
+  async listProducts(query: { limit?: number; offset?: number; q?: string; category?: string; sub_category?: string; sub_category2?: string } = {}, options: RequestOptions = {}): Promise<ApiEnvelope<{ items: Product[]; meta: { total: number; limit: number; offset: number } }>> {
     return requestEnvelope<{ items: Product[]; meta: { total: number; limit: number; offset: number } }>('GET', `/catalog/products`, { query, options: options });
   }
 

@@ -87,15 +87,40 @@ export type PasswordRecoveryPolicy = {
   notes: string[];
 };
 
+export type CatalogSubCategory2 = {
+  name: string;
+  productCount: number;
+};
+
 export type CatalogSubCategory = {
   name: string;
   productCount: number;
+  subCategory2s?: CatalogSubCategory2[];
 };
 
 export type CatalogCategory = {
   name: string;
   productCount: number;
   subCategories: CatalogSubCategory[];
+};
+
+export type CustomerCatalogState = 'owned' | 'preordered';
+
+export type ThirdPartyImage = {
+  url: string;
+  description: string;
+};
+
+export type ThirdPartyProductMeta = {
+  sourceId?: number | null;
+  thirdPartyId?: string | null;
+  thumbnail?: string;
+  image?: string;
+  rating?: string | null;
+  description?: string;
+  status?: number | null;
+  lastCheck?: string | null;
+  gallery?: ThirdPartyImage[];
 };
 
 export type Product = {
@@ -105,6 +130,9 @@ export type Product = {
   category: string;
   subCategory: string;
   subCategory2?: string;
+  customerCatalogState?: CustomerCatalogState | null;
+  customerOwnedQuantity?: number | null;
+  thirdParty?: ThirdPartyProductMeta | null;
   image?: string;
   image2?: string;
   image3?: string;

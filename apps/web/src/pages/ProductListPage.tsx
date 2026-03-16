@@ -6,9 +6,29 @@ import { useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { addCartItem, getCatalogCategories, listProducts } from '../api/client';
 import { useCart } from '../cart/CartContext';
-import type { CatalogCategory, Product } from '../types';
+import type { CatalogCategory, CatalogSubCategory, CatalogSubCategory2, Product } from '../types';
 
 const PAGE_SIZE = 30;
+
+function categoryTrail(product: Product) {
+  return [product.category, product.subCategory, product.subCategory2].filter(Boolean).join(' / ');
+}
+
+function customerStateLabel(product: Product) {
+  if (product.customerCatalogState === 'owned') {
+    return product.customerOwnedQuantity && product.customerOwnedQuantity > 1
+      ? `Owned ×${product.customerOwnedQuantity}`
+      : 'Owned';
+  }
+
+  if (product.customerCatalogState === 'preordered') {
+    return product.customerOwnedQuantity && product.customerOwnedQuantity > 1
+      ? `Preordered ×${product.customerOwnedQuantity}`
+      : 'Preordered';
+  }
+
+  return null;
+}
 
 export function ProductListPage() {
   const [products, setProducts] = useState<Product[]>([]);
@@ -17,8 +37,10 @@ export function ProductListPage() {
   const [activeQuery, setActiveQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('');
   const [selectedSubCategory, setSelectedSubCategory] = useState('');
+  const [selectedSubCategory2, setSelectedSubCategory2] = useState('');
   const [activeCategory, setActiveCategory] = useState('');
   const [activeSubCategory, setActiveSubCategory] = useState('');
+  const [activeSubCategory2, setActiveSubCategory2] = useState('');
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [message, setMessage] = useState<string | null>(null);
@@ -35,15 +57,33 @@ export function ProductListPage() {
     return Array.from({ length: end - start + 1 }, (_, index) => start + index);
   }, [currentPage, totalPages]);
 
-  const subCategoryOptions = useMemo(() => {
-    if (!selectedCategory) {
+  const selectedCategoryEntry = useMemo(
+    () => categories.find((entry) => entry.name === selectedCategory) ?? null,
+    [categories, selectedCategory],
+  );
+
+  const subCategoryOptions = useMemo<CatalogSubCategory[]>(() => {
+    if (!selectedCategoryEntry) {
       return [];
     }
 
-    return categories.find((entry) => entry.name === selectedCategory)?.subCategories ?? [];
-  }, [categories, selectedCategory]);
+    return selectedCategoryEntry.subCategories ?? [];
+  }, [selectedCategoryEntry]);
 
-  async function load(search = '', page = 1, category = '', subCategory = '') {
+  const selectedSubCategoryEntry = useMemo(
+    () => subCategoryOptions.find((entry) => entry.name === selectedSubCategory) ?? null,
+    [subCategoryOptions, selectedSubCategory],
+  );
+
+  const subCategory2Options = useMemo<CatalogSubCategory2[]>(() => {
+    if (!selectedSubCategoryEntry) {
+      return [];
+    }
+
+    return selectedSubCategoryEntry.subCategory2s ?? [];
+  }, [selectedSubCategoryEntry]);
+
+  async function load(search = '', page = 1, category = '', subCategory = '', subCategory2 = '') {
     setLoading(true);
     setError(null);
 
@@ -53,6 +93,7 @@ export function ProductListPage() {
         q: search,
         category: category || undefined,
         sub_category: subCategory || undefined,
+        sub_category2: subCategory2 || undefined,
         limit: PAGE_SIZE,
         offset: (safePage - 1) * PAGE_SIZE,
       });
@@ -67,6 +108,7 @@ export function ProductListPage() {
           q: search,
           category: category || undefined,
           sub_category: subCategory || undefined,
+          sub_category2: subCategory2 || undefined,
           limit: PAGE_SIZE,
           offset: (resolvedPage - 1) * PAGE_SIZE,
         });
@@ -77,6 +119,7 @@ export function ProductListPage() {
         setActiveQuery(search);
         setActiveCategory(category);
         setActiveSubCategory(subCategory);
+        setActiveSubCategory2(subCategory2);
         return;
       }
 
@@ -86,6 +129,7 @@ export function ProductListPage() {
       setActiveQuery(search);
       setActiveCategory(category);
       setActiveSubCategory(subCategory);
+      setActiveSubCategory2(subCategory2);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to load products');
     } finally {
@@ -109,14 +153,15 @@ export function ProductListPage() {
   }
 
   function handleSearchSubmit() {
-    void load(query.trim(), 1, selectedCategory, selectedSubCategory);
+    void load(query.trim(), 1, selectedCategory, selectedSubCategory, selectedSubCategory2);
   }
 
   function handleResetFilters() {
     setQuery('');
     setSelectedCategory('');
     setSelectedSubCategory('');
-    void load('', 1, '', '');
+    setSelectedSubCategory2('');
+    void load('', 1, '', '', '');
   }
 
   function handlePageChange(page: number) {
@@ -124,7 +169,7 @@ export function ProductListPage() {
       return;
     }
 
-    void load(activeQuery, page, activeCategory, activeSubCategory);
+    void load(activeQuery, page, activeCategory, activeSubCategory, activeSubCategory2);
   }
 
   useEffect(() => {
@@ -136,22 +181,35 @@ export function ProductListPage() {
         setError(err instanceof Error ? err.message : 'Failed to load categories');
       }
 
-      await load('', 1, '', '');
+      await load('', 1, '', '', '');
     }
 
     void bootstrap();
   }, []);
 
   useEffect(() => {
-    if (!selectedCategory && selectedSubCategory) {
+    if (!selectedCategory && (selectedSubCategory || selectedSubCategory2)) {
       setSelectedSubCategory('');
+      setSelectedSubCategory2('');
       return;
     }
 
     if (selectedCategory && selectedSubCategory && !subCategoryOptions.some((item) => item.name === selectedSubCategory)) {
       setSelectedSubCategory('');
+      setSelectedSubCategory2('');
     }
-  }, [selectedCategory, selectedSubCategory, subCategoryOptions]);
+  }, [selectedCategory, selectedSubCategory, selectedSubCategory2, subCategoryOptions]);
+
+  useEffect(() => {
+    if (!selectedSubCategory && selectedSubCategory2) {
+      setSelectedSubCategory2('');
+      return;
+    }
+
+    if (selectedSubCategory && selectedSubCategory2 && !subCategory2Options.some((item) => item.name === selectedSubCategory2)) {
+      setSelectedSubCategory2('');
+    }
+  }, [selectedSubCategory, selectedSubCategory2, subCategory2Options]);
 
   const hasProducts = products.length > 0;
   const rangeStart = totalProducts === 0 ? 0 : (currentPage - 1) * PAGE_SIZE + 1;
@@ -175,7 +233,7 @@ export function ProductListPage() {
             />
             <button onClick={handleSearchSubmit}>Search</button>
           </div>
-          <div className="catalog-filters">
+          <div className="catalog-filters catalog-filters-three-level">
             <label>
               <span>Category</span>
               <select value={selectedCategory} onChange={(e) => setSelectedCategory(e.target.value)}>
@@ -202,6 +260,21 @@ export function ProductListPage() {
                 ))}
               </select>
             </label>
+            <label>
+              <span>Subcategory level 2</span>
+              <select
+                value={selectedSubCategory2}
+                onChange={(e) => setSelectedSubCategory2(e.target.value)}
+                disabled={!selectedSubCategory || subCategory2Options.length === 0}
+              >
+                <option value="">All third-level groups</option>
+                {subCategory2Options.map((subCategory2) => (
+                  <option key={subCategory2.name} value={subCategory2.name}>
+                    {subCategory2.name} ({subCategory2.productCount})
+                  </option>
+                ))}
+              </select>
+            </label>
             <div className="catalog-filter-actions">
               <button type="button" onClick={handleSearchSubmit}>Apply filters</button>
               <button type="button" className="button-secondary" onClick={handleResetFilters}>Reset</button>
@@ -216,8 +289,8 @@ export function ProductListPage() {
         <div className="catalog-summary-row">
           <p className="muted">
             {hasProducts
-              ? `Showing ${rangeStart}-${rangeEnd} of ${totalProducts} products${activeQuery ? ` for “${activeQuery}”` : ''}${activeCategory ? ` in ${activeCategory}` : ''}${activeSubCategory ? ` / ${activeSubCategory}` : ''}.`
-              : `No products found${activeQuery ? ` for “${activeQuery}”` : ''}${activeCategory ? ` in ${activeCategory}` : ''}${activeSubCategory ? ` / ${activeSubCategory}` : ''}.`}
+              ? `Showing ${rangeStart}-${rangeEnd} of ${totalProducts} products${activeQuery ? ` for “${activeQuery}”` : ''}${activeCategory ? ` in ${activeCategory}` : ''}${activeSubCategory ? ` / ${activeSubCategory}` : ''}${activeSubCategory2 ? ` / ${activeSubCategory2}` : ''}.`
+              : `No products found${activeQuery ? ` for “${activeQuery}”` : ''}${activeCategory ? ` in ${activeCategory}` : ''}${activeSubCategory ? ` / ${activeSubCategory}` : ''}${activeSubCategory2 ? ` / ${activeSubCategory2}` : ''}.`}
           </p>
           {totalPages > 1 && (
             <nav className="pagination" aria-label="Products pagination">
@@ -259,24 +332,30 @@ export function ProductListPage() {
         </div>
       )}
       <div className="product-grid">
-        {products.map((product) => (
-          <article className="product-card" key={product.productId}>
-            <div className="product-meta">{product.category} / {product.subCategory}</div>
-            <h3>{product.description || product.productId}</h3>
-            <div className="product-id">{product.productId}</div>
-            <div className="price">{product.price || '—'}</div>
-            <div className="badges">
-              {product.isDownloadable && <span className="badge">Downloadable</span>}
-              {product.status && <span className="badge subtle">{product.status}</span>}
-            </div>
-            <div className="product-actions">
-              <Link to={`/products/${encodeURIComponent(product.productId)}`}>Open</Link>
-              <button type="button" disabled={busyProductId === product.productId} onClick={() => void handleAddToCart(product.productId)}>
-                {busyProductId === product.productId ? 'Adding…' : 'Add to cart'}
-              </button>
-            </div>
-          </article>
-        ))}
+        {products.map((product) => {
+          const ownedLabel = customerStateLabel(product);
+          return (
+            <article className="product-card" key={product.productId}>
+              <div className="product-meta">{categoryTrail(product)}</div>
+              <h3>{product.description || product.productId}</h3>
+              <div className="product-id">{product.productId}</div>
+              <div className="price">{product.price || '—'}</div>
+              <div className="badges">
+                {product.isDownloadable && <span className="badge">Downloadable</span>}
+                {product.status && <span className="badge subtle">{product.status}</span>}
+                {ownedLabel && <span className="badge badge-accent">{ownedLabel}</span>}
+                {product.thirdParty?.rating && <span className="badge subtle">3rd-party ★ {product.thirdParty.rating}</span>}
+              </div>
+              {product.thirdParty?.description && <p className="muted compact-copy">{product.thirdParty.description}</p>}
+              <div className="product-actions">
+                <Link to={`/products/${encodeURIComponent(product.productId)}`}>Open</Link>
+                <button type="button" disabled={busyProductId === product.productId} onClick={() => void handleAddToCart(product.productId)}>
+                  {busyProductId === product.productId ? 'Adding…' : 'Add to cart'}
+                </button>
+              </div>
+            </article>
+          );
+        })}
       </div>
     </section>
   );

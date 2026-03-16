@@ -16,13 +16,14 @@ final class ProductRepository
     {
     }
 
-    public function paginate(array $filters): array
+    public function paginate(array $filters, ?int $customerId = null): array
     {
         $limit = max(1, min((int) ($filters['limit'] ?? 24), 100));
         $offset = max(0, (int) ($filters['offset'] ?? 0));
         $search = trim((string) ($filters['q'] ?? ''));
         $category = trim((string) ($filters['category'] ?? ''));
         $subCategory = trim((string) ($filters['sub_category'] ?? ''));
+        $subCategory2 = trim((string) ($filters['sub_category2'] ?? ''));
 
         $where = ['1=1'];
         $params = [];
@@ -42,6 +43,11 @@ final class ProductRepository
             $params['sub_category'] = $subCategory;
         }
 
+        if ($subCategory2 !== '') {
+            $where[] = 'sub_category2 = :sub_category2';
+            $params['sub_category2'] = $subCategory2;
+        }
+
         $whereSql = implode(' AND ', $where);
 
         $countStmt = $this->db->prepare("SELECT COUNT(*) AS total FROM products WHERE {$whereSql}");
@@ -55,6 +61,7 @@ SELECT
     product_price,
     category,
     sub_category,
+    sub_category2,
     product_image,
     product_status,
     is_downloadable,
@@ -63,7 +70,7 @@ SELECT
     preorder
 FROM products
 WHERE {$whereSql}
-ORDER BY category_weight NULLS LAST, category, sub_category, product_id
+ORDER BY category_weight NULLS LAST, category, sub_category, sub_category2, product_id
 LIMIT :limit OFFSET :offset
 ";
         $stmt = $this->db->prepare($sql);
@@ -75,8 +82,12 @@ LIMIT :limit OFFSET :offset
         $stmt->execute();
         $rows = $stmt->fetchAll();
 
+        $items = array_map([$this, 'normalizeProduct'], $rows);
+        $items = $this->enrichWithCustomerCatalogState($items, $customerId);
+        $items = $this->enrichWithThirdPartyMeta($items, false);
+
         return [
-            'items' => array_map([$this, 'normalizeProduct'], $rows),
+            'items' => $items,
             'meta' => [
                 'total' => $total,
                 'limit' => $limit,
@@ -85,7 +96,7 @@ LIMIT :limit OFFSET :offset
         ];
     }
 
-    public function findById(string $productId): ?array
+    public function findById(string $productId, ?int $customerId = null): ?array
     {
         $sql = <<<'SQL'
 SELECT
@@ -121,10 +132,18 @@ SQL;
         $stmt = $this->db->prepare($sql);
         $stmt->execute(['product_id' => $productId]);
         $row = $stmt->fetch();
-        return $row ? $this->normalizeProduct($row) : null;
+        if (!$row) {
+            return null;
+        }
+
+        $product = $this->normalizeProduct($row);
+        $product = $this->enrichWithCustomerCatalogState([$product], $customerId)[0];
+        $product = $this->enrichWithThirdPartyMeta([$product], true)[0];
+
+        return $product;
     }
 
-    public function related(string $productId): array
+    public function related(string $productId, ?int $customerId = null): array
     {
         $sql = <<<'SQL'
 SELECT
@@ -134,6 +153,7 @@ SELECT
     p.product_price,
     p.category,
     p.sub_category,
+    p.sub_category2,
     p.product_image,
     p.product_status,
     p.is_downloadable,
@@ -148,9 +168,10 @@ ORDER BY p.product_id
 SQL;
         $stmt = $this->db->prepare($sql);
         $stmt->execute(['product_id' => $productId]);
-        return array_map([$this, 'normalizeProduct'], $stmt->fetchAll());
+        $items = array_map([$this, 'normalizeProduct'], $stmt->fetchAll());
+        $items = $this->enrichWithCustomerCatalogState($items, $customerId);
+        return $this->enrichWithThirdPartyMeta($items, false);
     }
-
 
     public function categories(): array
     {
@@ -158,21 +179,24 @@ SQL;
 SELECT
     COALESCE(NULLIF(trim(category), ''), 'Uncategorized') AS category_name,
     COALESCE(NULLIF(trim(sub_category), ''), '') AS sub_category_name,
+    COALESCE(NULLIF(trim(sub_category2), ''), '') AS sub_category2_name,
     COUNT(*) AS product_count,
     MIN(category_weight) AS category_weight
 FROM products
-GROUP BY 1, 2
-ORDER BY category_weight NULLS LAST, category_name, sub_category_name
+GROUP BY 1, 2, 3
+ORDER BY category_weight NULLS LAST, category_name, sub_category_name, sub_category2_name
 SQL;
         $stmt = $this->db->query($sql);
         $rows = $stmt->fetchAll();
 
         $categories = [];
         $subCategoryCount = 0;
+        $subCategory2Count = 0;
 
         foreach ($rows as $row) {
             $categoryName = (string) ($row['category_name'] ?? 'Uncategorized');
             $subCategoryName = (string) ($row['sub_category_name'] ?? '');
+            $subCategory2Name = (string) ($row['sub_category2_name'] ?? '');
             $productCount = (int) ($row['product_count'] ?? 0);
 
             if (!isset($categories[$categoryName])) {
@@ -185,22 +209,234 @@ SQL;
 
             $categories[$categoryName]['productCount'] += $productCount;
 
-            if ($subCategoryName !== '') {
-                $categories[$categoryName]['subCategories'][] = [
+            if ($subCategoryName === '') {
+                continue;
+            }
+
+            if (!isset($categories[$categoryName]['subCategories'][$subCategoryName])) {
+                $categories[$categoryName]['subCategories'][$subCategoryName] = [
                     'name' => $subCategoryName,
-                    'productCount' => $productCount,
+                    'productCount' => 0,
+                    'subCategory2s' => [],
                 ];
                 $subCategoryCount++;
             }
+
+            $categories[$categoryName]['subCategories'][$subCategoryName]['productCount'] += $productCount;
+
+            if ($subCategory2Name === '') {
+                continue;
+            }
+
+            $categories[$categoryName]['subCategories'][$subCategoryName]['subCategory2s'][] = [
+                'name' => $subCategory2Name,
+                'productCount' => $productCount,
+            ];
+            $subCategory2Count++;
+        }
+
+        $normalizedCategories = [];
+        foreach ($categories as $category) {
+            $category['subCategories'] = array_values($category['subCategories']);
+            $normalizedCategories[] = $category;
         }
 
         return [
-            'categories' => array_values($categories),
+            'categories' => $normalizedCategories,
             'meta' => [
-                'categoryCount' => count($categories),
+                'categoryCount' => count($normalizedCategories),
                 'subCategoryCount' => $subCategoryCount,
+                'subCategory2Count' => $subCategory2Count,
             ],
         ];
+    }
+
+    private function enrichWithCustomerCatalogState(array $items, ?int $customerId): array
+    {
+        if ($items === [] || $customerId === null || $customerId <= 0) {
+            return $items;
+        }
+
+        $productIds = array_values(array_filter(array_map(
+            static fn (array $item): string => trim((string) ($item['productId'] ?? '')),
+            $items
+        )));
+
+        if ($productIds === []) {
+            return $items;
+        }
+
+        $params = ['customer_id' => $customerId];
+        $placeholders = [];
+        foreach ($productIds as $index => $id) {
+            $key = 'product_' . $index;
+            $placeholders[] = ':' . $key;
+            $params[$key] = $id;
+        }
+
+        $sql = sprintf(
+            'SELECT product_id, COALESCE(SUM(quantity), 0) AS quantity FROM preorders WHERE customerid = :customer_id AND product_id IN (%s) GROUP BY product_id',
+            implode(', ', $placeholders)
+        );
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute($params);
+
+        $ownedQuantities = [];
+        foreach ($stmt->fetchAll() as $row) {
+            $ownedQuantities[trim((string) ($row['product_id'] ?? ''))] = (int) ($row['quantity'] ?? 0);
+        }
+
+        foreach ($items as &$item) {
+            $productId = trim((string) ($item['productId'] ?? ''));
+            $ownedQuantity = $ownedQuantities[$productId] ?? 0;
+            if ($ownedQuantity <= 0) {
+                $item['customerOwnedQuantity'] = null;
+                $item['customerCatalogState'] = null;
+                continue;
+            }
+
+            $item['customerOwnedQuantity'] = $ownedQuantity;
+            $item['customerCatalogState'] = ((int) ($item['preorder'] ?? 0) > 0) ? 'preordered' : 'owned';
+        }
+        unset($item);
+
+        return $items;
+    }
+
+    private function enrichWithThirdPartyMeta(array $items, bool $includeGallery): array
+    {
+        if ($items === []) {
+            return $items;
+        }
+
+        $productIds = array_values(array_filter(array_map(
+            static fn (array $item): string => trim((string) ($item['productId'] ?? '')),
+            $items
+        )));
+        if ($productIds === []) {
+            return $items;
+        }
+
+        $params = [];
+        $placeholders = [];
+        foreach ($productIds as $index => $id) {
+            $key = 'product_' . $index;
+            $placeholders[] = ':' . $key;
+            $params[$key] = $id;
+        }
+
+        $sql = sprintf(
+            'SELECT id, product_id, thumbnail, image, rating, description, id_3rd_party, last_check, status FROM "3rd_party_product_details" WHERE product_id IN (%s)',
+            implode(', ', $placeholders)
+        );
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute($params);
+        $detailRows = $stmt->fetchAll();
+
+        if ($detailRows === []) {
+            foreach ($items as &$item) {
+                $item['thirdParty'] = null;
+            }
+            unset($item);
+            return $items;
+        }
+
+        $galleryByThirdPartyId = [];
+        if ($includeGallery) {
+            $thirdPartyIds = array_values(array_filter(array_map(
+                static fn (array $row): string => trim((string) ($row['id_3rd_party'] ?? '')),
+                $detailRows
+            )));
+
+            if ($thirdPartyIds !== []) {
+                $galleryParams = [];
+                $galleryPlaceholders = [];
+                foreach ($thirdPartyIds as $index => $thirdPartyId) {
+                    $key = 'third_party_' . $index;
+                    $galleryPlaceholders[] = ':' . $key;
+                    $galleryParams[$key] = $thirdPartyId;
+                }
+
+                $gallerySql = sprintf(
+                    'SELECT third_party_id, url, description FROM "3rd_party_images" WHERE third_party_id IN (%s) ORDER BY id',
+                    implode(', ', $galleryPlaceholders)
+                );
+                $galleryStmt = $this->db->prepare($gallerySql);
+                $galleryStmt->execute($galleryParams);
+
+                foreach ($galleryStmt->fetchAll() as $row) {
+                    $thirdPartyId = trim((string) ($row['third_party_id'] ?? ''));
+                    if ($thirdPartyId === '') {
+                        continue;
+                    }
+
+                    $galleryByThirdPartyId[$thirdPartyId][] = [
+                        'url' => $this->normalizeExternalUrl((string) ($row['url'] ?? '')),
+                        'description' => trim((string) ($row['description'] ?? '')),
+                    ];
+                }
+            }
+        }
+
+        $detailsByProductId = [];
+        foreach ($detailRows as $row) {
+            $productId = trim((string) ($row['product_id'] ?? ''));
+            if ($productId === '') {
+                continue;
+            }
+
+            $thirdPartyId = trim((string) ($row['id_3rd_party'] ?? ''));
+            $detailsByProductId[$productId] = [
+                'sourceId' => isset($row['id']) ? (int) $row['id'] : null,
+                'thirdPartyId' => $thirdPartyId !== '' ? $thirdPartyId : null,
+                'thumbnail' => $this->normalizeExternalUrl((string) ($row['thumbnail'] ?? '')),
+                'image' => $this->normalizeExternalUrl((string) ($row['image'] ?? '')),
+                'rating' => trim((string) ($row['rating'] ?? '')) !== '' ? (string) $row['rating'] : null,
+                'description' => $this->normalizeThirdPartyDescription((string) ($row['description'] ?? ''), $includeGallery),
+                'status' => isset($row['status']) ? (int) $row['status'] : null,
+                'lastCheck' => trim((string) ($row['last_check'] ?? '')) !== '' ? (string) $row['last_check'] : null,
+                'gallery' => $thirdPartyId !== '' ? ($galleryByThirdPartyId[$thirdPartyId] ?? []) : [],
+            ];
+        }
+
+        foreach ($items as &$item) {
+            $productId = trim((string) ($item['productId'] ?? ''));
+            $item['thirdParty'] = $detailsByProductId[$productId] ?? null;
+        }
+        unset($item);
+
+        return $items;
+    }
+
+    private function normalizeThirdPartyDescription(string $value, bool $full): string
+    {
+        $normalized = html_entity_decode(strip_tags($value), ENT_QUOTES | ENT_HTML5, 'UTF-8');
+        $normalized = preg_replace('/\s+/u', ' ', $normalized) ?? $normalized;
+        $normalized = trim($normalized);
+
+        if ($normalized === '' || $full) {
+            return $normalized;
+        }
+
+        if (mb_strlen($normalized) <= 240) {
+            return $normalized;
+        }
+
+        return rtrim(mb_substr($normalized, 0, 237)) . '…';
+    }
+
+    private function normalizeExternalUrl(string $value): string
+    {
+        $trimmed = trim($value);
+        if ($trimmed === '') {
+            return '';
+        }
+
+        if (str_starts_with($trimmed, '//')) {
+            return 'https:' . $trimmed;
+        }
+
+        return $trimmed;
     }
 
     private function normalizeProduct(array $row): array

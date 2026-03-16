@@ -100,6 +100,10 @@ label select {
   min-width: 220px;
 }
 
+.catalog-filters-three-level label {
+  min-width: 180px;
+}
+
 .catalog-filter-actions {
   display: flex;
   gap: 0.75rem;
@@ -218,6 +222,15 @@ button:disabled {
   color: #444;
 }
 
+.badge.badge-accent {
+  background: #e7f3e9;
+  color: #165f22;
+}
+
+.compact-copy {
+  margin: 0;
+}
+
 .error {
   color: #a40000;
   font-weight: 700;
@@ -269,6 +282,36 @@ code {
   align-items: center;
   justify-content: space-between;
   gap: 0.75rem;
+}
+
+.third-party-panel {
+  padding-top: 0.5rem;
+  border-top: 1px solid #e7e0d5;
+}
+
+.third-party-image-wrap {
+  max-width: 420px;
+}
+
+.third-party-image,
+.third-party-gallery-image {
+  width: 100%;
+  height: auto;
+  display: block;
+  border: 1px solid #ded8cb;
+  background: #f8f7f3;
+}
+
+.third-party-gallery {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 0.75rem;
+}
+
+.third-party-gallery-item {
+  margin: 0;
+  display: grid;
+  gap: 0.35rem;
 }
 
 .cart-layout {

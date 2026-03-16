@@ -55,6 +55,9 @@ Run this after `make legacy-refresh` and before merging major rewrite changes.
 ### 7. Library flow
 - Open `/library`
 - Confirm owned downloads list appears
+- Catalog parity spot-check (CG-200): open Products, pick a category + subcategory + third-level `sub_category2`, and verify the list narrows correctly.
+- Logged-in catalog parity (CG-201): sign in with a fixture user, open Products, and verify at least one product is marked `Owned` and one is marked `Preordered` without breaking anonymous browsing.
+- 3rd-party meta parity (CG-202): open a product that has legacy 3rd-party metadata and verify the PDP shows the enrichment block and gallery without breaking the base product view.
 - Click a download button for a mapped downloadable product
 - Confirm file stream or redirect works
 

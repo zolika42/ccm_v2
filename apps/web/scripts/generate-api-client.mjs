@@ -21,11 +21,11 @@ const operationConfig = {
   resetPassword: { responseType: '{ changed: boolean; recoveryPolicy: { legacyForgotPasswordAvailable: boolean; emailDependencyVerified: boolean; implementedPath: string } }', bodyType: 'PasswordResetPayload' },
   getPasswordRecoveryPolicy: { responseType: '{ policy: PasswordRecoveryPolicy }' },
   getCatalogCategories: {
-    responseType: '{ categories: CatalogCategory[]; meta: { categoryCount: number; subCategoryCount: number } }',
+    responseType: '{ categories: CatalogCategory[]; meta: { categoryCount: number; subCategoryCount: number; subCategory2Count: number } }',
   },
   listProducts: {
     responseType: '{ items: Product[]; meta: { total: number; limit: number; offset: number } }',
-    queryType: '{ limit?: number; offset?: number; q?: string; category?: string; sub_category?: string }',
+    queryType: '{ limit?: number; offset?: number; q?: string; category?: string; sub_category?: string; sub_category2?: string }',
   },
   getProduct: { responseType: 'Product', pathParams: [{ name: 'productId', type: 'string' }] },
   getRelatedProducts: { responseType: 'Product[]', pathParams: [{ name: 'productId', type: 'string' }] },
