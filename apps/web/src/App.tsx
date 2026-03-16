@@ -3,6 +3,7 @@
  */
 import React from 'react';
 import { Link, Route, Routes } from 'react-router-dom';
+import { useAdmin } from './admin/AdminContext';
 import { useAuth } from './auth/AuthContext';
 import { useCart } from './cart/CartContext';
 import { CartPage } from './pages/CartPage';
@@ -12,7 +13,9 @@ import { LoginPage } from './pages/LoginPage';
 import { WishlistPage } from './pages/WishlistPage';
 import { ProductDetailPage } from './pages/ProductDetailPage';
 import { ProductListPage } from './pages/ProductListPage';
-
+import { AdminOrdersPage } from './pages/AdminOrdersPage';
+import { AdminOrderDetailPage } from './pages/AdminOrderDetailPage';
+import { AdminConfigPage } from './pages/AdminConfigPage';
 
 function SessionStatus() {
   const { user, loading, isAuthenticated } = useAuth();
@@ -37,6 +40,15 @@ function CartLinkLabel() {
   return <>Cart{summary ? ` (${summary.itemCount})` : ''}</>;
 }
 
+function AdminNavLink() {
+  const { isAdmin, loading } = useAdmin();
+  if (loading || !isAdmin) {
+    return null;
+  }
+
+  return <Link to="/admin/orders">Admin</Link>;
+}
+
 export function App() {
   return (
     <div className="app-shell">
@@ -46,12 +58,13 @@ export function App() {
           <div className="topbar-meta">
             <SessionStatus />
             <nav>
-            <Link to="/products">Products</Link>
-            <Link to="/cart"><CartLinkLabel /></Link>
-            <Link to="/checkout">Checkout</Link>
-            <Link to="/wishlist">Wishlist</Link>
-            <Link to="/library">Library</Link>
-            <Link to="/login">Account</Link>
+              <Link to="/products">Products</Link>
+              <Link to="/cart"><CartLinkLabel /></Link>
+              <Link to="/checkout">Checkout</Link>
+              <Link to="/wishlist">Wishlist</Link>
+              <Link to="/library">Library</Link>
+              <AdminNavLink />
+              <Link to="/login">Account</Link>
             </nav>
           </div>
         </div>
@@ -66,6 +79,9 @@ export function App() {
           <Route path="/wishlist" element={<WishlistPage />} />
           <Route path="/library" element={<LibraryPage />} />
           <Route path="/login" element={<LoginPage />} />
+          <Route path="/admin/orders" element={<AdminOrdersPage />} />
+          <Route path="/admin/orders/:orderId" element={<AdminOrderDetailPage />} />
+          <Route path="/admin/config" element={<AdminConfigPage />} />
         </Routes>
       </main>
     </div>

@@ -43,6 +43,11 @@ services:
       CG_STORE_DB_NAME: ${CG_STORE_DB_NAME:-columbia_games}
       CG_STORE_DB_USER: ${CG_STORE_DB_USER:-postgres}
       CG_STORE_DB_PASSWORD: ${CG_STORE_DB_PASSWORD:-postgres}
+      CG_REWRITE_DB_HOST: postgres
+      CG_REWRITE_DB_PORT: 5432
+      CG_REWRITE_DB_NAME: ${CG_REWRITE_DB_NAME:-columbia_rewrite}
+      CG_REWRITE_DB_USER: ${CG_REWRITE_DB_USER:-postgres}
+      CG_REWRITE_DB_PASSWORD: ${CG_REWRITE_DB_PASSWORD:-postgres}
     ports:
       - "${API_PORT:-8080}:${API_PORT:-8080}"
     volumes:

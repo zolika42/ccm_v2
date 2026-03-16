@@ -121,7 +121,7 @@
                 
                   <li>
                     <a href="#scripts-db-restore-legacy-sh">restore-legacy.sh</a>
-                    <ul class="symbol-list"><li><a href="#scripts-db-restore-legacy-sh-psql-exec">psql_exec</a></li><li><a href="#scripts-db-restore-legacy-sh-filter-sql-dump">filter_sql_dump</a></li><li><a href="#scripts-db-restore-legacy-sh-stream-sql">stream_sql</a></li></ul>
+                    <ul class="symbol-list"><li><a href="#scripts-db-restore-legacy-sh-load-root-env-defaults">load_root_env_defaults</a></li><li><a href="#scripts-db-restore-legacy-sh-psql-exec">psql_exec</a></li><li><a href="#scripts-db-restore-legacy-sh-filter-sql-dump">filter_sql_dump</a></li><li><a href="#scripts-db-restore-legacy-sh-stream-sql">stream_sql</a></li><li><a href="#scripts-db-restore-legacy-sh-seed-admin-scopes">seed_admin_scopes</a></li></ul>
                   </li>
                   <li>
                     <a href="#scripts-db-smoke-api-sh">smoke-api.sh</a>
@@ -167,19 +167,19 @@
         </div>
         <div class="file-stack">
           
-            <article class="file-card searchable" id="scripts-db-restore-legacy-sh" data-search="scripts/db/restore-legacy.sh Restores the legacy CCM and Columbia Games PostgreSQL dumps into the local development databases.  psql_exec filter_sql_dump stream_sql ">
+            <article class="file-card searchable" id="scripts-db-restore-legacy-sh" data-search="scripts/db/restore-legacy.sh Restores the legacy CCM and Columbia Games PostgreSQL dumps into the local development databases.  load_root_env_defaults psql_exec filter_sql_dump stream_sql seed_admin_scopes ">
               <div class="card-head">
                 <div>
-                  <p class="eyebrow">SH · 3.5 KB</p>
+                  <p class="eyebrow">SH · 6.2 KB</p>
                   <h3><code>scripts/db/restore-legacy.sh</code></h3>
                 </div>
                 <a class="anchor-link" href="#scripts-db-restore-legacy-sh">#</a>
               </div>
               <p class="overview">Restores the legacy CCM and Columbia Games PostgreSQL dumps into the local development databases.</p>
               <div class="meta-grid">
-                <p><strong>Detected symbols:</strong> <code>psql_exec</code>, <code>filter_sql_dump</code>, <code>stream_sql</code></p>
+                <p><strong>Detected symbols:</strong> <code>load_root_env_defaults</code>, <code>psql_exec</code>, <code>filter_sql_dump</code>, <code>stream_sql</code>, <code>seed_admin_scopes</code></p>
                 
-                <p class="muted tiny">Snapshot timestamp: 2026-03-16T06:22:10.000Z</p>
+                <p class="muted tiny">Snapshot timestamp: 2026-03-16T20:38:25.000Z</p>
               </div>
               <details>
                 <summary>Comment highlights</summary>
@@ -188,13 +188,25 @@
               <div class="symbol-section">
                 <div class="symbol-section-head">
                   <h4>Documented symbols</h4>
-                  <span class="count-pill">3</span>
+                  <span class="count-pill">5</span>
                 </div>
                 <div class="symbol-grid">
+    <section class="symbol-card searchable" id="scripts-db-restore-legacy-sh-load-root-env-defaults" data-search="function load_root_env_defaults No nearby shell comment was found for this function. load_root_env_defaults() { ">
+      <div class="symbol-head">
+        <div>
+          <p class="eyebrow">function · line 8</p>
+          <h4><code>load_root_env_defaults</code></h4>
+        </div>
+        <a class="anchor-link" href="#scripts-db-restore-legacy-sh-load-root-env-defaults">#</a>
+      </div>
+      <p class="symbol-signature"><code>load_root_env_defaults() {</code></p>
+      <p class="overview">No nearby shell comment was found for this function.</p>
+      
+    </section>
     <section class="symbol-card searchable" id="scripts-db-restore-legacy-sh-psql-exec" data-search="function psql_exec No nearby shell comment was found for this function. psql_exec() { ">
       <div class="symbol-head">
         <div>
-          <p class="eyebrow">function · line 33</p>
+          <p class="eyebrow">function · line 85</p>
           <h4><code>psql_exec</code></h4>
         </div>
         <a class="anchor-link" href="#scripts-db-restore-legacy-sh-psql-exec">#</a>
@@ -206,7 +218,7 @@
     <section class="symbol-card searchable" id="scripts-db-restore-legacy-sh-filter-sql-dump" data-search="function filter_sql_dump No nearby shell comment was found for this function. filter_sql_dump() { ">
       <div class="symbol-head">
         <div>
-          <p class="eyebrow">function · line 37</p>
+          <p class="eyebrow">function · line 89</p>
           <h4><code>filter_sql_dump</code></h4>
         </div>
         <a class="anchor-link" href="#scripts-db-restore-legacy-sh-filter-sql-dump">#</a>
@@ -218,12 +230,24 @@
     <section class="symbol-card searchable" id="scripts-db-restore-legacy-sh-stream-sql" data-search="function stream_sql No nearby shell comment was found for this function. stream_sql() { ">
       <div class="symbol-head">
         <div>
-          <p class="eyebrow">function · line 95</p>
+          <p class="eyebrow">function · line 147</p>
           <h4><code>stream_sql</code></h4>
         </div>
         <a class="anchor-link" href="#scripts-db-restore-legacy-sh-stream-sql">#</a>
       </div>
       <p class="symbol-signature"><code>stream_sql() {</code></p>
+      <p class="overview">No nearby shell comment was found for this function.</p>
+      
+    </section>
+    <section class="symbol-card searchable" id="scripts-db-restore-legacy-sh-seed-admin-scopes" data-search="function seed_admin_scopes No nearby shell comment was found for this function. seed_admin_scopes() { ">
+      <div class="symbol-head">
+        <div>
+          <p class="eyebrow">function · line 158</p>
+          <h4><code>seed_admin_scopes</code></h4>
+        </div>
+        <a class="anchor-link" href="#scripts-db-restore-legacy-sh-seed-admin-scopes">#</a>
+      </div>
+      <p class="symbol-signature"><code>seed_admin_scopes() {</code></p>
       <p class="overview">No nearby shell comment was found for this function.</p>
       
     </section></div>
@@ -258,7 +282,7 @@
             <article class="file-card searchable" id="scripts-db-verify-legacy-sh" data-search="scripts/db/verify-legacy.sh Verifies that the expected legacy tables and functions exist before application smoke tests run.  check_sql require_equals require_table require_function ">
               <div class="card-head">
                 <div>
-                  <p class="eyebrow">SH · 1.8 KB</p>
+                  <p class="eyebrow">SH · 2.0 KB</p>
                   <h3><code>scripts/db/verify-legacy.sh</code></h3>
                 </div>
                 <a class="anchor-link" href="#scripts-db-verify-legacy-sh">#</a>
@@ -267,7 +291,7 @@
               <div class="meta-grid">
                 <p><strong>Detected symbols:</strong> <code>check_sql</code>, <code>require_equals</code>, <code>require_table</code>, <code>require_function</code></p>
                 
-                <p class="muted tiny">Snapshot timestamp: 2026-03-16T06:22:10.000Z</p>
+                <p class="muted tiny">Snapshot timestamp: 2026-03-16T19:51:17.000Z</p>
               </div>
               <details>
                 <summary>Comment highlights</summary>
@@ -282,7 +306,7 @@
     <section class="symbol-card searchable" id="scripts-db-verify-legacy-sh-check-sql" data-search="function check_sql No nearby shell comment was found for this function. check_sql() { ">
       <div class="symbol-head">
         <div>
-          <p class="eyebrow">function · line 13</p>
+          <p class="eyebrow">function · line 14</p>
           <h4><code>check_sql</code></h4>
         </div>
         <a class="anchor-link" href="#scripts-db-verify-legacy-sh-check-sql">#</a>
@@ -294,7 +318,7 @@
     <section class="symbol-card searchable" id="scripts-db-verify-legacy-sh-require-equals" data-search="function require_equals No nearby shell comment was found for this function. require_equals() { ">
       <div class="symbol-head">
         <div>
-          <p class="eyebrow">function · line 19</p>
+          <p class="eyebrow">function · line 20</p>
           <h4><code>require_equals</code></h4>
         </div>
         <a class="anchor-link" href="#scripts-db-verify-legacy-sh-require-equals">#</a>
@@ -306,7 +330,7 @@
     <section class="symbol-card searchable" id="scripts-db-verify-legacy-sh-require-table" data-search="function require_table No nearby shell comment was found for this function. require_table() { ">
       <div class="symbol-head">
         <div>
-          <p class="eyebrow">function · line 30</p>
+          <p class="eyebrow">function · line 31</p>
           <h4><code>require_table</code></h4>
         </div>
         <a class="anchor-link" href="#scripts-db-verify-legacy-sh-require-table">#</a>
@@ -318,7 +342,7 @@
     <section class="symbol-card searchable" id="scripts-db-verify-legacy-sh-require-function" data-search="function require_function No nearby shell comment was found for this function. require_function() { ">
       <div class="symbol-head">
         <div>
-          <p class="eyebrow">function · line 38</p>
+          <p class="eyebrow">function · line 39</p>
           <h4><code>require_function</code></h4>
         </div>
         <a class="anchor-link" href="#scripts-db-verify-legacy-sh-require-function">#</a>

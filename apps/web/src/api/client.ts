@@ -2,6 +2,15 @@
  * @fileoverview Ergonomic frontend API wrapper that exposes app-friendly calls on top of the generated client.
  */
 import type {
+  AdminAccess,
+  AdminConfigBundle,
+  AdminConfigImportResult,
+  AdminConfigInventory,
+  AdminOrderDetail,
+  AdminOrderListResponse,
+  AdminProductUploadApplyResult,
+  AdminProductUploadPreview,
+  AdminProductUploadSettings,
   AuthUser,
   Cart,
   CatalogCategory,
@@ -16,7 +25,7 @@ import type {
 } from '../types';
 import * as mockApi from '../fixtures/mockApi';
 import { generatedApiClient } from './generated';
-import { buildApiUrl } from './runtime';
+import { buildApiUrl, requestEnvelope } from './runtime';
 
 const USE_FIXTURE_API = import.meta.env.VITE_USE_FIXTURE_API === '1'
   || (typeof window !== 'undefined' && new URLSearchParams(window.location.search).get('fixtureApi') === '1');
@@ -140,6 +149,84 @@ export async function replaceWishlistItem(productId: string, quantity: number) {
 
 export async function removeWishlistItem(productId: string) {
   return USE_FIXTURE_API ? mockApi.removeWishlistItem(productId) : generatedApiClient.removeWishlistItem(productId);
+}
+
+export async function getAdminAccess(merchantId?: string, configId?: string): Promise<AdminAccess> {
+  const response = USE_FIXTURE_API
+    ? await mockApi.getAdminAccess(merchantId, configId)
+    : await requestEnvelope<AdminAccess>('GET', '/admin/access', { query: { merchantId, configId } });
+  return response.data;
+}
+
+export async function listAdminOrders(params: {
+  merchantId?: string;
+  configId?: string;
+  view?: string;
+  q?: string;
+  limit?: number;
+  offset?: number;
+}) {
+  return USE_FIXTURE_API
+    ? mockApi.listAdminOrders(params)
+    : requestEnvelope<AdminOrderListResponse>('GET', '/admin/orders', { query: params });
+}
+
+export async function getAdminOrderDetail(orderId: string, merchantId?: string, configId?: string) {
+  return USE_FIXTURE_API
+    ? mockApi.getAdminOrderDetail(orderId, merchantId, configId)
+    : requestEnvelope<{ scope: unknown; order: AdminOrderDetail }>('GET', `/admin/orders/${encodeURIComponent(orderId)}`, {
+      query: { merchantId, configId },
+    });
+}
+
+export async function markAdminOrder(orderId: string, payload: { merchantId?: string; configId?: string; action?: string; note?: string }) {
+  return USE_FIXTURE_API
+    ? mockApi.markAdminOrder(orderId, payload)
+    : requestEnvelope<{ scope: unknown; mark: unknown }>('POST', `/admin/orders/${encodeURIComponent(orderId)}/mark`, {
+      body: payload,
+    });
+}
+
+export async function getAdminConfigInventory(merchantId?: string, configId?: string) {
+  const response = USE_FIXTURE_API
+    ? await mockApi.getAdminConfigInventory(merchantId, configId)
+    : await requestEnvelope<AdminConfigInventory>('GET', '/admin/config/inventory', { query: { merchantId, configId } });
+  return response.data;
+}
+
+export async function exportAdminConfig(merchantId?: string, configId?: string): Promise<AdminConfigBundle> {
+  const response = USE_FIXTURE_API
+    ? await mockApi.exportAdminConfig(merchantId, configId)
+    : await requestEnvelope<AdminConfigBundle>('GET', '/admin/config/export', { query: { merchantId, configId } });
+  return response.data;
+}
+
+export async function importAdminConfig(payload: { merchantId?: string; configId?: string; bundle: AdminConfigBundle }): Promise<AdminConfigImportResult> {
+  const response = USE_FIXTURE_API
+    ? await mockApi.importAdminConfig(payload)
+    : await requestEnvelope<AdminConfigImportResult>('POST', '/admin/config/import', { body: payload });
+  return response.data;
+}
+
+export async function getAdminProductUploadSettings(merchantId?: string, configId?: string): Promise<AdminProductUploadSettings> {
+  const response = USE_FIXTURE_API
+    ? await mockApi.getAdminProductUploadSettings(merchantId, configId)
+    : await requestEnvelope<AdminProductUploadSettings>('GET', '/admin/product-upload/settings', { query: { merchantId, configId } });
+  return response.data;
+}
+
+export async function previewAdminProductUpload(payload: { merchantId?: string; configId?: string; content: string; fieldNames?: string[]; hasHeaderRow?: boolean }): Promise<AdminProductUploadPreview> {
+  const response = USE_FIXTURE_API
+    ? await mockApi.previewAdminProductUpload(payload)
+    : await requestEnvelope<AdminProductUploadPreview>('POST', '/admin/product-upload/preview', { body: payload });
+  return response.data;
+}
+
+export async function applyAdminProductUpload(payload: { merchantId?: string; configId?: string; content: string; fieldNames?: string[]; hasHeaderRow?: boolean }): Promise<AdminProductUploadApplyResult> {
+  const response = USE_FIXTURE_API
+    ? await mockApi.applyAdminProductUpload(payload)
+    : await requestEnvelope<AdminProductUploadApplyResult>('POST', '/admin/product-upload/apply', { body: payload });
+  return response.data;
 }
 
 export { generatedApiClient };

@@ -5,6 +5,7 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { BrowserRouter } from 'react-router-dom';
 import { App } from './App';
+import { AdminProvider } from './admin/AdminContext';
 import { AuthProvider } from './auth/AuthContext';
 import { CartProvider } from './cart/CartContext';
 import { CatalogProvider } from './catalog/CatalogContext';
@@ -15,14 +16,16 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
     <BrowserRouter>
       <AuthProvider>
-        <CatalogProvider>
-          <WishlistProvider>
-            <CartProvider>
-              <App />
-            </CartProvider>
-          </WishlistProvider>
-        </CatalogProvider>
+        <AdminProvider>
+          <CatalogProvider>
+            <WishlistProvider>
+              <CartProvider>
+                <App />
+              </CartProvider>
+            </WishlistProvider>
+          </CatalogProvider>
+        </AdminProvider>
       </AuthProvider>
     </BrowserRouter>
-  </React.StrictMode>
+  </React.StrictMode>,
 );

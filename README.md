@@ -37,13 +37,22 @@ API kliens generálás:
 
 ## Gyors indítás Dockerrel
 1. Másold át a root `.env.example` fájlt `.env` névre.
-2. Indítsd el a stacket:
+2. Ha kell állandó admin hozzáférés restore után, a root `.env`-ben add meg egyszer a következőt:
+   - `CG_ADMIN_BOOTSTRAP_CUSTOMER_IDS=123`
+   - opcionálisan: `CG_ADMIN_BOOTSTRAP_MERCHANT_ID=cg`
+   - opcionálisan: `CG_ADMIN_BOOTSTRAP_CONFIG_ID=default`
+3. Indítsd el a stacket:
    - `make up`
-3. Ha megvannak a dumpok, töltsd be őket:
+4. Ha megvannak a dumpok, töltsd be őket:
    - `make restore CCM_DUMP=/abs/path/ccm.sql.gz STORE_DUMP=/abs/path/columbia_games.sql.gz`
 4. Ellenőrzés:
    - `make verify`
    - `make smoke`
+
+Megjegyzés az admin bootstrapről:
+- a restore script a **root** `.env` fájlból olvassa a `CG_ADMIN_BOOTSTRAP_*` változókat
+- az `apps/api/.env` továbbra is csak az API runtime configja
+- shellből átadott env változó továbbra is felülírja a `.env` értékét
 5. Ha böngészőből akarod átnézni az adatbázisokat, a pgAdmin is feláll a stackkel együtt:
    - `http://localhost:5050`
    - login: `admin@local.test` / `admin`

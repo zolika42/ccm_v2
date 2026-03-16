@@ -445,3 +445,160 @@ export type ApiEnvelope<T> = {
   meta: ApiMeta;
   error?: ApiError;
 };
+
+export type AdminScope = {
+  customerId: number;
+  merchantId: string;
+  configId: string;
+  isActive: boolean;
+  notes?: string | null;
+  createdAt?: string | null;
+  updatedAt?: string | null;
+};
+
+export type AdminAccess = {
+  user: {
+    customerId: number;
+    email: string;
+    name: string;
+  };
+  isAdmin: boolean;
+  defaultScope?: AdminScope | null;
+  scopes: AdminScope[];
+};
+
+export type AdminOrderMark = {
+  id?: number;
+  action: string;
+  note?: string | null;
+  customerId: number;
+  createdAt?: string | null;
+};
+
+export type AdminOrderSummary = {
+  orderId: string;
+  status: number;
+  lastUpdated?: string | null;
+  shipName?: string | null;
+  shipEmail?: string | null;
+  shipCity?: string | null;
+  shipCountry?: string | null;
+  shipMethod?: string | null;
+  shippableSubtotal?: string | null;
+  pdfTotal?: string | null;
+  totalItemsRequiringPayment?: number | null;
+  pointsApplied?: number | null;
+  promoCode?: string | null;
+  itemCount: number;
+  totalQuantity: number;
+  latestMark?: AdminOrderMark | null;
+};
+
+export type AdminOrderItem = {
+  productId: string;
+  description?: string | null;
+  quantity: number;
+  price?: string | null;
+  category?: string | null;
+  subCategory?: string | null;
+  subCategory2?: string | null;
+  isDownloadable: boolean;
+  fields: Record<string, string>;
+};
+
+export type AdminOrderDetail = {
+  orderId: string;
+  merchantId: string;
+  configId: string;
+  status: number;
+  lastUpdated?: string | null;
+  fields: Record<string, string>;
+  items: AdminOrderItem[];
+  marks: AdminOrderMark[];
+};
+
+export type AdminOrderListResponse = {
+  scope: AdminScope;
+  orders: {
+    items: AdminOrderSummary[];
+    meta: {
+      total: number;
+      limit: number;
+      offset: number;
+      view: string;
+      query: string;
+    };
+  };
+};
+
+export type AdminConfigInventory = {
+  scope: { merchantId: string; configId: string };
+  rows: Array<{
+    table: string;
+    present: boolean;
+    columns: string[];
+    row?: Record<string, unknown> | null;
+  }>;
+  operations: Array<{
+    operation: string;
+    required: boolean;
+    implemented: boolean;
+    notes: string;
+  }>;
+};
+
+export type AdminConfigBundle = {
+  schemaVersion: number;
+  exportedAt: string;
+  scope: { merchantId: string; configId: string };
+  tables: Record<string, Array<Record<string, unknown>>>;
+};
+
+export type AdminConfigImportResult = {
+  scope: { merchantId: string; configId: string };
+  importedTables: Record<string, number>;
+  importedByCustomerId: number;
+  importedAt: string;
+};
+
+export type AdminProductUploadSettings = {
+  scope: { merchantId: string; configId: string };
+  sourceFormat: number;
+  sourceHasFieldNames: boolean;
+  overrideFields: boolean;
+  fields: string[];
+  saveCopy: boolean;
+  saveFile?: string | null;
+  sourceFile?: string | null;
+  supportedInput: {
+    delimiter: string;
+    notes: string[];
+  };
+};
+
+export type AdminProductUploadPreview = {
+  scope: { merchantId: string; configId: string };
+  delimiter: string;
+  fieldNames: string[];
+  rowCount: number;
+  insertCount: number;
+  updateCount: number;
+  warnings: string[];
+  rows: Array<{
+    rowNumber: number;
+    productId: string;
+    mode: 'insert' | 'update';
+    fields: Record<string, unknown>;
+  }>;
+};
+
+export type AdminProductUploadApplyResult = {
+  scope: { merchantId: string; configId: string };
+  appliedByCustomerId: number;
+  appliedAt: string;
+  rowCount: number;
+  insertCount: number;
+  updateCount: number;
+  warnings: string[];
+  notes: string[];
+};

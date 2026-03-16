@@ -6,6 +6,7 @@ declare(strict_types=1);
  * @fileoverview HTTP entrypoint: wires the request lifecycle, service container, routes, and top-level exception handling.
  */
 
+use ColumbiaGames\Api\Controllers\AdminController;
 use ColumbiaGames\Api\Controllers\AuthController;
 use ColumbiaGames\Api\Controllers\CatalogController;
 use ColumbiaGames\Api\Controllers\CartController;
@@ -13,12 +14,14 @@ use ColumbiaGames\Api\Controllers\CheckoutController;
 use ColumbiaGames\Api\Controllers\LibraryController;
 use ColumbiaGames\Api\Controllers\WishlistController;
 use ColumbiaGames\Api\Database\ConnectionFactory;
+use ColumbiaGames\Api\Repositories\AdminRepository;
 use ColumbiaGames\Api\Repositories\CartRepository;
 use ColumbiaGames\Api\Repositories\CheckoutRepository;
 use ColumbiaGames\Api\Repositories\CustomerRepository;
 use ColumbiaGames\Api\Repositories\LibraryRepository;
 use ColumbiaGames\Api\Repositories\ProductRepository;
 use ColumbiaGames\Api\Repositories\WishlistRepository;
+use ColumbiaGames\Api\Services\AdminService;
 use ColumbiaGames\Api\Services\AuthService;
 use ColumbiaGames\Api\Services\CartService;
 use ColumbiaGames\Api\Services\CatalogService;
@@ -49,18 +52,21 @@ $router = new Router();
 $connections = new ConnectionFactory();
 
 $customerRepository = new CustomerRepository($connections->store());
+$adminRepository = new AdminRepository($connections->ccm(), $connections->store(), $connections->rewrite());
 $productRepository = new ProductRepository($connections->store());
 $cartRepository = new CartRepository($connections->ccm(), $productRepository);
 $checkoutRepository = new CheckoutRepository($connections->ccm(), $connections->store());
 $libraryRepository = new LibraryRepository($connections->store());
 $wishlistRepository = new WishlistRepository($connections->store());
 $authService = new AuthService($customerRepository);
+$adminService = new AdminService($adminRepository);
 $catalogService = new CatalogService($productRepository);
 $cartService = new CartService($cartRepository, $productRepository);
 $checkoutService = new CheckoutService($cartRepository, $checkoutRepository, $customerRepository, $wishlistRepository);
 $libraryService = new LibraryService($libraryRepository);
 $wishlistService = new WishlistService($wishlistRepository, $productRepository);
 
+$adminController = new AdminController($adminService);
 $authController = new AuthController($authService);
 $catalogController = new CatalogController($catalogService);
 $cartController = new CartController($cartService);
@@ -73,6 +79,7 @@ $router->get('/health', function () use ($connections): void {
         'databases' => [
             'ccm' => $connections->ping('ccm'),
             'columbia_games' => $connections->ping('store'),
+            'rewrite' => $connections->ping('rewrite'),
         ],
     ]);
 });
@@ -83,6 +90,18 @@ $router->get('/openapi', static function (): void {
     readfile(__DIR__ . '/openapi.yaml');
     exit;
 });
+
+
+$router->get('/admin/access', [$adminController, 'access']);
+$router->get('/admin/orders', [$adminController, 'orders']);
+$router->get('/admin/orders/{orderId}', [$adminController, 'orderDetail']);
+$router->post('/admin/orders/{orderId}/mark', [$adminController, 'markOrder']);
+$router->get('/admin/config/inventory', [$adminController, 'configInventory']);
+$router->get('/admin/config/export', [$adminController, 'exportConfig']);
+$router->post('/admin/config/import', [$adminController, 'importConfig']);
+$router->get('/admin/product-upload/settings', [$adminController, 'productUploadSettings']);
+$router->post('/admin/product-upload/preview', [$adminController, 'productUploadPreview']);
+$router->post('/admin/product-upload/apply', [$adminController, 'productUploadApply']);
 
 $router->post('/auth/login', [$authController, 'login']);
 $router->post('/auth/register', [$authController, 'register']);

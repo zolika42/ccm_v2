@@ -552,3 +552,80 @@ label span {
   border-color: #7a1010;
   font-weight: 700;
 }
+
+.admin-page {
+  gap: 1rem;
+}
+
+.admin-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  align-items: end;
+}
+
+.admin-toolbar label {
+  display: grid;
+  gap: 0.35rem;
+  min-width: 180px;
+}
+
+.admin-toolbar .grow-field {
+  flex: 1 1 280px;
+}
+
+.button-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.65rem 0.9rem;
+  border: 1px solid #1f2937;
+  text-decoration: none;
+  color: #1f2937;
+  background: #fff;
+}
+
+.secondary-link {
+  border-color: #d7d2c8;
+}
+
+.table-scroll {
+  overflow-x: auto;
+}
+
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.data-table th,
+.data-table td {
+  border-bottom: 1px solid #e5ded3;
+  padding: 0.75rem;
+  text-align: left;
+  vertical-align: top;
+}
+
+.small-text {
+  font-size: 0.82rem;
+}
+
+.queue-badge {
+  display: inline-block;
+  padding: 0.2rem 0.45rem;
+  background: rgba(122, 16, 16, 0.08);
+  border: 1px solid rgba(122, 16, 16, 0.2);
+}
+
+.detail-kv {
+  display: grid;
+  gap: 0.25rem;
+}
+
+.admin-detail-meta {
+  align-items: center;
+}
+
+.admin-summary-row {
+  align-items: center;
+}

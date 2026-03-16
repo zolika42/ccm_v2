@@ -9,6 +9,7 @@ DB_SERVICE="${DB_SERVICE:-postgres}"
 DB_USER="${LEGACY_DB_SUPERUSER:-postgres}"
 CCM_DB="${CG_CCM_DB_NAME:-ccm}"
 STORE_DB="${CG_STORE_DB_NAME:-columbia_games}"
+REWRITE_DB="${CG_REWRITE_DB_NAME:-columbia_rewrite}"
 
 check_sql() {
   local database="$1"
@@ -57,4 +58,7 @@ require_function "$STORE_DB" 'record_order'
 require_function "$STORE_DB" 'record_item'
 require_function "$STORE_DB" 'preorder_update_or_insert'
 
-echo "[verify] Legacy schema checks passed."
+require_table "$REWRITE_DB" 'public.admin_user_scopes'
+require_table "$REWRITE_DB" 'public.admin_order_marks'
+
+echo "[verify] Legacy + rewrite schema checks passed."

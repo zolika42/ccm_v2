@@ -2,6 +2,15 @@
  * @fileoverview Small fixture-backed API for UI parity docs and screenshot generation.
  */
 import type {
+  AdminAccess,
+  AdminConfigBundle,
+  AdminConfigImportResult,
+  AdminConfigInventory,
+  AdminOrderDetail,
+  AdminOrderListResponse,
+  AdminProductUploadApplyResult,
+  AdminProductUploadPreview,
+  AdminProductUploadSettings,
   ApiEnvelope,
   ApiMeta,
   AuthUser,
@@ -624,4 +633,297 @@ export async function getLibrary() {
 
 export function getLibraryDownloadUrl(productId: string) {
   return `#fixture-download-${encodeURIComponent(productId)}`;
+}
+
+
+const ADMIN_ACCESS: AdminAccess = {
+  user: { customerId: USER.customerId, email: USER.email, name: USER.name },
+  isAdmin: true,
+  defaultScope: {
+    customerId: USER.customerId,
+    merchantId: 'cg',
+    configId: 'default',
+    isActive: true,
+    notes: 'Fixture admin scope',
+  },
+  scopes: [
+    {
+      customerId: USER.customerId,
+      merchantId: 'cg',
+      configId: 'default',
+      isActive: true,
+      notes: 'Fixture admin scope',
+    },
+  ],
+};
+
+let adminMarks = [
+  { id: 1, action: 'mark', note: 'Packed for review', customerId: USER.customerId, createdAt: '2026-03-16T16:00:00Z' },
+];
+
+const ADMIN_ORDER_DETAIL: AdminOrderDetail = {
+  orderId: 'FIXTURE-ADMIN-1001',
+  merchantId: 'cg',
+  configId: 'default',
+  status: 0,
+  lastUpdated: '2026-03-16T15:30:00Z',
+  fields: {
+    ship_name: 'Alex Fixture',
+    ship_email: USER.email,
+    ship_city: 'Hudson',
+    ship_country: 'US',
+    ship_method: 'UPS Ground',
+    shippable_subtotal: '59.99',
+    pdf_total: '39.98',
+    total_items_requiring_payment: '3',
+    points_applied: '25',
+    promocode: 'SPRING',
+  },
+  items: [
+    {
+      productId: 'CG-ATLAS',
+      description: 'Atlas Carrier Fleet',
+      quantity: 1,
+      price: '59.99',
+      category: 'Miniatures',
+      subCategory: 'Space Fleets',
+      subCategory2: 'Carriers',
+      isDownloadable: false,
+      fields: {
+        product_description: 'Atlas Carrier Fleet',
+        ec_quantity_ordered: '1',
+        product_price: '59.99',
+      },
+    },
+    {
+      productId: 'CG-NEBULA',
+      description: 'Nebula Border Wars PDF',
+      quantity: 2,
+      price: '19.99',
+      category: 'Rulebooks',
+      subCategory: 'Digital Editions',
+      subCategory2: 'Campaign Books',
+      isDownloadable: true,
+      fields: {
+        product_description: 'Nebula Border Wars PDF',
+        ec_quantity_ordered: '2',
+        product_price: '19.99',
+      },
+    },
+  ],
+  marks: adminMarks,
+};
+
+const ADMIN_CONFIG_INVENTORY: AdminConfigInventory = {
+  scope: { merchantId: 'cg', configId: 'default' },
+  rows: [
+    { table: 'merchant_configurations', present: true, columns: ['merchant_id', 'config_id', 'product_fields'], row: { merchant_id: 'cg', config_id: 'default', product_fields: 'product_id\r\nproduct_description' } },
+    { table: 'customer_databases', present: true, columns: ['merchant_id', 'config_id', 'customers_table'], row: { merchant_id: 'cg', config_id: 'default', customers_table: 'customers' } },
+    { table: 'merchant_product_uploads', present: true, columns: ['merchant_id', 'config_id', 'source_format', 'fields'], row: { merchant_id: 'cg', config_id: 'default', source_format: 1 } },
+    { table: 'merchant_order_downloads', present: true, columns: ['merchant_id', 'config_id', 'header_template', 'detail_template'], row: { merchant_id: 'cg', config_id: 'default', header_template: 'odl-orders.txt' } },
+    { table: 'merchant_downloads', present: true, columns: ['merchant_id', 'config_id', 'download_directory'], row: { merchant_id: 'cg', config_id: 'default', download_directory: '/home/columbia/downloads-cg' } },
+    { table: 'payflowpro', present: true, columns: ['merchant_id', 'config_id', 'vendor'], row: { merchant_id: 'cg', config_id: 'default', vendor: 'columbiagames' } },
+  ],
+  operations: [
+    { operation: 'config-export', required: true, implemented: true, notes: 'Fixture export supported' },
+    { operation: 'config-import', required: true, implemented: true, notes: 'Fixture import supported' },
+    { operation: 'order-queue', required: true, implemented: true, notes: 'Fixture order queue supported' },
+    { operation: 'product-table-upload', required: true, implemented: true, notes: 'Fixture TSV upload supported' },
+  ],
+};
+
+const ADMIN_PRODUCT_UPLOAD_SETTINGS: AdminProductUploadSettings = {
+  scope: { merchantId: 'cg', configId: 'default' },
+  sourceFormat: 1,
+  sourceHasFieldNames: false,
+  overrideFields: true,
+  fields: ['product_id', 'product_description', 'product_price', 'category', 'sub_category', 'sub_category2', 'product_status'],
+  saveCopy: false,
+  saveFile: null,
+  sourceFile: null,
+  supportedInput: {
+    delimiter: 'tab',
+    notes: ['Fixture upload uses pasted TSV content.'],
+  },
+};
+
+export async function getAdminAccess() {
+  if (!signedIn()) return unauthorized<AdminAccess>('/admin/access');
+  return ok('/admin/access', clone(ADMIN_ACCESS));
+}
+
+export async function listAdminOrders(params: { view?: string; q?: string; limit?: number; offset?: number }) {
+  if (!signedIn()) return unauthorized<AdminOrderListResponse>('/admin/orders');
+  const view = params.view ?? 'queue';
+  const q = (params.q ?? '').toLowerCase();
+  let items = [
+    {
+      orderId: ADMIN_ORDER_DETAIL.orderId,
+      status: 0,
+      lastUpdated: ADMIN_ORDER_DETAIL.lastUpdated,
+      shipName: ADMIN_ORDER_DETAIL.fields.ship_name,
+      shipEmail: ADMIN_ORDER_DETAIL.fields.ship_email,
+      shipCity: ADMIN_ORDER_DETAIL.fields.ship_city,
+      shipCountry: ADMIN_ORDER_DETAIL.fields.ship_country,
+      shipMethod: ADMIN_ORDER_DETAIL.fields.ship_method,
+      shippableSubtotal: ADMIN_ORDER_DETAIL.fields.shippable_subtotal,
+      pdfTotal: ADMIN_ORDER_DETAIL.fields.pdf_total,
+      totalItemsRequiringPayment: 3,
+      pointsApplied: 25,
+      promoCode: 'SPRING',
+      itemCount: 2,
+      totalQuantity: 3,
+      latestMark: view === 'all' ? adminMarks[0] : null,
+    },
+    {
+      orderId: 'FIXTURE-ADMIN-1002',
+      status: 0,
+      lastUpdated: '2026-03-16T15:10:00Z',
+      shipName: 'Morgan Queue',
+      shipEmail: 'morgan@example.invalid',
+      shipCity: 'Albany',
+      shipCountry: 'US',
+      shipMethod: 'Mail',
+      shippableSubtotal: '24.00',
+      pdfTotal: '0.00',
+      totalItemsRequiringPayment: 1,
+      pointsApplied: 0,
+      promoCode: null,
+      itemCount: 1,
+      totalQuantity: 1,
+      latestMark: null,
+    },
+  ];
+  if (view === 'queue') {
+    items = items.filter((item) => !item.latestMark);
+  }
+  if (q) {
+    items = items.filter((item) => [item.orderId, item.shipName, item.shipEmail].join(' ').toLowerCase().includes(q));
+  }
+  return ok('/admin/orders', {
+    scope: clone(ADMIN_ACCESS.defaultScope!),
+    orders: {
+      items,
+      meta: { total: items.length, limit: params.limit ?? 25, offset: params.offset ?? 0, view, query: params.q ?? '' },
+    },
+  });
+}
+
+export async function getAdminOrderDetail(orderId: string) {
+  if (!signedIn()) return unauthorized<{ scope: unknown; order: AdminOrderDetail }>(`/admin/orders/${orderId}`);
+  return ok(`/admin/orders/${orderId}`, {
+    scope: clone(ADMIN_ACCESS.defaultScope!),
+    order: clone({ ...ADMIN_ORDER_DETAIL, marks: adminMarks }),
+  });
+}
+
+export async function markAdminOrder(orderId: string, payload: { action?: string; note?: string }) {
+  if (!signedIn()) return unauthorized<{ scope: unknown; mark: unknown }>(`/admin/orders/${orderId}/mark`);
+  const mark = {
+    id: adminMarks.length + 1,
+    action: payload.action ?? 'mark',
+    note: payload.note ?? null,
+    customerId: USER.customerId,
+    createdAt: new Date().toISOString(),
+  };
+  adminMarks = [mark, ...adminMarks];
+  return ok(`/admin/orders/${orderId}/mark`, {
+    scope: clone(ADMIN_ACCESS.defaultScope!),
+    mark,
+  });
+}
+
+export async function getAdminConfigInventory() {
+  if (!signedIn()) return unauthorized<AdminConfigInventory>('/admin/config/inventory');
+  return ok('/admin/config/inventory', clone(ADMIN_CONFIG_INVENTORY));
+}
+
+export async function exportAdminConfig() {
+  if (!signedIn()) return unauthorized<AdminConfigBundle>('/admin/config/export');
+  return ok('/admin/config/export', {
+    schemaVersion: 1,
+    exportedAt: '2026-03-16T16:20:00Z',
+    scope: { merchantId: 'cg', configId: 'default' },
+    tables: {
+      merchant_configurations: [clone(ADMIN_CONFIG_INVENTORY.rows[0].row!) as Record<string, unknown>],
+      customer_databases: [clone(ADMIN_CONFIG_INVENTORY.rows[1].row!) as Record<string, unknown>],
+      merchant_product_uploads: [clone(ADMIN_CONFIG_INVENTORY.rows[2].row!) as Record<string, unknown>],
+      merchant_order_downloads: [clone(ADMIN_CONFIG_INVENTORY.rows[3].row!) as Record<string, unknown>],
+      merchant_downloads: [clone(ADMIN_CONFIG_INVENTORY.rows[4].row!) as Record<string, unknown>],
+      payflowpro: [clone(ADMIN_CONFIG_INVENTORY.rows[5].row!) as Record<string, unknown>],
+    },
+  });
+}
+
+export async function importAdminConfig() {
+  if (!signedIn()) return unauthorized<AdminConfigImportResult>('/admin/config/import');
+  return ok('/admin/config/import', {
+    scope: { merchantId: 'cg', configId: 'default' },
+    importedTables: {
+      merchant_configurations: 1,
+      customer_databases: 1,
+      merchant_product_uploads: 1,
+      merchant_order_downloads: 1,
+      merchant_downloads: 1,
+      payflowpro: 1,
+    },
+    importedByCustomerId: USER.customerId,
+    importedAt: new Date().toISOString(),
+  });
+}
+
+export async function getAdminProductUploadSettings() {
+  if (!signedIn()) return unauthorized<AdminProductUploadSettings>('/admin/product-upload/settings');
+  return ok('/admin/product-upload/settings', clone(ADMIN_PRODUCT_UPLOAD_SETTINGS));
+}
+
+function parseFixtureTsv(content: string) {
+  return content
+    .split(/\r\n|\n|\r/)
+    .filter((line) => line.trim() !== '')
+    .map((line) => line.split('	').map((part) => part.trim()))
+    .map((cells, index) => ({
+      rowNumber: index + 1,
+      productId: cells[0] ?? `FIX-${index + 1}`,
+      mode: PRODUCTS.some((product) => product.productId === (cells[0] ?? '')) ? 'update' as const : 'insert' as const,
+      fields: {
+        product_id: cells[0] ?? '',
+        product_description: cells[1] ?? '',
+        product_price: cells[2] ?? '',
+        category: cells[3] ?? '',
+        sub_category: cells[4] ?? '',
+        sub_category2: cells[5] ?? '',
+        product_status: cells[6] ?? '',
+      },
+    }));
+}
+
+export async function previewAdminProductUpload(payload: { content: string }) {
+  if (!signedIn()) return unauthorized<AdminProductUploadPreview>('/admin/product-upload/preview');
+  const rows = parseFixtureTsv(payload.content);
+  return ok('/admin/product-upload/preview', {
+    scope: { merchantId: 'cg', configId: 'default' },
+    delimiter: 'tab',
+    fieldNames: clone(ADMIN_PRODUCT_UPLOAD_SETTINGS.fields),
+    rowCount: rows.length,
+    insertCount: rows.filter((row) => row.mode === 'insert').length,
+    updateCount: rows.filter((row) => row.mode === 'update').length,
+    warnings: [],
+    rows,
+  });
+}
+
+export async function applyAdminProductUpload(payload: { content: string }) {
+  if (!signedIn()) return unauthorized<AdminProductUploadApplyResult>('/admin/product-upload/apply');
+  const rows = parseFixtureTsv(payload.content);
+  return ok('/admin/product-upload/apply', {
+    scope: { merchantId: 'cg', configId: 'default' },
+    appliedByCustomerId: USER.customerId,
+    appliedAt: new Date().toISOString(),
+    rowCount: rows.length,
+    insertCount: rows.filter((row) => row.mode === 'insert').length,
+    updateCount: rows.filter((row) => row.mode === 'update').length,
+    warnings: [],
+    notes: ['Fixture apply completed.'],
+  });
 }
