@@ -70,6 +70,26 @@ services:
     command: >
       sh -lc "npm install && npm run dev -- --host 0.0.0.0 --port ${WEB_PORT:-5173}"
 
+  pgadmin:
+    image: dpage/pgadmin4:9
+    container_name: ccm_v2_pgadmin
+    restart: unless-stopped
+    user: "0:0"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@ccm-v2.dev
+      PGADMIN_DEFAULT_PASSWORD: admin
+      PGADMIN_CONFIG_SERVER_MODE: "False"
+      PGADMIN_DISABLE_POSTFIX: "1"
+      PGADMIN_LISTEN_PORT: 5050
+    ports:
+      - "5050:5050"
+    volumes:
+      - pgadmin_data:/var/lib/pgadmin
+      - ./docker/pgadmin/servers.json:/pgadmin4/servers.json:ro
 volumes:
   postgres_data:
   web_node_modules:
+  pgadmin_data:

@@ -3,7 +3,7 @@
 Ez a repo már nem csak kódszkeletont, hanem **futtatható fejlesztői környezetet** is ad:
 - natív PHP API starter
 - React + TypeScript web starter
-- Docker Compose stack (API + web + Postgres)
+- Docker Compose stack (API + web + Postgres + pgAdmin)
 - opcionális DDEV wrapper
 - restore / verify / smoke workflow a legacy dumpokhoz
 
@@ -44,11 +44,16 @@ API kliens generálás:
 4. Ellenőrzés:
    - `make verify`
    - `make smoke`
+5. Ha böngészőből akarod átnézni az adatbázisokat, a pgAdmin is feláll a stackkel együtt:
+   - `http://localhost:5050`
+   - login: `admin@local.test` / `admin`
+   - az előre felvett szerver a Compose-os `postgres` service-re mutat
 
 Elérhetőségek:
 - API: `http://localhost:8080`
 - Web: `http://localhost:5173`
-- Postgres: `localhost:55432`
+- Postgres: `localhost:5432`
+- pgAdmin: `http://localhost:5050`
 
 ## DDEV
 A `.ddev/` mappa opcionális kényelmi réteg. A source of truth továbbra is a Docker Compose.
@@ -73,3 +78,10 @@ A browsable HTML view of frontend/backend/tooling source comments is generated a
 Download bridge configuration for owned library files:
 - `LEGACY_DOWNLOAD_ROOT=/absolute/path/to/legacy/downloads` to stream files directly
 - or `LEGACY_DOWNLOAD_BASE_URL=https://legacy.example/downloads` to redirect to an existing trusted origin
+
+## pgAdmin
+
+- Külön indítás: `make pgadmin-up`
+- Logok: `make pgadmin-logs`
+- Leállítás: `make pgadmin-down`
+- Az előre konfigurált szerver a default `postgres` userrel van felvéve. Ha ettől eltérő superusert használsz, frissítsd a `docker/pgadmin/servers.json` fájlt.

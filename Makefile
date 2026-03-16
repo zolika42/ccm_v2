@@ -1,5 +1,5 @@
 # @fileoverview Common developer entrypoints for runtime management, restore/verify/smoke, and documentation generation.
-.PHONY: docs docs-check up down logs api-logs api-log-file web-logs ps restore verify smoke legacy-refresh native-api native-web
+.PHONY: docs docs-check up down logs api-logs api-log-file web-logs pgadmin-logs ps restore verify smoke legacy-refresh native-api native-web pgadmin-up pgadmin-down
 
 docs:
 	@node ./scripts/docs/generate-docs.mjs
@@ -26,6 +26,9 @@ api-log-file:
 
 web-logs:
 	docker compose logs -f --tail=200 web
+
+pgadmin-logs:
+	docker compose logs -f --tail=200 pgadmin
 
 ps:
 	docker compose ps
@@ -57,3 +60,9 @@ native-api: docs
 
 native-web: docs
 	cd apps/web && npm install && npm run dev -- --host 0.0.0.0 --port 5173
+
+pgadmin-up:
+	docker compose up -d pgadmin
+
+pgadmin-down:
+	docker compose stop pgadmin

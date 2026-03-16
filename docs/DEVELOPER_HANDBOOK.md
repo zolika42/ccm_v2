@@ -1,7 +1,7 @@
 # Developer Handbook
 
 > Generated automatically by `scripts/docs/generate-docs.mjs`. Do not hand-edit this file; update the generator instead.
-> Generated at: 2026-03-16T00:17:53.071Z
+> Generated at: 2026-03-16T07:39:51.243Z
 
 ## 1. What this repo is
 
@@ -98,6 +98,7 @@ The repo is designed to let developers work in three modes:
 - `api-logs`
 - `api-log-file`
 - `web-logs`
+- `pgadmin-logs`
 - `ps`
 - `restore`
 - `verify`
@@ -105,6 +106,8 @@ The repo is designed to let developers work in three modes:
 - `legacy-refresh`
 - `native-api`
 - `native-web`
+- `pgadmin-up`
+- `pgadmin-down`
 
 ### Frontend commands
 - `dev` → `node ./node_modules/vite/bin/vite.js`
