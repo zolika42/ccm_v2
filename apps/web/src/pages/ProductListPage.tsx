@@ -4,141 +4,262 @@
 import React from 'react';
 import { useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { addCartItem } from '../api/client';
+import { addCartItem, getCatalogCategories, listProducts } from '../api/client';
 import { useCart } from '../cart/CartContext';
-import { useCatalogCategories } from '../catalog/useCatalogCategories';
-import { useCatalogProducts } from '../catalog/useCatalogProducts';
+import type { CatalogCategory, Product } from '../types';
+
+const PAGE_SIZE = 30;
 
 export function ProductListPage() {
-  const [queryInput, setQueryInput] = useState('');
-  const [submittedQuery, setSubmittedQuery] = useState('');
+  const [products, setProducts] = useState<Product[]>([]);
+  const [categories, setCategories] = useState<CatalogCategory[]>([]);
+  const [query, setQuery] = useState('');
+  const [activeQuery, setActiveQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('');
   const [selectedSubCategory, setSelectedSubCategory] = useState('');
+  const [activeCategory, setActiveCategory] = useState('');
+  const [activeSubCategory, setActiveSubCategory] = useState('');
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   const [message, setMessage] = useState<string | null>(null);
   const [busyProductId, setBusyProductId] = useState<string | null>(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalProducts, setTotalProducts] = useState(0);
   const { refresh } = useCart();
-  const categoryState = useCatalogCategories();
-  const productState = useCatalogProducts({
-    q: submittedQuery,
-    category: selectedCategory,
-    sub_category: selectedSubCategory,
-    limit: 30,
-    offset: 0,
-  });
 
-  const availableSubCategories = useMemo(
-    () => categoryState.categories.find((category) => category.name === selectedCategory)?.subCategories ?? [],
-    [categoryState.categories, selectedCategory],
-  );
+  const totalPages = Math.max(1, Math.ceil(totalProducts / PAGE_SIZE));
+  const pageWindow = useMemo(() => {
+    const windowSize = 5;
+    const start = Math.max(1, Math.min(currentPage - 2, totalPages - windowSize + 1));
+    const end = Math.min(totalPages, start + windowSize - 1);
+    return Array.from({ length: end - start + 1 }, (_, index) => start + index);
+  }, [currentPage, totalPages]);
 
-  useEffect(() => {
-    setSelectedSubCategory((current) => {
-      if (!current) {
-        return current;
+  const subCategoryOptions = useMemo(() => {
+    if (!selectedCategory) {
+      return [];
+    }
+
+    return categories.find((entry) => entry.name === selectedCategory)?.subCategories ?? [];
+  }, [categories, selectedCategory]);
+
+  async function load(search = '', page = 1, category = '', subCategory = '') {
+    setLoading(true);
+    setError(null);
+
+    try {
+      const safePage = Math.max(1, page);
+      const response = await listProducts({
+        q: search,
+        category: category || undefined,
+        sub_category: subCategory || undefined,
+        limit: PAGE_SIZE,
+        offset: (safePage - 1) * PAGE_SIZE,
+      });
+
+      const items = response.data.items;
+      const total = Math.max(items.length, response.data.meta?.total ?? 0);
+      const resolvedTotalPages = Math.max(1, Math.ceil(total / PAGE_SIZE));
+      const resolvedPage = Math.min(safePage, resolvedTotalPages);
+
+      if (resolvedPage !== safePage) {
+        const fallback = await listProducts({
+          q: search,
+          category: category || undefined,
+          sub_category: subCategory || undefined,
+          limit: PAGE_SIZE,
+          offset: (resolvedPage - 1) * PAGE_SIZE,
+        });
+
+        setProducts(fallback.data.items);
+        setTotalProducts(Math.max(fallback.data.items.length, fallback.data.meta?.total ?? 0));
+        setCurrentPage(resolvedPage);
+        setActiveQuery(search);
+        setActiveCategory(category);
+        setActiveSubCategory(subCategory);
+        return;
       }
 
-      return availableSubCategories.some((item) => item.name === current) ? current : '';
-    });
-  }, [availableSubCategories]);
+      setProducts(items);
+      setTotalProducts(total);
+      setCurrentPage(resolvedPage);
+      setActiveQuery(search);
+      setActiveCategory(category);
+      setActiveSubCategory(subCategory);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to load products');
+    } finally {
+      setLoading(false);
+    }
+  }
 
   async function handleAddToCart(productId: string) {
     setBusyProductId(productId);
     setMessage(null);
+    setError(null);
     try {
       await addCartItem(productId, 1);
       await refresh();
       setMessage(`${productId} added to cart.`);
     } catch (err) {
-      productState.refetch().catch(() => undefined);
-      setMessage(null);
-      throw err;
+      setError(err instanceof Error ? err.message : 'Failed to add item');
     } finally {
       setBusyProductId(null);
     }
   }
 
-  async function onAddToCart(productId: string) {
-    try {
-      await handleAddToCart(productId);
-    } catch {
-      // Product query hook already exposes the current error state for list loading.
-    }
-  }
-
   function handleSearchSubmit() {
-    setSubmittedQuery(queryInput.trim());
+    void load(query.trim(), 1, selectedCategory, selectedSubCategory);
   }
 
   function handleResetFilters() {
-    setQueryInput('');
-    setSubmittedQuery('');
+    setQuery('');
     setSelectedCategory('');
     setSelectedSubCategory('');
-    setMessage(null);
+    void load('', 1, '', '');
   }
+
+  function handlePageChange(page: number) {
+    if (loading || page === currentPage || page < 1 || page > totalPages) {
+      return;
+    }
+
+    void load(activeQuery, page, activeCategory, activeSubCategory);
+  }
+
+  useEffect(() => {
+    async function bootstrap() {
+      try {
+        const categoryResponse = await getCatalogCategories();
+        setCategories(categoryResponse.categories);
+      } catch (err) {
+        setError(err instanceof Error ? err.message : 'Failed to load categories');
+      }
+
+      await load('', 1, '', '');
+    }
+
+    void bootstrap();
+  }, []);
+
+  useEffect(() => {
+    if (!selectedCategory && selectedSubCategory) {
+      setSelectedSubCategory('');
+      return;
+    }
+
+    if (selectedCategory && selectedSubCategory && !subCategoryOptions.some((item) => item.name === selectedSubCategory)) {
+      setSelectedSubCategory('');
+    }
+  }, [selectedCategory, selectedSubCategory, subCategoryOptions]);
+
+  const hasProducts = products.length > 0;
+  const rangeStart = totalProducts === 0 ? 0 : (currentPage - 1) * PAGE_SIZE + 1;
+  const rangeEnd = totalProducts === 0 ? 0 : Math.min(currentPage * PAGE_SIZE, totalProducts);
 
   return (
     <section>
       <div className="page-header product-page-header">
-        <div>
-          <h2>Products</h2>
-          <p className="muted">Catalog data is now cached in-memory per filter combination, so repeated views reuse the same typed API state.</p>
+        <h2>Products</h2>
+        <div className="catalog-toolbar">
+          <div className="row search-row">
+            <input
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter') {
+                  handleSearchSubmit();
+                }
+              }}
+              placeholder="Search products…"
+            />
+            <button onClick={handleSearchSubmit}>Search</button>
+          </div>
+          <div className="catalog-filters">
+            <label>
+              <span>Category</span>
+              <select value={selectedCategory} onChange={(e) => setSelectedCategory(e.target.value)}>
+                <option value="">All categories</option>
+                {categories.map((category) => (
+                  <option key={category.name} value={category.name}>
+                    {category.name} ({category.productCount})
+                  </option>
+                ))}
+              </select>
+            </label>
+            <label>
+              <span>Subcategory</span>
+              <select
+                value={selectedSubCategory}
+                onChange={(e) => setSelectedSubCategory(e.target.value)}
+                disabled={!selectedCategory || subCategoryOptions.length === 0}
+              >
+                <option value="">All subcategories</option>
+                {subCategoryOptions.map((subCategory) => (
+                  <option key={subCategory.name} value={subCategory.name}>
+                    {subCategory.name} ({subCategory.productCount})
+                  </option>
+                ))}
+              </select>
+            </label>
+            <div className="catalog-filter-actions">
+              <button type="button" onClick={handleSearchSubmit}>Apply filters</button>
+              <button type="button" className="button-secondary" onClick={handleResetFilters}>Reset</button>
+            </div>
+          </div>
         </div>
-        <button type="button" onClick={() => void productState.refetch()} disabled={productState.loading}>Refresh list</button>
       </div>
-
-      <div className="panel stack filter-panel">
-        <div className="filter-grid">
-          <label>
-            Search
-            <input value={queryInput} onChange={(e) => setQueryInput(e.target.value)} placeholder="Search products…" />
-          </label>
-          <label>
-            Category
-            <select value={selectedCategory} onChange={(e) => setSelectedCategory(e.target.value)} disabled={categoryState.loading}>
-              <option value="">All categories</option>
-              {categoryState.categories.map((category) => (
-                <option key={category.name} value={category.name}>
-                  {category.name} ({category.productCount})
-                </option>
-              ))}
-            </select>
-          </label>
-          <label>
-            Sub-category
-            <select value={selectedSubCategory} onChange={(e) => setSelectedSubCategory(e.target.value)} disabled={categoryState.loading || !selectedCategory}>
-              <option value="">All sub-categories</option>
-              {availableSubCategories.map((subCategory) => (
-                <option key={subCategory.name} value={subCategory.name}>
-                  {subCategory.name} ({subCategory.productCount})
-                </option>
-              ))}
-            </select>
-          </label>
-        </div>
-
-        <div className="row wrap-row">
-          <button type="button" onClick={handleSearchSubmit} disabled={productState.loading}>Apply filters</button>
-          <button type="button" onClick={handleResetFilters}>Reset</button>
-          {categoryState.meta ? (
-            <span className="muted">
-              {categoryState.meta.categoryCount} categories / {categoryState.meta.subCategoryCount} sub-categories cached
-            </span>
-          ) : null}
-        </div>
-
-        {categoryState.error ? <p className="error">{categoryState.error}</p> : null}
-      </div>
-
       {message && <p className="success">{message}</p>}
-      {productState.loading && <p>Loading…</p>}
-      {productState.error && <p className="error">{productState.error}</p>}
-      {!productState.loading && !productState.error && productState.meta ? (
-        <p className="muted">Showing {productState.products.length} of {productState.meta.total} products.</p>
-      ) : null}
-
+      {loading && <p>Loading…</p>}
+      {error && <p className="error">{error}</p>}
+      {!loading && !error && (
+        <div className="catalog-summary-row">
+          <p className="muted">
+            {hasProducts
+              ? `Showing ${rangeStart}-${rangeEnd} of ${totalProducts} products${activeQuery ? ` for “${activeQuery}”` : ''}${activeCategory ? ` in ${activeCategory}` : ''}${activeSubCategory ? ` / ${activeSubCategory}` : ''}.`
+              : `No products found${activeQuery ? ` for “${activeQuery}”` : ''}${activeCategory ? ` in ${activeCategory}` : ''}${activeSubCategory ? ` / ${activeSubCategory}` : ''}.`}
+          </p>
+          {totalPages > 1 && (
+            <nav className="pagination" aria-label="Products pagination">
+              <button type="button" className="pagination-button" disabled={currentPage === 1} onClick={() => handlePageChange(currentPage - 1)}>
+                Previous
+              </button>
+              {pageWindow[0] > 1 && (
+                <>
+                  <button type="button" className="pagination-button" onClick={() => handlePageChange(1)}>
+                    1
+                  </button>
+                  {pageWindow[0] > 2 && <span className="pagination-ellipsis">…</span>}
+                </>
+              )}
+              {pageWindow.map((page) => (
+                <button
+                  key={page}
+                  type="button"
+                  className={`pagination-button${page === currentPage ? ' is-active' : ''}`}
+                  aria-current={page === currentPage ? 'page' : undefined}
+                  onClick={() => handlePageChange(page)}
+                >
+                  {page}
+                </button>
+              ))}
+              {pageWindow[pageWindow.length - 1] < totalPages && (
+                <>
+                  {pageWindow[pageWindow.length - 1] < totalPages - 1 && <span className="pagination-ellipsis">…</span>}
+                  <button type="button" className="pagination-button" onClick={() => handlePageChange(totalPages)}>
+                    {totalPages}
+                  </button>
+                </>
+              )}
+              <button type="button" className="pagination-button" disabled={currentPage === totalPages} onClick={() => handlePageChange(currentPage + 1)}>
+                Next
+              </button>
+            </nav>
+          )}
+        </div>
+      )}
       <div className="product-grid">
-        {productState.products.map((product) => (
+        {products.map((product) => (
           <article className="product-card" key={product.productId}>
             <div className="product-meta">{product.category} / {product.subCategory}</div>
             <h3>{product.description || product.productId}</h3>
@@ -150,7 +271,7 @@ export function ProductListPage() {
             </div>
             <div className="product-actions">
               <Link to={`/products/${encodeURIComponent(product.productId)}`}>Open</Link>
-              <button type="button" disabled={busyProductId === product.productId} onClick={() => void onAddToCart(product.productId)}>
+              <button type="button" disabled={busyProductId === product.productId} onClick={() => void handleAddToCart(product.productId)}>
                 {busyProductId === product.productId ? 'Adding…' : 'Add to cart'}
               </button>
             </div>

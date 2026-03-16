@@ -1,4 +1,7 @@
 #!/usr/bin/env node
+/**
+ * @fileoverview Captures UI parity fixture pages into PNG screenshots for docs/ui-parity-inventory.md.
+ */
 import { mkdirSync, rmSync } from 'node:fs';
 import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
