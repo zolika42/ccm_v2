@@ -149,6 +149,10 @@
                     <a href="#apps-api-src-controllers-librarycontroller-php">LibraryController.php</a>
                     <ul class="symbol-list"><li><a href="#apps-api-src-controllers-librarycontroller-php-librarycontroller">LibraryController</a></li><li><a href="#apps-api-src-controllers-librarycontroller-php-download">download</a></li></ul>
                   </li>
+                  <li>
+                    <a href="#apps-api-src-controllers-wishlistcontroller-php">WishlistController.php</a>
+                    <ul class="symbol-list"><li><a href="#apps-api-src-controllers-wishlistcontroller-php-wishlistcontroller">WishlistController</a></li><li><a href="#apps-api-src-controllers-wishlistcontroller-php-replaceitem">replaceItem</a></li><li><a href="#apps-api-src-controllers-wishlistcontroller-php-removeitem">removeItem</a></li></ul>
+                  </li>
               </ul>
             </section>
             <section class="sidebar-group">
@@ -185,6 +189,10 @@
                     <a href="#apps-api-src-repositories-productrepository-php">ProductRepository.php</a>
                     <ul class="symbol-list"><li><a href="#apps-api-src-repositories-productrepository-php-productrepository">ProductRepository</a></li></ul>
                   </li>
+                  <li>
+                    <a href="#apps-api-src-repositories-wishlistrepository-php">WishlistRepository.php</a>
+                    <ul class="symbol-list"><li><a href="#apps-api-src-repositories-wishlistrepository-php-wishlistrepository">WishlistRepository</a></li><li><a href="#apps-api-src-repositories-wishlistrepository-php-syncpurchaseditems">syncPurchasedItems</a></li><li><a href="#apps-api-src-repositories-wishlistrepository-php-loaditems">loadItems</a></li><li><a href="#apps-api-src-repositories-wishlistrepository-php-loadquantities">loadQuantities</a></li></ul>
+                  </li>
               </ul>
             </section>
             <section class="sidebar-group">
@@ -210,6 +218,10 @@
                   <li>
                     <a href="#apps-api-src-services-libraryservice-php">LibraryService.php</a>
                     <ul class="symbol-list"><li><a href="#apps-api-src-services-libraryservice-php-libraryservice">LibraryService</a></li></ul>
+                  </li>
+                  <li>
+                    <a href="#apps-api-src-services-wishlistservice-php">WishlistService.php</a>
+                    <ul class="symbol-list"><li><a href="#apps-api-src-services-wishlistservice-php-wishlistservice">WishlistService</a></li><li><a href="#apps-api-src-services-wishlistservice-php-syncpurchaseditems">syncPurchasedItems</a></li></ul>
                   </li>
               </ul>
             </section>
@@ -267,10 +279,10 @@
         </div>
         <div class="file-stack">
           
-            <article class="file-card searchable" id="apps-api-public-index-php" data-search="apps/api/public/index.php HTTP entrypoint: wires the request lifecycle, service container, routes, and top-level exception handling.   ColumbiaGames\Api\Controllers\AuthController ColumbiaGames\Api\Controllers\CatalogController ColumbiaGames\Api\Controllers\CartController ColumbiaGames\Api\Controllers\CheckoutController ColumbiaGames\Api\Controllers\LibraryController ColumbiaGames\Api\Database\ConnectionFactory ColumbiaGames\Api\Repositories\CartRepository ColumbiaGames\Api\Repositories\CheckoutRepository ColumbiaGames\Api\Repositories\CustomerRepository ColumbiaGames\Api\Repositories\LibraryRepository ColumbiaGames\Api\Repositories\ProductRepository ColumbiaGames\Api\Services\AuthService">
+            <article class="file-card searchable" id="apps-api-public-index-php" data-search="apps/api/public/index.php HTTP entrypoint: wires the request lifecycle, service container, routes, and top-level exception handling.   ColumbiaGames\Api\Controllers\AuthController ColumbiaGames\Api\Controllers\CatalogController ColumbiaGames\Api\Controllers\CartController ColumbiaGames\Api\Controllers\CheckoutController ColumbiaGames\Api\Controllers\LibraryController ColumbiaGames\Api\Controllers\WishlistController ColumbiaGames\Api\Database\ConnectionFactory ColumbiaGames\Api\Repositories\CartRepository ColumbiaGames\Api\Repositories\CheckoutRepository ColumbiaGames\Api\Repositories\CustomerRepository ColumbiaGames\Api\Repositories\LibraryRepository ColumbiaGames\Api\Repositories\ProductRepository">
               <div class="card-head">
                 <div>
-                  <p class="eyebrow">PHP · 4.6 KB</p>
+                  <p class="eyebrow">PHP · 5.2 KB</p>
                   <h3><code>apps/api/public/index.php</code></h3>
                 </div>
                 <a class="anchor-link" href="#apps-api-public-index-php">#</a>
@@ -278,8 +290,8 @@
               <p class="overview">HTTP entrypoint: wires the request lifecycle, service container, routes, and top-level exception handling.</p>
               <div class="meta-grid">
                 
-                <p><strong>Dependencies:</strong> <code>ColumbiaGames\Api\Controllers\AuthController</code>, <code>ColumbiaGames\Api\Controllers\CatalogController</code>, <code>ColumbiaGames\Api\Controllers\CartController</code>, <code>ColumbiaGames\Api\Controllers\CheckoutController</code>, <code>ColumbiaGames\Api\Controllers\LibraryController</code>, <code>ColumbiaGames\Api\Database\ConnectionFactory</code>, <code>ColumbiaGames\Api\Repositories\CartRepository</code>, <code>ColumbiaGames\Api\Repositories\CheckoutRepository</code>, <code>ColumbiaGames\Api\Repositories\CustomerRepository</code>, <code>ColumbiaGames\Api\Repositories\LibraryRepository</code>, <code>ColumbiaGames\Api\Repositories\ProductRepository</code>, <code>ColumbiaGames\Api\Services\AuthService</code></p>
-                <p class="muted tiny">Snapshot timestamp: 2026-03-16T12:54:26.000Z</p>
+                <p><strong>Dependencies:</strong> <code>ColumbiaGames\Api\Controllers\AuthController</code>, <code>ColumbiaGames\Api\Controllers\CatalogController</code>, <code>ColumbiaGames\Api\Controllers\CartController</code>, <code>ColumbiaGames\Api\Controllers\CheckoutController</code>, <code>ColumbiaGames\Api\Controllers\LibraryController</code>, <code>ColumbiaGames\Api\Controllers\WishlistController</code>, <code>ColumbiaGames\Api\Database\ConnectionFactory</code>, <code>ColumbiaGames\Api\Repositories\CartRepository</code>, <code>ColumbiaGames\Api\Repositories\CheckoutRepository</code>, <code>ColumbiaGames\Api\Repositories\CustomerRepository</code>, <code>ColumbiaGames\Api\Repositories\LibraryRepository</code>, <code>ColumbiaGames\Api\Repositories\ProductRepository</code></p>
+                <p class="muted tiny">Snapshot timestamp: 2026-03-16T16:09:37.000Z</p>
               </div>
               <details>
                 <summary>Comment highlights</summary>
@@ -298,7 +310,7 @@
       <section class="group searchable" data-search="apps/api/src/Controllers">
         <div class="group-head">
           <h2>apps/api/src/Controllers</h2>
-          <span class="count-pill">5 file(s)</span>
+          <span class="count-pill">6 file(s)</span>
         </div>
         <div class="file-stack">
           
@@ -504,6 +516,68 @@
     </section></div>
               </div>
             </article>
+            <article class="file-card searchable" id="apps-api-src-controllers-wishlistcontroller-php" data-search="apps/api/src/Controllers/WishlistController.php Controller for authenticated wishlist summary and wishlist item mutations.  WishlistController __construct index addItem replaceItem removeItem ColumbiaGames\Api\Services\WishlistService ColumbiaGames\Api\Support\JsonResponse ColumbiaGames\Api\Support\Request RuntimeException">
+              <div class="card-head">
+                <div>
+                  <p class="eyebrow">PHP · 2.4 KB</p>
+                  <h3><code>apps/api/src/Controllers/WishlistController.php</code></h3>
+                </div>
+                <a class="anchor-link" href="#apps-api-src-controllers-wishlistcontroller-php">#</a>
+              </div>
+              <p class="overview">Controller for authenticated wishlist summary and wishlist item mutations.</p>
+              <div class="meta-grid">
+                <p><strong>Detected symbols:</strong> <code>WishlistController</code>, <code>__construct</code>, <code>index</code>, <code>addItem</code>, <code>replaceItem</code>, <code>removeItem</code></p>
+                <p><strong>Dependencies:</strong> <code>ColumbiaGames\Api\Services\WishlistService</code>, <code>ColumbiaGames\Api\Support\JsonResponse</code>, <code>ColumbiaGames\Api\Support\Request</code>, <code>RuntimeException</code></p>
+                <p class="muted tiny">Snapshot timestamp: 2026-03-16T16:09:38.000Z</p>
+              </div>
+              <details>
+                <summary>Comment highlights</summary>
+                <p class="muted">No additional comment blocks were extracted from this file.</p>
+              </details>
+              <div class="symbol-section">
+                <div class="symbol-section-head">
+                  <h4>Documented symbols</h4>
+                  <span class="count-pill">3</span>
+                </div>
+                <div class="symbol-grid">
+    <section class="symbol-card searchable" id="apps-api-src-controllers-wishlistcontroller-php-wishlistcontroller" data-search="class WishlistController No dedicated symbol docblock found; inherits file intent: Controller for authenticated wishlist summary and wishlist item mutations. final class WishlistController ">
+      <div class="symbol-head">
+        <div>
+          <p class="eyebrow">class · line 16</p>
+          <h4><code>WishlistController</code></h4>
+        </div>
+        <a class="anchor-link" href="#apps-api-src-controllers-wishlistcontroller-php-wishlistcontroller">#</a>
+      </div>
+      <p class="symbol-signature"><code>final class WishlistController</code></p>
+      <p class="overview">No dedicated symbol docblock found; inherits file intent: Controller for authenticated wishlist summary and wishlist item mutations.</p>
+      
+    </section>
+    <section class="symbol-card searchable" id="apps-api-src-controllers-wishlistcontroller-php-replaceitem" data-search="function replaceItem No descriptive summary was found for this symbol. public function replaceItem(Request $request, array $params): void param array&lt;string, string&gt; $params">
+      <div class="symbol-head">
+        <div>
+          <p class="eyebrow">function · line 42</p>
+          <h4><code>replaceItem</code></h4>
+        </div>
+        <a class="anchor-link" href="#apps-api-src-controllers-wishlistcontroller-php-replaceitem">#</a>
+      </div>
+      <p class="symbol-signature"><code>public function replaceItem(Request $request, array $params): void</code></p>
+      <p class="overview">No descriptive summary was found for this symbol.</p>
+      <details class="tags-block"><summary>Doc tags</summary><ul><li><code>@param</code> array&lt;string, string&gt; $params</li></ul></details>
+    </section>
+    <section class="symbol-card searchable" id="apps-api-src-controllers-wishlistcontroller-php-removeitem" data-search="function removeItem No descriptive summary was found for this symbol. public function removeItem(Request $request, array $params): void param array&lt;string, string&gt; $params">
+      <div class="symbol-head">
+        <div>
+          <p class="eyebrow">function · line 53</p>
+          <h4><code>removeItem</code></h4>
+        </div>
+        <a class="anchor-link" href="#apps-api-src-controllers-wishlistcontroller-php-removeitem">#</a>
+      </div>
+      <p class="symbol-signature"><code>public function removeItem(Request $request, array $params): void</code></p>
+      <p class="overview">No descriptive summary was found for this symbol.</p>
+      <details class="tags-block"><summary>Doc tags</summary><ul><li><code>@param</code> array&lt;string, string&gt; $params</li></ul></details>
+    </section></div>
+              </div>
+            </article>
         </div>
       </section>
       <section class="group searchable" data-search="apps/api/src/Database">
@@ -556,7 +630,7 @@
       <section class="group searchable" data-search="apps/api/src/Repositories">
         <div class="group-head">
           <h2>apps/api/src/Repositories</h2>
-          <span class="count-pill">5 file(s)</span>
+          <span class="count-pill">6 file(s)</span>
         </div>
         <div class="file-stack">
           
@@ -1050,12 +1124,86 @@
     </section></div>
               </div>
             </article>
+            <article class="file-card searchable" id="apps-api-src-repositories-wishlistrepository-php" data-search="apps/api/src/Repositories/WishlistRepository.php Store-database wishlist adapter backed by the legacy real_wishlists table/view semantics.  WishlistRepository __construct summary addItem replaceItem removeItem syncPurchasedItems findCustomer loadItems loadQuantities PDO">
+              <div class="card-head">
+                <div>
+                  <p class="eyebrow">PHP · 7.9 KB</p>
+                  <h3><code>apps/api/src/Repositories/WishlistRepository.php</code></h3>
+                </div>
+                <a class="anchor-link" href="#apps-api-src-repositories-wishlistrepository-php">#</a>
+              </div>
+              <p class="overview">Store-database wishlist adapter backed by the legacy real_wishlists table/view semantics.</p>
+              <div class="meta-grid">
+                <p><strong>Detected symbols:</strong> <code>WishlistRepository</code>, <code>__construct</code>, <code>summary</code>, <code>addItem</code>, <code>replaceItem</code>, <code>removeItem</code>, <code>syncPurchasedItems</code>, <code>findCustomer</code>, <code>loadItems</code>, <code>loadQuantities</code></p>
+                <p><strong>Dependencies:</strong> <code>PDO</code></p>
+                <p class="muted tiny">Snapshot timestamp: 2026-03-16T16:09:38.000Z</p>
+              </div>
+              <details>
+                <summary>Comment highlights</summary>
+                <p class="muted">No additional comment blocks were extracted from this file.</p>
+              </details>
+              <div class="symbol-section">
+                <div class="symbol-section-head">
+                  <h4>Documented symbols</h4>
+                  <span class="count-pill">4</span>
+                </div>
+                <div class="symbol-grid">
+    <section class="symbol-card searchable" id="apps-api-src-repositories-wishlistrepository-php-wishlistrepository" data-search="class WishlistRepository No dedicated symbol docblock found; inherits file intent: Store-database wishlist adapter backed by the legacy real_wishlists table/view semantics. final class WishlistRepository ">
+      <div class="symbol-head">
+        <div>
+          <p class="eyebrow">class · line 13</p>
+          <h4><code>WishlistRepository</code></h4>
+        </div>
+        <a class="anchor-link" href="#apps-api-src-repositories-wishlistrepository-php-wishlistrepository">#</a>
+      </div>
+      <p class="symbol-signature"><code>final class WishlistRepository</code></p>
+      <p class="overview">No dedicated symbol docblock found; inherits file intent: Store-database wishlist adapter backed by the legacy real_wishlists table/view semantics.</p>
+      
+    </section>
+    <section class="symbol-card searchable" id="apps-api-src-repositories-wishlistrepository-php-syncpurchaseditems" data-search="function syncPurchasedItems No descriptive summary was found for this symbol. public function syncPurchasedItems(int $customerId, array $purchasedItems): array param array&lt;int, array{productId:string, quantity:int}&gt; $purchasedItems return array{trigger:string,beforeCount:int,afterCount:int,updatedItems:array&lt;int,array{productId:string,beforeQuantity:int,purchasedQuantity:int,afterQuantity:int,action:string}&gt;,removedProductIds:array&lt;int,string&gt;}">
+      <div class="symbol-head">
+        <div>
+          <p class="eyebrow">function · line 100</p>
+          <h4><code>syncPurchasedItems</code></h4>
+        </div>
+        <a class="anchor-link" href="#apps-api-src-repositories-wishlistrepository-php-syncpurchaseditems">#</a>
+      </div>
+      <p class="symbol-signature"><code>public function syncPurchasedItems(int $customerId, array $purchasedItems): array</code></p>
+      <p class="overview">No descriptive summary was found for this symbol.</p>
+      <details class="tags-block"><summary>Doc tags</summary><ul><li><code>@param</code> array&lt;int, array{productId:string, quantity:int}&gt; $purchasedItems</li><li><code>@return</code> array{trigger:string,beforeCount:int,afterCount:int,updatedItems:array&lt;int,array{productId:string,beforeQuantity:int,purchasedQuantity:int,afterQuantity:int,action:string}&gt;,removedProductIds:array&lt;int,string&gt;}</li></ul></details>
+    </section>
+    <section class="symbol-card searchable" id="apps-api-src-repositories-wishlistrepository-php-loaditems" data-search="function loadItems No descriptive summary was found for this symbol. private function loadItems(int $customerId): array return array&lt;int, array&lt;string, mixed&gt;&gt;">
+      <div class="symbol-head">
+        <div>
+          <p class="eyebrow">function · line 163</p>
+          <h4><code>loadItems</code></h4>
+        </div>
+        <a class="anchor-link" href="#apps-api-src-repositories-wishlistrepository-php-loaditems">#</a>
+      </div>
+      <p class="symbol-signature"><code>private function loadItems(int $customerId): array</code></p>
+      <p class="overview">No descriptive summary was found for this symbol.</p>
+      <details class="tags-block"><summary>Doc tags</summary><ul><li><code>@return</code> array&lt;int, array&lt;string, mixed&gt;&gt;</li></ul></details>
+    </section>
+    <section class="symbol-card searchable" id="apps-api-src-repositories-wishlistrepository-php-loadquantities" data-search="function loadQuantities No descriptive summary was found for this symbol. private function loadQuantities(int $customerId): array return array&lt;string,int&gt;">
+      <div class="symbol-head">
+        <div>
+          <p class="eyebrow">function · line 210</p>
+          <h4><code>loadQuantities</code></h4>
+        </div>
+        <a class="anchor-link" href="#apps-api-src-repositories-wishlistrepository-php-loadquantities">#</a>
+      </div>
+      <p class="symbol-signature"><code>private function loadQuantities(int $customerId): array</code></p>
+      <p class="overview">No descriptive summary was found for this symbol.</p>
+      <details class="tags-block"><summary>Doc tags</summary><ul><li><code>@return</code> array&lt;string,int&gt;</li></ul></details>
+    </section></div>
+              </div>
+            </article>
         </div>
       </section>
       <section class="group searchable" data-search="apps/api/src/Services">
         <div class="group-head">
           <h2>apps/api/src/Services</h2>
-          <span class="count-pill">5 file(s)</span>
+          <span class="count-pill">6 file(s)</span>
         </div>
         <div class="file-stack">
           
@@ -1173,10 +1321,10 @@
     </section></div>
               </div>
             </article>
-            <article class="file-card searchable" id="apps-api-src-services-checkoutservice-php" data-search="apps/api/src/Services/CheckoutService.php Checkout application service for summary, validation, and submit orchestration.  CheckoutService __construct summary validate submit buildCheckoutPayload loadCheckoutCustomer buildDraft normalizeInput buildRequirements validateDraft requireField ColumbiaGames\Api\Repositories\CartRepository ColumbiaGames\Api\Repositories\CheckoutRepository ColumbiaGames\Api\Repositories\CustomerRepository ColumbiaGames\Api\Support\ApiLogger ColumbiaGames\Api\Support\SessionAuth">
+            <article class="file-card searchable" id="apps-api-src-services-checkoutservice-php" data-search="apps/api/src/Services/CheckoutService.php Checkout application service for summary, validation, and submit orchestration.  CheckoutService __construct summary validate submit buildCheckoutPayload loadCheckoutCustomer buildDraft normalizeInput buildRequirements validateDraft requireField ColumbiaGames\Api\Repositories\CartRepository ColumbiaGames\Api\Repositories\CheckoutRepository ColumbiaGames\Api\Repositories\CustomerRepository ColumbiaGames\Api\Repositories\WishlistRepository ColumbiaGames\Api\Support\ApiLogger ColumbiaGames\Api\Support\SessionAuth">
               <div class="card-head">
                 <div>
-                  <p class="eyebrow">PHP · 17.7 KB</p>
+                  <p class="eyebrow">PHP · 18.5 KB</p>
                   <h3><code>apps/api/src/Services/CheckoutService.php</code></h3>
                 </div>
                 <a class="anchor-link" href="#apps-api-src-services-checkoutservice-php">#</a>
@@ -1184,8 +1332,8 @@
               <p class="overview">Checkout application service for summary, validation, and submit orchestration.</p>
               <div class="meta-grid">
                 <p><strong>Detected symbols:</strong> <code>CheckoutService</code>, <code>__construct</code>, <code>summary</code>, <code>validate</code>, <code>submit</code>, <code>buildCheckoutPayload</code>, <code>loadCheckoutCustomer</code>, <code>buildDraft</code>, <code>normalizeInput</code>, <code>buildRequirements</code>, <code>validateDraft</code>, <code>requireField</code></p>
-                <p><strong>Dependencies:</strong> <code>ColumbiaGames\Api\Repositories\CartRepository</code>, <code>ColumbiaGames\Api\Repositories\CheckoutRepository</code>, <code>ColumbiaGames\Api\Repositories\CustomerRepository</code>, <code>ColumbiaGames\Api\Support\ApiLogger</code>, <code>ColumbiaGames\Api\Support\SessionAuth</code></p>
-                <p class="muted tiny">Snapshot timestamp: 2026-03-16T12:55:16.000Z</p>
+                <p><strong>Dependencies:</strong> <code>ColumbiaGames\Api\Repositories\CartRepository</code>, <code>ColumbiaGames\Api\Repositories\CheckoutRepository</code>, <code>ColumbiaGames\Api\Repositories\CustomerRepository</code>, <code>ColumbiaGames\Api\Repositories\WishlistRepository</code>, <code>ColumbiaGames\Api\Support\ApiLogger</code>, <code>ColumbiaGames\Api\Support\SessionAuth</code></p>
+                <p class="muted tiny">Snapshot timestamp: 2026-03-16T16:09:38.000Z</p>
               </div>
               <details>
                 <summary>Comment highlights</summary>
@@ -1200,7 +1348,7 @@
     <section class="symbol-card searchable" id="apps-api-src-services-checkoutservice-php-checkoutservice" data-search="class CheckoutService No dedicated symbol docblock found; inherits file intent: Checkout application service for summary, validation, and submit orchestration. final class CheckoutService ">
       <div class="symbol-head">
         <div>
-          <p class="eyebrow">class · line 17</p>
+          <p class="eyebrow">class · line 18</p>
           <h4><code>CheckoutService</code></h4>
         </div>
         <a class="anchor-link" href="#apps-api-src-services-checkoutservice-php-checkoutservice">#</a>
@@ -1246,6 +1394,56 @@
       <p class="symbol-signature"><code>final class LibraryService</code></p>
       <p class="overview">No dedicated symbol docblock found; inherits file intent: Library application service for owned-download retrieval and legacy delivery bridging.</p>
       
+    </section></div>
+              </div>
+            </article>
+            <article class="file-card searchable" id="apps-api-src-services-wishlistservice-php" data-search="apps/api/src/Services/WishlistService.php Authenticated wishlist application service for read-model, add/replace mutations, and post-purchase sync.  WishlistService __construct summary add replace remove syncPurchasedItems requireAuthenticatedCustomerId assertProductExists ColumbiaGames\Api\Repositories\ProductRepository ColumbiaGames\Api\Repositories\WishlistRepository ColumbiaGames\Api\Support\ApiLogger ColumbiaGames\Api\Support\SessionAuth RuntimeException">
+              <div class="card-head">
+                <div>
+                  <p class="eyebrow">PHP · 4.8 KB</p>
+                  <h3><code>apps/api/src/Services/WishlistService.php</code></h3>
+                </div>
+                <a class="anchor-link" href="#apps-api-src-services-wishlistservice-php">#</a>
+              </div>
+              <p class="overview">Authenticated wishlist application service for read-model, add/replace mutations, and post-purchase sync.</p>
+              <div class="meta-grid">
+                <p><strong>Detected symbols:</strong> <code>WishlistService</code>, <code>__construct</code>, <code>summary</code>, <code>add</code>, <code>replace</code>, <code>remove</code>, <code>syncPurchasedItems</code>, <code>requireAuthenticatedCustomerId</code>, <code>assertProductExists</code></p>
+                <p><strong>Dependencies:</strong> <code>ColumbiaGames\Api\Repositories\ProductRepository</code>, <code>ColumbiaGames\Api\Repositories\WishlistRepository</code>, <code>ColumbiaGames\Api\Support\ApiLogger</code>, <code>ColumbiaGames\Api\Support\SessionAuth</code>, <code>RuntimeException</code></p>
+                <p class="muted tiny">Snapshot timestamp: 2026-03-16T16:09:38.000Z</p>
+              </div>
+              <details>
+                <summary>Comment highlights</summary>
+                <p class="muted">No additional comment blocks were extracted from this file.</p>
+              </details>
+              <div class="symbol-section">
+                <div class="symbol-section-head">
+                  <h4>Documented symbols</h4>
+                  <span class="count-pill">2</span>
+                </div>
+                <div class="symbol-grid">
+    <section class="symbol-card searchable" id="apps-api-src-services-wishlistservice-php-wishlistservice" data-search="class WishlistService No dedicated symbol docblock found; inherits file intent: Authenticated wishlist application service for read-model, add/replace mutations, and post-purchase sync. final class WishlistService ">
+      <div class="symbol-head">
+        <div>
+          <p class="eyebrow">class · line 17</p>
+          <h4><code>WishlistService</code></h4>
+        </div>
+        <a class="anchor-link" href="#apps-api-src-services-wishlistservice-php-wishlistservice">#</a>
+      </div>
+      <p class="symbol-signature"><code>final class WishlistService</code></p>
+      <p class="overview">No dedicated symbol docblock found; inherits file intent: Authenticated wishlist application service for read-model, add/replace mutations, and post-purchase sync.</p>
+      
+    </section>
+    <section class="symbol-card searchable" id="apps-api-src-services-wishlistservice-php-syncpurchaseditems" data-search="function syncPurchasedItems No descriptive summary was found for this symbol. public function syncPurchasedItems(int $customerId, array $purchasedItems): array param array&lt;int, array{productId:string, quantity:int}&gt; $purchasedItems return array&lt;string,mixed&gt;">
+      <div class="symbol-head">
+        <div>
+          <p class="eyebrow">function · line 113</p>
+          <h4><code>syncPurchasedItems</code></h4>
+        </div>
+        <a class="anchor-link" href="#apps-api-src-services-wishlistservice-php-syncpurchaseditems">#</a>
+      </div>
+      <p class="symbol-signature"><code>public function syncPurchasedItems(int $customerId, array $purchasedItems): array</code></p>
+      <p class="overview">No descriptive summary was found for this symbol.</p>
+      <details class="tags-block"><summary>Doc tags</summary><ul><li><code>@param</code> array&lt;int, array{productId:string, quantity:int}&gt; $purchasedItems</li><li><code>@return</code> array&lt;string,mixed&gt;</li></ul></details>
     </section></div>
               </div>
             </article>

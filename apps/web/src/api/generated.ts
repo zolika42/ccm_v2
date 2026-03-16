@@ -19,6 +19,7 @@ import type {
   CheckoutState,
   CheckoutSubmission,
   LibraryState,
+  WishlistState,
   Product,
 } from '../types';
 import { requestEnvelope, requestText, type RequestOptions } from './runtime';
@@ -118,6 +119,22 @@ export class GeneratedApiClient {
 
   async getLibraryDownload(productId: string, options: RequestOptions = {}): Promise<string> {
     return requestText('GET', `/library/${encodeURIComponent(productId)}/download`, { options: options });
+  }
+
+  async getWishlist(options: RequestOptions = {}): Promise<ApiEnvelope<WishlistState>> {
+    return requestEnvelope<WishlistState>('GET', `/wishlist`, { options: { ...options, allowStatuses: [401] } });
+  }
+
+  async addWishlistItem(body: { productId: string; quantity?: number }, options: RequestOptions = {}): Promise<ApiEnvelope<WishlistState>> {
+    return requestEnvelope<WishlistState>('POST', `/wishlist/items`, { body, options: { ...options, allowStatuses: [401, 422] } });
+  }
+
+  async replaceWishlistItem(productId: string, body: { quantity: number }, options: RequestOptions = {}): Promise<ApiEnvelope<WishlistState>> {
+    return requestEnvelope<WishlistState>('PATCH', `/wishlist/items/${encodeURIComponent(productId)}`, { body, options: { ...options, allowStatuses: [401, 422] } });
+  }
+
+  async removeWishlistItem(productId: string, options: RequestOptions = {}): Promise<ApiEnvelope<WishlistState>> {
+    return requestEnvelope<WishlistState>('DELETE', `/wishlist/items/${encodeURIComponent(productId)}`, { options: { ...options, allowStatuses: [401] } });
   }
 }
 

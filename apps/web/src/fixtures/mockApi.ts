@@ -15,6 +15,7 @@ import type {
   CheckoutState,
   LibraryState,
   Product,
+  WishlistState,
 } from '../types';
 
 const USER: AuthUser = {
@@ -149,6 +150,58 @@ const CART: Cart = {
     shippableSubtotalFormatted: '59.99',
   },
 };
+
+const FIXTURE_WISHLIST_SEED: WishlistState = {
+  customerId: USER.customerId,
+  customerEmail: USER.email,
+  customerName: USER.name,
+  items: [
+    {
+      productId: 'CG-ATLAS',
+      description: 'Atlas Carrier Fleet',
+      quantity: 2,
+      price: '$59.99',
+      category: 'Miniatures',
+      subCategory: 'Space Fleets',
+      subCategory2: 'Carriers',
+      status: 'Active',
+      isDownloadable: false,
+      preorder: null,
+      releaseDate: '2025-11-04',
+    },
+    {
+      productId: 'CG-ORBIT',
+      description: 'Orbit Siege Command Pack',
+      quantity: 1,
+      price: '$34.50',
+      category: 'Board Games',
+      subCategory: 'Starter Sets',
+      subCategory2: 'Intro Boxes',
+      status: 'Active',
+      isDownloadable: false,
+      preorder: 1,
+      releaseDate: '2025-08-09',
+    },
+  ],
+  meta: {
+    count: 2,
+    totalQuantity: 3,
+    downloadableCount: 0,
+    hasItems: true,
+    categories: ['Miniatures', 'Board Games'],
+    legacyRelation: 'Fixture mirrors real_wishlists keyed by authenticated customer id.',
+  },
+};
+
+let fixtureWishlistState: WishlistState = clone(FIXTURE_WISHLIST_SEED);
+
+function rebuildWishlistMeta(state: WishlistState) {
+  state.meta.count = state.items.length;
+  state.meta.totalQuantity = state.items.reduce((sum, item) => sum + item.quantity, 0);
+  state.meta.downloadableCount = state.items.filter((item) => item.isDownloadable).length;
+  state.meta.hasItems = state.items.length > 0;
+  state.meta.categories = Array.from(new Set(state.items.map((item) => item.category).filter(Boolean)));
+}
 
 const DRAFT: CheckoutDraft = {
   shipName: 'Alex Fixture',
@@ -423,19 +476,126 @@ export async function validateCheckout(_draft: Partial<CheckoutDraft>) {
 }
 
 export async function submitCheckout(_draft: Partial<CheckoutDraft>) {
-  return {
-    ok: false,
-    data: null as unknown as { checkout: CheckoutState; submission: null },
-    meta: meta('/checkout/submit'),
-    error: {
-      code: 'validation_error',
-      message: 'Checkout validation failed.',
-      details: {
-        checkout: checkoutState(),
-        submission: null,
+  if (!signedIn()) {
+    return {
+      ok: false,
+      data: null as unknown as { checkout: CheckoutState; submission: null },
+      meta: meta('/checkout/submit'),
+      error: {
+        code: 'unauthorized',
+        message: 'Not authenticated.',
+        details: {
+          checkout: checkoutState(),
+          submission: null,
+        },
       },
+    };
+  }
+
+  return ok('/checkout/submit', {
+    checkout: { ...checkoutState(), cart: { ...clone(CART), items: [], summary: { ...clone(CART.summary), itemCount: 0, uniqueItemCount: 0, hasItems: false, subtotal: 0, subtotalFormatted: '0.00', downloadableItemCount: 0, shippableSubtotal: 0, shippableSubtotalFormatted: '0.00' } } },
+    submission: {
+      orderId: 'FIXTURE-SUBMIT-2001',
+      customerId: USER.customerId,
+      paymentType: 'visa',
+      pointsApplied: 25,
+      store: {
+        customerId: USER.customerId,
+        pointsBefore: 180,
+        pointsAfter: 155,
+        recordedItemCount: 2,
+        recordedItems: [
+          { productId: 'CG-ATLAS', quantity: 1 },
+          { productId: 'CG-NEBULA', quantity: 2 },
+        ],
+      },
+      legacyOrder: {
+        orderId: 'FIXTURE-SUBMIT-2001',
+        browserId: CART.browserId,
+        storage: CART.storage,
+        quantities: { 'CG-ATLAS': 1, 'CG-NEBULA': 2 },
+        summary: {
+          paidLineCount: 2,
+          discountableTotal: 99.97,
+          downloadableSubtotal: 39.98,
+          shippableSubtotal: 59.99,
+          totalItemCount: 3,
+          uniqueItemCount: 2,
+          downloadableItemCount: 2,
+          nonDownloadableItemCount: 1,
+        },
+        legacyContext: { merchantId: 'cg', configId: 'default' },
+      },
+      wishlist: {
+        trigger: 'post_purchase_sync',
+        beforeCount: 2,
+        afterCount: 1,
+        updatedItems: [
+          { productId: 'CG-ATLAS', beforeQuantity: 2, purchasedQuantity: 1, afterQuantity: 1, action: 'decremented' },
+        ],
+        removedProductIds: [],
+      },
+      postSubmitCart: { ...clone(CART), items: [], summary: { ...clone(CART.summary), itemCount: 0, uniqueItemCount: 0, hasItems: false, subtotal: 0, subtotalFormatted: '0.00', downloadableItemCount: 0, shippableSubtotal: 0, shippableSubtotalFormatted: '0.00' } },
     },
-  };
+  });
+}
+
+export async function getWishlist() {
+  if (!signedIn()) return unauthorized<WishlistState>('/wishlist');
+  return ok('/wishlist', clone(fixtureWishlistState));
+}
+
+export async function addWishlistItem(productId: string, quantity = 1) {
+  if (!signedIn()) return unauthorized<WishlistState>('/wishlist/items');
+  const current = clone(fixtureWishlistState);
+  const existing = current.items.find((item) => item.productId === productId);
+  if (existing) {
+    existing.quantity += quantity;
+  } else {
+    const product = PRODUCTS.find((item) => item.productId === productId) ?? PRODUCTS[0];
+    current.items.push({
+      productId: product.productId,
+      description: product.description,
+      quantity,
+      price: product.price,
+      category: product.category,
+      subCategory: product.subCategory,
+      subCategory2: product.subCategory2,
+      status: product.status,
+      isDownloadable: product.isDownloadable,
+      downloadableFilename: product.downloadableFilename,
+      preorder: product.preorder ?? null,
+      releaseDate: product.releaseDate,
+    });
+  }
+  rebuildWishlistMeta(current);
+  current.lastMutation = { action: 'add', productId, quantity };
+  fixtureWishlistState = clone(current);
+  return ok('/wishlist/items', current);
+}
+
+export async function replaceWishlistItem(productId: string, quantity: number) {
+  if (!signedIn()) return unauthorized<WishlistState>(`/wishlist/items/${productId}`);
+  const current = clone(fixtureWishlistState);
+  const existing = current.items.find((item) => item.productId === productId);
+  if (existing) {
+    existing.quantity = quantity;
+  }
+  current.items = current.items.filter((item) => item.quantity > 0);
+  rebuildWishlistMeta(current);
+  current.lastMutation = { action: 'replace', productId, quantity };
+  fixtureWishlistState = clone(current);
+  return ok(`/wishlist/items/${productId}`, current);
+}
+
+export async function removeWishlistItem(productId: string) {
+  if (!signedIn()) return unauthorized<WishlistState>(`/wishlist/items/${productId}`);
+  const current = clone(fixtureWishlistState);
+  current.items = current.items.filter((item) => item.productId !== productId);
+  rebuildWishlistMeta(current);
+  current.lastMutation = { action: 'remove', productId, quantity: 0 };
+  fixtureWishlistState = clone(current);
+  return ok(`/wishlist/items/${productId}`, current);
 }
 
 export async function getLibrary() {

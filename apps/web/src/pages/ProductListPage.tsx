@@ -7,6 +7,7 @@ import { Link } from 'react-router-dom';
 import { addCartItem, getCatalogCategories, listProducts } from '../api/client';
 import { useCart } from '../cart/CartContext';
 import type { CatalogCategory, CatalogSubCategory, CatalogSubCategory2, Product } from '../types';
+import { useWishlist } from '../wishlist/WishlistContext';
 
 const PAGE_SIZE = 30;
 
@@ -48,6 +49,7 @@ export function ProductListPage() {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalProducts, setTotalProducts] = useState(0);
   const { refresh } = useCart();
+  const { isInWishlist, isBusy: isWishlistBusy, toggleWishlist } = useWishlist();
 
   const totalPages = Math.max(1, Math.ceil(totalProducts / PAGE_SIZE));
   const pageWindow = useMemo(() => {
@@ -149,6 +151,25 @@ export function ProductListPage() {
       setError(err instanceof Error ? err.message : 'Failed to add item');
     } finally {
       setBusyProductId(null);
+    }
+  }
+
+
+  async function handleToggleWishlist(productId: string) {
+    setMessage(null);
+    setError(null);
+
+
+    try {
+      const result = await toggleWishlist(productId, 1);
+      if (result.needsLogin) {
+        setError('Please log in to manage wishlist items.');
+        return;
+      }
+
+      setMessage(result.active ? `${productId} saved to wishlist.` : `${productId} removed from wishlist.`);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to update wishlist item');
     }
   }
 
@@ -334,6 +355,9 @@ export function ProductListPage() {
       <div className="product-grid">
         {products.map((product) => {
           const ownedLabel = customerStateLabel(product);
+          const wishlisted = isInWishlist(product.productId);
+          const wishlistBusy = isWishlistBusy(product.productId);
+
           return (
             <article className="product-card" key={product.productId}>
               <div className="product-meta">{categoryTrail(product)}</div>
@@ -351,6 +375,15 @@ export function ProductListPage() {
                 <Link to={`/products/${encodeURIComponent(product.productId)}`}>Open</Link>
                 <button type="button" disabled={busyProductId === product.productId} onClick={() => void handleAddToCart(product.productId)}>
                   {busyProductId === product.productId ? 'Adding…' : 'Add to cart'}
+                </button>
+                <button
+                  type="button"
+                  className={`button-secondary wishlist-toggle${wishlisted ? ' is-active' : ''}`}
+                  aria-pressed={wishlisted}
+                  disabled={wishlistBusy}
+                  onClick={() => void handleToggleWishlist(product.productId)}
+                >
+                  {wishlistBusy ? 'Saving…' : wishlisted ? '♥ Wishlisted' : '♡ Wishlist'}
                 </button>
               </div>
             </article>

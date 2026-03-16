@@ -17,6 +17,7 @@ Run this after `make legacy-refresh` and before merging major rewrite changes.
 - Open `/checkout`
 - Confirm checkout clearly says guest checkout is disabled and login is required
 - Open `/library` and confirm login prompt/error
+- Open `/wishlist` and confirm login prompt/error
 
 ### 2. New customer registration
 - Open `/login`
@@ -53,6 +54,11 @@ Run this after `make legacy-refresh` and before merging major rewrite changes.
 - Confirm cart is cleared
 
 ### 7. Library flow
+- Open `/wishlist`
+- Confirm wishlist summary appears for the authenticated customer and shows saved quantities
+- Add a product to wishlist from `/products` or a PDP and confirm it appears in `/wishlist` (CG-223)
+- Change a wishlist quantity on `/wishlist`, save it, and confirm the updated quantity persists (CG-223)
+- Submit a purchase that overlaps the wishlist and confirm the checkout success block reports the wishlist side-effect (CG-224)
 - Open `/library`
 - Confirm owned downloads list appears
 - Catalog parity spot-check (CG-200): open Products, pick a category + subcategory + third-level `sub_category2`, and verify the list narrows correctly.

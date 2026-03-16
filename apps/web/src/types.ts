@@ -300,6 +300,62 @@ export type CheckoutState = {
   };
 };
 
+
+export type WishlistItem = {
+  productId: string;
+  description: string;
+  quantity: number;
+  price: string;
+  category: string;
+  subCategory: string;
+  subCategory2?: string;
+  image?: string;
+  status?: string;
+  isDownloadable: boolean;
+  downloadableFilename?: string;
+  preorder?: number | null;
+  releaseDate?: string;
+};
+
+export type WishlistMutation = {
+  action: 'add' | 'replace' | 'remove';
+  productId: string;
+  quantity: number;
+  productDescription?: string;
+};
+
+export type WishlistPurchaseSyncItem = {
+  productId: string;
+  beforeQuantity: number;
+  purchasedQuantity: number;
+  afterQuantity: number;
+  action: string;
+};
+
+export type WishlistPurchaseSync = {
+  trigger: string;
+  beforeCount: number;
+  afterCount: number;
+  updatedItems: WishlistPurchaseSyncItem[];
+  removedProductIds: string[];
+};
+
+export type WishlistState = {
+  customerId: number;
+  customerEmail: string;
+  customerName: string;
+  items: WishlistItem[];
+  meta: {
+    count: number;
+    totalQuantity: number;
+    downloadableCount: number;
+    hasItems: boolean;
+    categories: string[];
+    legacyRelation: string;
+  };
+  lastMutation?: WishlistMutation;
+};
+
 export type LibraryItem = {
   productId: string;
   description: string;
@@ -358,6 +414,7 @@ export type CheckoutSubmission = {
       configId: string;
     };
   };
+  wishlist: WishlistPurchaseSync;
   postSubmitCart: Cart;
 };
 

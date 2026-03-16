@@ -1,7 +1,7 @@
 # Developer Handbook
 
 > Generated automatically by `scripts/docs/generate-docs.mjs`. Do not hand-edit this file; update the generator instead.
-> Generated at: 2026-03-16T15:39:38.009Z
+> Generated at: 2026-03-16T16:33:25.800Z
 
 ## 1. What this repo is
 
@@ -185,6 +185,10 @@ The frontend must not hand-roll raw fetch calls for project endpoints anymore. T
 - `POST /checkout/submit` → `submitCheckout`
 - `GET /library` → `getLibrary`
 - `GET /library/{productId}/download` → `getLibraryDownload`
+- `GET /wishlist` → `getWishlist`
+- `POST /wishlist/items` → `addWishlistItem`
+- `PATCH /wishlist/items/{productId}` → `replaceWishlistItem`
+- `DELETE /wishlist/items/{productId}` → `removeWishlistItem`
 
 ### Rule of thumb
 - Change backend route/shape? Update OpenAPI first.

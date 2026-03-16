@@ -11,17 +11,20 @@ use ColumbiaGames\Api\Controllers\CatalogController;
 use ColumbiaGames\Api\Controllers\CartController;
 use ColumbiaGames\Api\Controllers\CheckoutController;
 use ColumbiaGames\Api\Controllers\LibraryController;
+use ColumbiaGames\Api\Controllers\WishlistController;
 use ColumbiaGames\Api\Database\ConnectionFactory;
 use ColumbiaGames\Api\Repositories\CartRepository;
 use ColumbiaGames\Api\Repositories\CheckoutRepository;
 use ColumbiaGames\Api\Repositories\CustomerRepository;
 use ColumbiaGames\Api\Repositories\LibraryRepository;
 use ColumbiaGames\Api\Repositories\ProductRepository;
+use ColumbiaGames\Api\Repositories\WishlistRepository;
 use ColumbiaGames\Api\Services\AuthService;
 use ColumbiaGames\Api\Services\CartService;
 use ColumbiaGames\Api\Services\CatalogService;
 use ColumbiaGames\Api\Services\CheckoutService;
 use ColumbiaGames\Api\Services\LibraryService;
+use ColumbiaGames\Api\Services\WishlistService;
 use ColumbiaGames\Api\Support\ApiLogger;
 use ColumbiaGames\Api\Support\Cors;
 use ColumbiaGames\Api\Support\JsonResponse;
@@ -50,17 +53,20 @@ $productRepository = new ProductRepository($connections->store());
 $cartRepository = new CartRepository($connections->ccm(), $productRepository);
 $checkoutRepository = new CheckoutRepository($connections->ccm(), $connections->store());
 $libraryRepository = new LibraryRepository($connections->store());
+$wishlistRepository = new WishlistRepository($connections->store());
 $authService = new AuthService($customerRepository);
 $catalogService = new CatalogService($productRepository);
 $cartService = new CartService($cartRepository, $productRepository);
-$checkoutService = new CheckoutService($cartRepository, $checkoutRepository, $customerRepository);
+$checkoutService = new CheckoutService($cartRepository, $checkoutRepository, $customerRepository, $wishlistRepository);
 $libraryService = new LibraryService($libraryRepository);
+$wishlistService = new WishlistService($wishlistRepository, $productRepository);
 
 $authController = new AuthController($authService);
 $catalogController = new CatalogController($catalogService);
 $cartController = new CartController($cartService);
 $checkoutController = new CheckoutController($checkoutService);
 $libraryController = new LibraryController($libraryService);
+$wishlistController = new WishlistController($wishlistService);
 
 $router->get('/health', function () use ($connections): void {
     JsonResponse::success([
@@ -104,5 +110,10 @@ $router->post('/checkout/submit', [$checkoutController, 'submit']);
 
 $router->get('/library', [$libraryController, 'index']);
 $router->get('/library/{productId}/download', [$libraryController, 'download']);
+
+$router->get('/wishlist', [$wishlistController, 'index']);
+$router->post('/wishlist/items', [$wishlistController, 'addItem']);
+$router->patch('/wishlist/items/{productId}', [$wishlistController, 'replaceItem']);
+$router->delete('/wishlist/items/{productId}', [$wishlistController, 'removeItem']);
 
 $router->dispatch($request);

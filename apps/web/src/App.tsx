@@ -9,6 +9,7 @@ import { CartPage } from './pages/CartPage';
 import { CheckoutPage } from './pages/CheckoutPage';
 import { LibraryPage } from './pages/LibraryPage';
 import { LoginPage } from './pages/LoginPage';
+import { WishlistPage } from './pages/WishlistPage';
 import { ProductDetailPage } from './pages/ProductDetailPage';
 import { ProductListPage } from './pages/ProductListPage';
 
@@ -48,6 +49,7 @@ export function App() {
             <Link to="/products">Products</Link>
             <Link to="/cart"><CartLinkLabel /></Link>
             <Link to="/checkout">Checkout</Link>
+            <Link to="/wishlist">Wishlist</Link>
             <Link to="/library">Library</Link>
             <Link to="/login">Account</Link>
             </nav>
@@ -61,6 +63,7 @@ export function App() {
           <Route path="/products/:productId" element={<ProductDetailPage />} />
           <Route path="/cart" element={<CartPage />} />
           <Route path="/checkout" element={<CheckoutPage />} />
+          <Route path="/wishlist" element={<WishlistPage />} />
           <Route path="/library" element={<LibraryPage />} />
           <Route path="/login" element={<LoginPage />} />
         </Routes>

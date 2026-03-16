@@ -12,6 +12,7 @@ import type {
   PasswordResetPayload,
   ProfileUpdatePayload,
   RegistrationPayload,
+  WishlistState,
 } from '../types';
 import * as mockApi from '../fixtures/mockApi';
 import { generatedApiClient } from './generated';
@@ -123,6 +124,22 @@ export async function submitCheckout(draft: Partial<CheckoutDraft>) {
 
 export async function getLibrary() {
   return USE_FIXTURE_API ? mockApi.getLibrary() : generatedApiClient.getLibrary();
+}
+
+export async function getWishlist() {
+  return USE_FIXTURE_API ? mockApi.getWishlist() : generatedApiClient.getWishlist();
+}
+
+export async function addWishlistItem(productId: string, quantity = 1) {
+  return USE_FIXTURE_API ? mockApi.addWishlistItem(productId, quantity) : generatedApiClient.addWishlistItem({ productId, quantity });
+}
+
+export async function replaceWishlistItem(productId: string, quantity: number) {
+  return USE_FIXTURE_API ? mockApi.replaceWishlistItem(productId, quantity) : generatedApiClient.replaceWishlistItem(productId, { quantity });
+}
+
+export async function removeWishlistItem(productId: string) {
+  return USE_FIXTURE_API ? mockApi.removeWishlistItem(productId) : generatedApiClient.removeWishlistItem(productId);
 }
 
 export { generatedApiClient };

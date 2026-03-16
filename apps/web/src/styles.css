@@ -516,3 +516,39 @@ label span {
 .library-meta-list {
   margin-top: 0.5rem;
 }
+
+.wishlist-grid {
+  display: grid;
+  gap: 1rem;
+}
+
+.wishlist-card {
+  background: #fff;
+  border: 1px solid #d7d2c8;
+  padding: 1rem;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.04);
+}
+
+.wishlist-card h3 {
+  margin: 0 0 0.35rem;
+}
+
+.wishlist-actions {
+  align-items: flex-end;
+}
+
+.compact-label {
+  width: 140px;
+}
+
+
+.wishlist-toggle {
+  min-width: 9.5rem;
+}
+
+.wishlist-toggle.is-active {
+  background: #7a1010;
+  color: #fff;
+  border-color: #7a1010;
+  font-weight: 700;
+}

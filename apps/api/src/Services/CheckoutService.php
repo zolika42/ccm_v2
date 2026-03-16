@@ -11,6 +11,7 @@ namespace ColumbiaGames\Api\Services;
 use ColumbiaGames\Api\Repositories\CartRepository;
 use ColumbiaGames\Api\Repositories\CheckoutRepository;
 use ColumbiaGames\Api\Repositories\CustomerRepository;
+use ColumbiaGames\Api\Repositories\WishlistRepository;
 use ColumbiaGames\Api\Support\ApiLogger;
 use ColumbiaGames\Api\Support\SessionAuth;
 
@@ -22,6 +23,7 @@ final class CheckoutService
         private readonly CartRepository $carts,
         private readonly CheckoutRepository $checkout,
         private readonly CustomerRepository $customers,
+        private readonly WishlistRepository $wishlists,
     ) {
     }
 
@@ -98,6 +100,13 @@ final class CheckoutService
         $this->carts->beginTransaction();
         try {
             $storeSubmission = $this->checkout->submitToLegacyStore((int) $customer['customerId'], $checkout['draft'], $cart);
+            $wishlistSideEffect = $this->wishlists->syncPurchasedItems(
+                (int) $customer['customerId'],
+                array_map(static fn (array $item): array => [
+                    'productId' => (string) ($item['productId'] ?? ''),
+                    'quantity' => (int) ($item['quantity'] ?? 0),
+                ], (array) ($storeSubmission['recordedItems'] ?? [])),
+            );
             $legacyOrder = $this->carts->submitOrderDraft(
                 $browserId,
                 $checkout['draft'],
@@ -110,7 +119,7 @@ final class CheckoutService
                 'browserId' => $browserId,
                 'customerId' => (int) ($customer['customerId'] ?? 0),
                 'orderId' => (string) ($storeSubmission['orderId'] ?? $legacyOrder['orderId'] ?? ''),
-                'recordedItemCount' => (int) (($storeSubmission['store']['recordedItemCount'] ?? 0)),
+                'recordedItemCount' => (int) (($storeSubmission['recordedItemCount'] ?? 0)),
             ]);
         } catch (\Throwable $e) {
             $this->checkout->rollBackStoreTransaction();
@@ -138,6 +147,13 @@ final class CheckoutService
                 'pointsApplied' => (int) ($checkout['draft']['pointsApplied'] ?? 0),
                 'store' => $storeSubmission,
                 'legacyOrder' => $legacyOrder,
+                'wishlist' => $wishlistSideEffect ?? [
+                    'trigger' => 'post_purchase_sync',
+                    'beforeCount' => 0,
+                    'afterCount' => 0,
+                    'updatedItems' => [],
+                    'removedProductIds' => [],
+                ],
                 'postSubmitCart' => $postCart,
             ],
         ];

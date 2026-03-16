@@ -263,6 +263,39 @@ components:
     LibraryState:
       type: object
       additionalProperties: true
+    WishlistItem:
+      type: object
+      properties:
+        productId:
+          type: string
+        description:
+          type: string
+        quantity:
+          type: integer
+        price:
+          type: string
+        category:
+          type: string
+        subCategory:
+          type: string
+        subCategory2:
+          type: string
+        image:
+          type: string
+        status:
+          type: string
+        isDownloadable:
+          type: boolean
+        downloadableFilename:
+          type: string
+        preorder:
+          type: integer
+          nullable: true
+        releaseDate:
+          type: string
+    WishlistState:
+      type: object
+      additionalProperties: true
 paths:
   /health:
     get:
@@ -312,7 +345,7 @@ paths:
           application/json:
             schema:
               type: object
-              required: [email, name, password]
+              required: [email, password]
               properties:
                 email:
                   type: string
@@ -587,3 +620,67 @@ paths:
           description: Product is not owned or file missing
         '409':
           description: File mapping is unsafe or unavailable
+
+  /wishlist:
+    get:
+      operationId: getWishlist
+      summary: Authenticated wishlist summary/read model
+      responses:
+        '200':
+          description: Wishlist summary
+        '401':
+          description: Not authenticated
+
+  /wishlist/items:
+    post:
+      operationId: addWishlistItem
+      summary: Add or increment a wishlist item
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [productId]
+              properties:
+                productId:
+                  type: string
+                quantity:
+                  type: integer
+      responses:
+        '200':
+          description: Wishlist updated
+        '401':
+          description: Not authenticated
+        '422':
+          description: Validation error
+
+  /wishlist/items/{productId}:
+    patch:
+      operationId: replaceWishlistItem
+      summary: Replace/update a wishlist item quantity
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [quantity]
+              properties:
+                quantity:
+                  type: integer
+      responses:
+        '200':
+          description: Wishlist updated
+        '401':
+          description: Not authenticated
+        '422':
+          description: Validation error
+    delete:
+      operationId: removeWishlistItem
+      summary: Remove a wishlist item
+      responses:
+        '200':
+          description: Wishlist updated
+        '401':
+          description: Not authenticated

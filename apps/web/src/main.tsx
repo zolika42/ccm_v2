@@ -8,6 +8,7 @@ import { App } from './App';
 import { AuthProvider } from './auth/AuthContext';
 import { CartProvider } from './cart/CartContext';
 import { CatalogProvider } from './catalog/CatalogContext';
+import { WishlistProvider } from './wishlist/WishlistContext';
 import './styles.css';
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
@@ -15,9 +16,11 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
     <BrowserRouter>
       <AuthProvider>
         <CatalogProvider>
-          <CartProvider>
-            <App />
-          </CartProvider>
+          <WishlistProvider>
+            <CartProvider>
+              <App />
+            </CartProvider>
+          </WishlistProvider>
         </CatalogProvider>
       </AuthProvider>
     </BrowserRouter>

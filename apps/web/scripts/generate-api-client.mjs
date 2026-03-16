@@ -48,6 +48,10 @@ const operationConfig = {
   },
   getLibrary: { responseType: 'LibraryState', allowStatuses: [401] },
   getLibraryDownload: { responseType: 'string', rawText: true, pathParams: [{ name: 'productId', type: 'string' }] },
+  getWishlist: { responseType: 'WishlistState', allowStatuses: [401] },
+  addWishlistItem: { responseType: 'WishlistState', bodyType: '{ productId: string; quantity?: number }', allowStatuses: [401, 422] },
+  replaceWishlistItem: { responseType: 'WishlistState', pathParams: [{ name: 'productId', type: 'string' }], bodyType: '{ quantity: number }', allowStatuses: [401, 422] },
+  removeWishlistItem: { responseType: 'WishlistState', pathParams: [{ name: 'productId', type: 'string' }], allowStatuses: [401] },
 };
 
 function parseOperations(yaml) {
@@ -143,6 +147,7 @@ import type {
   CheckoutState,
   CheckoutSubmission,
   LibraryState,
+  WishlistState,
   Product,
 } from '../types';
 import { requestEnvelope, requestText, type RequestOptions } from './runtime';

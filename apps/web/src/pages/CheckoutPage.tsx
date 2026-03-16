@@ -152,8 +152,21 @@ export function CheckoutPage() {
                 <li>Recorded items: {submission.store.recordedItemCount}</li>
                 <li>Points: {submission.store.pointsBefore} → {submission.store.pointsAfter}</li>
                 <li>Payment type snapshot: {submission.paymentType || 'free'}</li>
+                <li>Wishlist sync: {submission.wishlist.beforeCount} → {submission.wishlist.afterCount} item(s)</li>
                 <li>Post-submit cart items: {submission.postSubmitCart.summary.itemCount}</li>
               </ul>
+              {submission.wishlist.updatedItems.length > 0 ? (
+                <div className="result-card compact-copy">
+                  <strong>Wishlist side-effect</strong>
+                  <ul className="bullet-list compact-list">
+                    {submission.wishlist.updatedItems.map((item) => (
+                      <li key={item.productId}>
+                        <code>{item.productId}</code>: {item.beforeQuantity} → {item.afterQuantity} after purchasing {item.purchasedQuantity} ({item.action})
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              ) : null}
             </div>
           )}
         </div>

@@ -7,6 +7,7 @@ import { Link, useParams } from 'react-router-dom';
 import { addCartItem, getProduct, getRelated } from '../api/client';
 import { useCart } from '../cart/CartContext';
 import type { Product } from '../types';
+import { useWishlist } from '../wishlist/WishlistContext';
 
 function categoryTrail(product: Product) {
   return [product.category, product.subCategory, product.subCategory2].filter(Boolean).join(' / ');
@@ -45,6 +46,7 @@ export function ProductDetailPage() {
   const [message, setMessage] = useState<string | null>(null);
   const [adding, setAdding] = useState(false);
   const { refresh } = useCart();
+  const { isInWishlist, isBusy: isWishlistBusy, toggleWishlist } = useWishlist();
 
   useEffect(() => {
     async function load() {
@@ -62,6 +64,26 @@ export function ProductDetailPage() {
 
     void load();
   }, [productId]);
+
+
+  async function handleToggleWishlist() {
+    if (!product) return;
+
+    setMessage(null);
+    setError(null);
+
+    try {
+      const result = await toggleWishlist(product.productId, quantity);
+      if (result.needsLogin) {
+        setError('Please log in to manage wishlist items.');
+        return;
+      }
+
+      setMessage(result.active ? `${product.productId} saved to wishlist.` : `${product.productId} removed from wishlist.`);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to update wishlist item');
+    }
+  }
 
   async function handleAddToCart() {
     if (!product) return;
@@ -84,6 +106,8 @@ export function ProductDetailPage() {
 
   const ownedLabel = customerStateLabel(product);
   const thirdPartyImage = mediaUrl(product.thirdParty?.image || product.thirdParty?.thumbnail);
+  const wishlisted = isInWishlist(product.productId);
+  const wishlistBusy = isWishlistBusy(product.productId);
 
   return (
     <section className="panel stack">
@@ -104,6 +128,15 @@ export function ProductDetailPage() {
             <input type="number" min={1} max={999} value={quantity} onChange={(e) => setQuantity(Math.max(1, Number(e.target.value) || 1))} />
           </label>
           <button type="button" disabled={adding} onClick={() => void handleAddToCart()}>{adding ? 'Adding…' : 'Add to cart'}</button>
+          <button
+            type="button"
+            className={`button-secondary wishlist-toggle${wishlisted ? ' is-active' : ''}`}
+            aria-pressed={wishlisted}
+            disabled={wishlistBusy}
+            onClick={() => void handleToggleWishlist()}
+          >
+            {wishlistBusy ? 'Saving…' : wishlisted ? '♥ Wishlisted' : '♡ Wishlist'}
+          </button>
         </div>
         {message && <p className="success">{message}</p>}
         <div className="badges">
