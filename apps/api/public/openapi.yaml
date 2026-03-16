@@ -72,6 +72,50 @@ components:
           type: string
         points:
           type: integer
+        shipPhone:
+          type: string
+        shipStreet:
+          type: string
+        shipStreet2:
+          type: string
+        shipCity:
+          type: string
+        shipState:
+          type: string
+        shipZip:
+          type: string
+        shipCountry:
+          type: string
+        billName:
+          type: string
+        billStreet:
+          type: string
+        billStreet2:
+          type: string
+        billCity:
+          type: string
+        billState:
+          type: string
+        billZip:
+          type: string
+        billCountry:
+          type: string
+        payCardType:
+          type: string
+        payCardMonth:
+          type: string
+        payCardYear:
+          type: string
+        payCardName:
+          type: string
+        payCardLast4:
+          type: string
+        authPersistence:
+          type: string
+        browserId:
+          oneOf:
+            - type: string
+            - type: 'null'
     Product:
       type: object
       properties:
@@ -146,6 +190,9 @@ components:
     CheckoutState:
       type: object
       additionalProperties: true
+    PasswordRecoveryPolicy:
+      type: object
+      additionalProperties: true
     LibraryState:
       type: object
       additionalProperties: true
@@ -180,11 +227,39 @@ paths:
                   type: string
                 password:
                   type: string
+                rememberMe:
+                  type: boolean
       responses:
         '200':
           description: Logged in
         '401':
           description: Invalid credentials
+
+  /auth/register:
+    post:
+      operationId: register
+      summary: Create a new legacy-compatible customer account
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [email, password]
+              properties:
+                email:
+                  type: string
+                name:
+                  type: string
+                password:
+                  type: string
+                rememberMe:
+                  type: boolean
+      responses:
+        '201':
+          description: Customer created
+        '409':
+          description: Customer already exists
   /auth/logout:
     post:
       operationId: logout
@@ -201,6 +276,32 @@ paths:
           description: Current user profile
         '401':
           description: Not authenticated
+
+  /auth/profile:
+    put:
+      operationId: updateProfile
+      summary: Update the authenticated customer profile
+      responses:
+        '200':
+          description: Updated profile
+        '401':
+          description: Not authenticated
+  /auth/password/reset:
+    post:
+      operationId: resetPassword
+      summary: Change the authenticated customer's legacy password
+      responses:
+        '200':
+          description: Password changed
+        '401':
+          description: Current password invalid or missing auth
+  /auth/password/recovery-policy:
+    get:
+      operationId: getPasswordRecoveryPolicy
+      summary: Current recovery/reset policy audit result
+      responses:
+        '200':
+          description: Policy details
   /catalog/categories:
     get:
       operationId: getCatalogCategories

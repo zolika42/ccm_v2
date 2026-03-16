@@ -13,9 +13,13 @@ const outputPath = path.resolve(__dirname, '../src/api/generated.ts');
 const operationConfig = {
   getHealth: { responseType: 'Record<string, unknown>' },
   getOpenapi: { responseType: 'string', rawText: true },
-  login: { responseType: '{ user: AuthUser }', bodyType: '{ email: string; password: string }' },
+  login: { responseType: '{ user: AuthUser }', bodyType: '{ email: string; password: string; rememberMe?: boolean }' },
+  register: { responseType: '{ user: AuthUser }', bodyType: 'RegistrationPayload' },
   logout: { responseType: '{ loggedOut: boolean }' },
   me: { responseType: '{ user: AuthUser }' },
+  updateProfile: { responseType: '{ user: AuthUser }', bodyType: 'ProfileUpdatePayload' },
+  resetPassword: { responseType: '{ changed: boolean; recoveryPolicy: { legacyForgotPasswordAvailable: boolean; emailDependencyVerified: boolean; implementedPath: string } }', bodyType: 'PasswordResetPayload' },
+  getPasswordRecoveryPolicy: { responseType: '{ policy: PasswordRecoveryPolicy }' },
   getCatalogCategories: {
     responseType: '{ categories: CatalogCategory[]; meta: { categoryCount: number; subCategoryCount: number } }',
   },
@@ -60,7 +64,7 @@ function parseOperations(yaml) {
       continue;
     }
 
-    const methodMatch = line.match(/^    (get|post|patch|delete):\s*$/);
+    const methodMatch = line.match(/^    (get|post|put|patch|delete):\s*$/);
     if (methodMatch && currentPath) {
       currentMethod = methodMatch[1].toUpperCase();
       continue;
@@ -127,6 +131,10 @@ const content = `/* eslint-disable */
 import type {
   ApiEnvelope,
   AuthUser,
+  PasswordRecoveryPolicy,
+  PasswordResetPayload,
+  ProfileUpdatePayload,
+  RegistrationPayload,
   Cart,
   CartIdentity,
   CartSummary,

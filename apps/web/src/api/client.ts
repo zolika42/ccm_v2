@@ -8,6 +8,10 @@ import type {
   CheckoutDraft,
   CheckoutSubmission,
   CheckoutState,
+  PasswordRecoveryPolicy,
+  PasswordResetPayload,
+  ProfileUpdatePayload,
+  RegistrationPayload,
 } from '../types';
 import * as mockApi from '../fixtures/mockApi';
 import { generatedApiClient } from './generated';
@@ -16,14 +20,37 @@ import { buildApiUrl } from './runtime';
 const USE_FIXTURE_API = import.meta.env.VITE_USE_FIXTURE_API === '1'
   || (typeof window !== 'undefined' && new URLSearchParams(window.location.search).get('fixtureApi') === '1');
 
-export async function login(email: string, password: string): Promise<AuthUser> {
-  const payload = USE_FIXTURE_API ? await mockApi.login(email) : await generatedApiClient.login({ email, password });
+export async function login(email: string, password: string, rememberMe = false): Promise<AuthUser> {
+  const payload = USE_FIXTURE_API
+    ? await mockApi.login(email, password, rememberMe)
+    : await generatedApiClient.login({ email, password, rememberMe });
   return payload.data.user;
+}
+
+export async function register(payload: RegistrationPayload): Promise<AuthUser> {
+  const response = USE_FIXTURE_API ? await mockApi.register(payload) : await generatedApiClient.register(payload);
+  return response.data.user;
 }
 
 export async function me(): Promise<AuthUser> {
   const payload = USE_FIXTURE_API ? await mockApi.me() : await generatedApiClient.me();
   return payload.data.user;
+}
+
+export async function updateProfile(payload: ProfileUpdatePayload): Promise<AuthUser> {
+  const response = USE_FIXTURE_API ? await mockApi.updateProfile(payload) : await generatedApiClient.updateProfile(payload);
+  return response.data.user;
+}
+
+export async function resetPassword(payload: PasswordResetPayload) {
+  return USE_FIXTURE_API ? mockApi.resetPassword(payload) : generatedApiClient.resetPassword(payload);
+}
+
+export async function getPasswordRecoveryPolicy(): Promise<PasswordRecoveryPolicy> {
+  const response = USE_FIXTURE_API
+    ? await mockApi.getPasswordRecoveryPolicy()
+    : await generatedApiClient.getPasswordRecoveryPolicy();
+  return response.data.policy;
 }
 
 export async function getCatalogCategories(): Promise<{ categories: CatalogCategory[]; meta: { categoryCount: number; subCategoryCount: number } }> {

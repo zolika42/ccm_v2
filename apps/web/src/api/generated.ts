@@ -7,6 +7,10 @@
 import type {
   ApiEnvelope,
   AuthUser,
+  PasswordRecoveryPolicy,
+  PasswordResetPayload,
+  ProfileUpdatePayload,
+  RegistrationPayload,
   Cart,
   CartIdentity,
   CartSummary,
@@ -28,8 +32,12 @@ export class GeneratedApiClient {
     return requestText('GET', `/openapi`, { options: options });
   }
 
-  async login(body: { email: string; password: string }, options: RequestOptions = {}): Promise<ApiEnvelope<{ user: AuthUser }>> {
+  async login(body: { email: string; password: string; rememberMe?: boolean }, options: RequestOptions = {}): Promise<ApiEnvelope<{ user: AuthUser }>> {
     return requestEnvelope<{ user: AuthUser }>('POST', `/auth/login`, { body, options: options });
+  }
+
+  async register(body: RegistrationPayload, options: RequestOptions = {}): Promise<ApiEnvelope<{ user: AuthUser }>> {
+    return requestEnvelope<{ user: AuthUser }>('POST', `/auth/register`, { body, options: options });
   }
 
   async logout(options: RequestOptions = {}): Promise<ApiEnvelope<{ loggedOut: boolean }>> {
@@ -38,6 +46,18 @@ export class GeneratedApiClient {
 
   async me(options: RequestOptions = {}): Promise<ApiEnvelope<{ user: AuthUser }>> {
     return requestEnvelope<{ user: AuthUser }>('GET', `/auth/me`, { options: options });
+  }
+
+  async updateProfile(body: ProfileUpdatePayload, options: RequestOptions = {}): Promise<ApiEnvelope<{ user: AuthUser }>> {
+    return requestEnvelope<{ user: AuthUser }>('PUT', `/auth/profile`, { body, options: options });
+  }
+
+  async resetPassword(body: PasswordResetPayload, options: RequestOptions = {}): Promise<ApiEnvelope<{ changed: boolean; recoveryPolicy: { legacyForgotPasswordAvailable: boolean; emailDependencyVerified: boolean; implementedPath: string } }>> {
+    return requestEnvelope<{ changed: boolean; recoveryPolicy: { legacyForgotPasswordAvailable: boolean; emailDependencyVerified: boolean; implementedPath: string } }>('POST', `/auth/password/reset`, { body, options: options });
+  }
+
+  async getPasswordRecoveryPolicy(options: RequestOptions = {}): Promise<ApiEnvelope<{ policy: PasswordRecoveryPolicy }>> {
+    return requestEnvelope<{ policy: PasswordRecoveryPolicy }>('GET', `/auth/password/recovery-policy`, { options: options });
   }
 
   async getCatalogCategories(options: RequestOptions = {}): Promise<ApiEnvelope<{ categories: CatalogCategory[]; meta: { categoryCount: number; subCategoryCount: number } }>> {

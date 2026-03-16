@@ -5,6 +5,10 @@ import type {
   ApiEnvelope,
   ApiMeta,
   AuthUser,
+  PasswordRecoveryPolicy,
+  PasswordResetPayload,
+  ProfileUpdatePayload,
+  RegistrationPayload,
   Cart,
   CatalogCategory,
   CheckoutDraft,
@@ -219,7 +223,10 @@ function checkoutState(): CheckoutState {
       : null,
     draft: clone(DRAFT),
     requirements: {
-      requiresLogin: !signedIn(),
+      requiresLogin: true,
+      guestCheckoutAllowed: false,
+      policy: 'login-required',
+      policyReason: 'legacy_submit_requires_customer_id',
       shippingRequired: true,
       paymentRequired: true,
       availablePaymentTypes: ['visa', 'mastercard', 'paypal'],
@@ -258,8 +265,35 @@ function checkoutState(): CheckoutState {
   };
 }
 
-export async function login(email: string) {
-  return ok('/auth/login', { user: { ...USER, email: email || USER.email } });
+export async function login(email: string, _password?: string, rememberMe = false) {
+  return ok('/auth/login', { user: { ...USER, email: email || USER.email, authPersistence: rememberMe ? 'remembered-session' : 'session', browserId: CART.browserId } });
+}
+
+export async function register(payload: RegistrationPayload) {
+  return ok('/auth/register', { user: { ...USER, ...payload, email: payload.email || USER.email, name: payload.name || USER.name, authPersistence: payload.rememberMe ? 'remembered-session' : 'session', browserId: CART.browserId } });
+}
+
+
+export async function updateProfile(payload: ProfileUpdatePayload) {
+  return ok('/auth/profile', { user: { ...USER, ...payload, authPersistence: 'session', browserId: CART.browserId } });
+}
+
+export async function resetPassword(_payload: PasswordResetPayload) {
+  return ok('/auth/password/reset', { changed: true, recoveryPolicy: { legacyForgotPasswordAvailable: false, emailDependencyVerified: false, implementedPath: 'authenticated-password-reset' } });
+}
+
+export async function getPasswordRecoveryPolicy() {
+  const policy: PasswordRecoveryPolicy = {
+    legacyForgotPasswordAvailable: false,
+    emailDependencyVerified: false,
+    passwordStorage: 'legacy-plaintext-column-customer_password',
+    implementedPath: 'authenticated-password-reset',
+    notes: [
+      'Fixture API mirrors the rewrite decision: no email-based recovery without verified legacy evidence.',
+      'Logged-in password rotation remains available.',
+    ],
+  };
+  return ok('/auth/password/recovery-policy', { policy });
 }
 
 export async function me() {

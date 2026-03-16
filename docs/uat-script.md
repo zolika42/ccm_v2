@@ -1,4 +1,4 @@
-# UAT Script (CG-193)
+# UAT Script (updated for CG-195..199)
 
 Run this after `make legacy-refresh` and before merging major rewrite changes.
 
@@ -14,14 +14,37 @@ Run this after `make legacy-refresh` and before merging major rewrite changes.
 - Open a PDP
 - Add an item to cart
 - Confirm `/cart` shows the item
+- Open `/checkout`
+- Confirm checkout clearly says guest checkout is disabled and login is required
 - Open `/library` and confirm login prompt/error
 
-### 2. Authenticated buyer
+### 2. New customer registration
+- Open `/login`
+- Create a new account with email and password (name optional)
+- Confirm the UI becomes authenticated immediately
+- Confirm `/auth/me` equivalent UI shows the new customer id/email/name
+- Refresh the page and confirm remembered-session behavior when enabled
+
+### 3. Authenticated buyer session
 - Log in with a known fixture customer
 - Confirm `/auth/me` equivalent UI looks correct
 - Confirm cart survives login state changes
+- Confirm auth persistence mode and browser id are visible in the account UI
 
-### 3. Purchase flow
+### 4. Profile / make changes
+- While authenticated, edit shipping/billing fields on `/login`
+- Save profile
+- Confirm the updated values stay on screen after save
+- Refresh session and confirm the same values are returned again
+
+### 5. Password reset policy
+- Open `/login`
+- Confirm the page shows that email-based forgot-password is intentionally unavailable
+- While authenticated, change the password through the authenticated reset form
+- Log out
+- Log back in with the new password
+
+### 6. Purchase flow
 - Add one product
 - Open `/checkout`
 - Validate with missing fields and confirm structured errors
@@ -29,12 +52,12 @@ Run this after `make legacy-refresh` and before merging major rewrite changes.
 - Confirm success state/order ID
 - Confirm cart is cleared
 
-### 4. Library flow
+### 7. Library flow
 - Open `/library`
 - Confirm owned downloads list appears
 - Click a download button for a mapped downloadable product
 - Confirm file stream or redirect works
 
-### 5. Regression
+### 8. Regression
 - Run `make smoke`
 - Confirm no request/response errors in API logs

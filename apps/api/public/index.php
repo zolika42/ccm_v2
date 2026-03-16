@@ -79,8 +79,12 @@ $router->get('/openapi', static function (): void {
 });
 
 $router->post('/auth/login', [$authController, 'login']);
+$router->post('/auth/register', [$authController, 'register']);
 $router->post('/auth/logout', [$authController, 'logout']);
 $router->get('/auth/me', [$authController, 'me']);
+$router->put('/auth/profile', [$authController, 'updateProfile']);
+$router->post('/auth/password/reset', [$authController, 'changePassword']);
+$router->get('/auth/password/recovery-policy', [$authController, 'passwordRecoveryPolicy']);
 
 $router->get('/catalog/categories', [$catalogController, 'categories']);
 $router->get('/catalog/products', [$catalogController, 'index']);

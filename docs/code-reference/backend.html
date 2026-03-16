@@ -175,7 +175,7 @@
                   </li>
                   <li>
                     <a href="#apps-api-src-repositories-customerrepository-php">CustomerRepository.php</a>
-                    <ul class="symbol-list"><li><a href="#apps-api-src-repositories-customerrepository-php-customerrepository">CustomerRepository</a></li></ul>
+                    <ul class="symbol-list"><li><a href="#apps-api-src-repositories-customerrepository-php-customerrepository">CustomerRepository</a></li><li><a href="#apps-api-src-repositories-customerrepository-php-profileparams">profileParams</a></li></ul>
                   </li>
                   <li>
                     <a href="#apps-api-src-repositories-libraryrepository-php">LibraryRepository.php</a>
@@ -270,7 +270,7 @@
             <article class="file-card searchable" id="apps-api-public-index-php" data-search="apps/api/public/index.php HTTP entrypoint: wires the request lifecycle, service container, routes, and top-level exception handling.   ColumbiaGames\Api\Controllers\AuthController ColumbiaGames\Api\Controllers\CatalogController ColumbiaGames\Api\Controllers\CartController ColumbiaGames\Api\Controllers\CheckoutController ColumbiaGames\Api\Controllers\LibraryController ColumbiaGames\Api\Database\ConnectionFactory ColumbiaGames\Api\Repositories\CartRepository ColumbiaGames\Api\Repositories\CheckoutRepository ColumbiaGames\Api\Repositories\CustomerRepository ColumbiaGames\Api\Repositories\LibraryRepository ColumbiaGames\Api\Repositories\ProductRepository ColumbiaGames\Api\Services\AuthService">
               <div class="card-head">
                 <div>
-                  <p class="eyebrow">PHP · 4.3 KB</p>
+                  <p class="eyebrow">PHP · 4.6 KB</p>
                   <h3><code>apps/api/public/index.php</code></h3>
                 </div>
                 <a class="anchor-link" href="#apps-api-public-index-php">#</a>
@@ -279,7 +279,7 @@
               <div class="meta-grid">
                 
                 <p><strong>Dependencies:</strong> <code>ColumbiaGames\Api\Controllers\AuthController</code>, <code>ColumbiaGames\Api\Controllers\CatalogController</code>, <code>ColumbiaGames\Api\Controllers\CartController</code>, <code>ColumbiaGames\Api\Controllers\CheckoutController</code>, <code>ColumbiaGames\Api\Controllers\LibraryController</code>, <code>ColumbiaGames\Api\Database\ConnectionFactory</code>, <code>ColumbiaGames\Api\Repositories\CartRepository</code>, <code>ColumbiaGames\Api\Repositories\CheckoutRepository</code>, <code>ColumbiaGames\Api\Repositories\CustomerRepository</code>, <code>ColumbiaGames\Api\Repositories\LibraryRepository</code>, <code>ColumbiaGames\Api\Repositories\ProductRepository</code>, <code>ColumbiaGames\Api\Services\AuthService</code></p>
-                <p class="muted tiny">Snapshot timestamp: 2026-03-16T06:22:10.000Z</p>
+                <p class="muted tiny">Snapshot timestamp: 2026-03-16T12:54:26.000Z</p>
               </div>
               <details>
                 <summary>Comment highlights</summary>
@@ -302,19 +302,19 @@
         </div>
         <div class="file-stack">
           
-            <article class="file-card searchable" id="apps-api-src-controllers-authcontroller-php" data-search="apps/api/src/Controllers/AuthController.php Controller for login/logout/session lookup endpoints. Keeps HTTP validation separate from auth business rules.  AuthController __construct login logout me ColumbiaGames\Api\Services\AuthService ColumbiaGames\Api\Support\JsonResponse ColumbiaGames\Api\Support\Request RuntimeException">
+            <article class="file-card searchable" id="apps-api-src-controllers-authcontroller-php" data-search="apps/api/src/Controllers/AuthController.php Controller for login/logout/session lookup endpoints. Keeps HTTP validation separate from auth business rules.  AuthController __construct login register logout me updateProfile changePassword passwordRecoveryPolicy ColumbiaGames\Api\Services\AuthService ColumbiaGames\Api\Support\CookieBridge ColumbiaGames\Api\Support\JsonResponse ColumbiaGames\Api\Support\Request DomainException RuntimeException">
               <div class="card-head">
                 <div>
-                  <p class="eyebrow">PHP · 1.5 KB</p>
+                  <p class="eyebrow">PHP · 8.4 KB</p>
                   <h3><code>apps/api/src/Controllers/AuthController.php</code></h3>
                 </div>
                 <a class="anchor-link" href="#apps-api-src-controllers-authcontroller-php">#</a>
               </div>
               <p class="overview">Controller for login/logout/session lookup endpoints. Keeps HTTP validation separate from auth business rules.</p>
               <div class="meta-grid">
-                <p><strong>Detected symbols:</strong> <code>AuthController</code>, <code>__construct</code>, <code>login</code>, <code>logout</code>, <code>me</code></p>
-                <p><strong>Dependencies:</strong> <code>ColumbiaGames\Api\Services\AuthService</code>, <code>ColumbiaGames\Api\Support\JsonResponse</code>, <code>ColumbiaGames\Api\Support\Request</code>, <code>RuntimeException</code></p>
-                <p class="muted tiny">Snapshot timestamp: 2026-03-16T06:22:10.000Z</p>
+                <p><strong>Detected symbols:</strong> <code>AuthController</code>, <code>__construct</code>, <code>login</code>, <code>register</code>, <code>logout</code>, <code>me</code>, <code>updateProfile</code>, <code>changePassword</code>, <code>passwordRecoveryPolicy</code></p>
+                <p><strong>Dependencies:</strong> <code>ColumbiaGames\Api\Services\AuthService</code>, <code>ColumbiaGames\Api\Support\CookieBridge</code>, <code>ColumbiaGames\Api\Support\JsonResponse</code>, <code>ColumbiaGames\Api\Support\Request</code>, <code>DomainException</code>, <code>RuntimeException</code></p>
+                <p class="muted tiny">Snapshot timestamp: 2026-03-16T13:30:07.000Z</p>
               </div>
               <details>
                 <summary>Comment highlights</summary>
@@ -329,7 +329,7 @@
     <section class="symbol-card searchable" id="apps-api-src-controllers-authcontroller-php-authcontroller" data-search="class AuthController No dedicated symbol docblock found; inherits file intent: Controller for login/logout/session lookup endpoints. Keeps HTTP validation separate from auth business rules. final class AuthController ">
       <div class="symbol-head">
         <div>
-          <p class="eyebrow">class · line 16</p>
+          <p class="eyebrow">class · line 18</p>
           <h4><code>AuthController</code></h4>
         </div>
         <a class="anchor-link" href="#apps-api-src-controllers-authcontroller-php-authcontroller">#</a>
@@ -924,19 +924,19 @@
     </section></div>
               </div>
             </article>
-            <article class="file-card searchable" id="apps-api-src-repositories-customerrepository-php" data-search="apps/api/src/Repositories/CustomerRepository.php Store-database customer lookups and customer profile persistence used by auth and checkout.  CustomerRepository __construct findByEmail findPublicProfileById findCheckoutProfileById PDO">
+            <article class="file-card searchable" id="apps-api-src-repositories-customerrepository-php" data-search="apps/api/src/Repositories/CustomerRepository.php Store-database customer lookups and customer profile persistence used by auth and checkout.  CustomerRepository __construct findByEmail emailExists findPublicProfileById findCheckoutProfileById createCustomer updateProfile updatePassword profileParams PDO">
               <div class="card-head">
                 <div>
-                  <p class="eyebrow">PHP · 1.8 KB</p>
+                  <p class="eyebrow">PHP · 8.4 KB</p>
                   <h3><code>apps/api/src/Repositories/CustomerRepository.php</code></h3>
                 </div>
                 <a class="anchor-link" href="#apps-api-src-repositories-customerrepository-php">#</a>
               </div>
               <p class="overview">Store-database customer lookups and customer profile persistence used by auth and checkout.</p>
               <div class="meta-grid">
-                <p><strong>Detected symbols:</strong> <code>CustomerRepository</code>, <code>__construct</code>, <code>findByEmail</code>, <code>findPublicProfileById</code>, <code>findCheckoutProfileById</code></p>
+                <p><strong>Detected symbols:</strong> <code>CustomerRepository</code>, <code>__construct</code>, <code>findByEmail</code>, <code>emailExists</code>, <code>findPublicProfileById</code>, <code>findCheckoutProfileById</code>, <code>createCustomer</code>, <code>updateProfile</code>, <code>updatePassword</code>, <code>profileParams</code></p>
                 <p><strong>Dependencies:</strong> <code>PDO</code></p>
-                <p class="muted tiny">Snapshot timestamp: 2026-03-16T06:22:10.000Z</p>
+                <p class="muted tiny">Snapshot timestamp: 2026-03-16T13:30:07.000Z</p>
               </div>
               <details>
                 <summary>Comment highlights</summary>
@@ -945,7 +945,7 @@
               <div class="symbol-section">
                 <div class="symbol-section-head">
                   <h4>Documented symbols</h4>
-                  <span class="count-pill">1</span>
+                  <span class="count-pill">2</span>
                 </div>
                 <div class="symbol-grid">
     <section class="symbol-card searchable" id="apps-api-src-repositories-customerrepository-php-customerrepository" data-search="class CustomerRepository No dedicated symbol docblock found; inherits file intent: Store-database customer lookups and customer profile persistence used by auth and checkout. final class CustomerRepository ">
@@ -959,6 +959,18 @@
       <p class="symbol-signature"><code>final class CustomerRepository</code></p>
       <p class="overview">No dedicated symbol docblock found; inherits file intent: Store-database customer lookups and customer profile persistence used by auth and checkout.</p>
       
+    </section>
+    <section class="symbol-card searchable" id="apps-api-src-repositories-customerrepository-php-profileparams" data-search="function profileParams No descriptive summary was found for this symbol. private function profileParams(array $input, bool $includePassword): array return array&lt;string, scalar|null&gt;">
+      <div class="symbol-head">
+        <div>
+          <p class="eyebrow">function · line 254</p>
+          <h4><code>profileParams</code></h4>
+        </div>
+        <a class="anchor-link" href="#apps-api-src-repositories-customerrepository-php-profileparams">#</a>
+      </div>
+      <p class="symbol-signature"><code>private function profileParams(array $input, bool $includePassword): array</code></p>
+      <p class="overview">No descriptive summary was found for this symbol.</p>
+      <details class="tags-block"><summary>Doc tags</summary><ul><li><code>@return</code> array&lt;string, scalar|null&gt;</li></ul></details>
     </section></div>
               </div>
             </article>
@@ -1047,19 +1059,19 @@
         </div>
         <div class="file-stack">
           
-            <article class="file-card searchable" id="apps-api-src-services-authservice-php" data-search="apps/api/src/Services/AuthService.php Authentication application service built around customer records and session state.  AuthService __construct login logout me ColumbiaGames\Api\Repositories\CustomerRepository ColumbiaGames\Api\Support\SessionAuth RuntimeException">
+            <article class="file-card searchable" id="apps-api-src-services-authservice-php" data-search="apps/api/src/Services/AuthService.php Authentication application service built around customer records and session state.  AuthService __construct login register logout me updateProfile changePassword mapPublicUser ColumbiaGames\Api\Repositories\CustomerRepository ColumbiaGames\Api\Support\SessionAuth DomainException RuntimeException">
               <div class="card-head">
                 <div>
-                  <p class="eyebrow">PHP · 1.6 KB</p>
+                  <p class="eyebrow">PHP · 5.5 KB</p>
                   <h3><code>apps/api/src/Services/AuthService.php</code></h3>
                 </div>
                 <a class="anchor-link" href="#apps-api-src-services-authservice-php">#</a>
               </div>
               <p class="overview">Authentication application service built around customer records and session state.</p>
               <div class="meta-grid">
-                <p><strong>Detected symbols:</strong> <code>AuthService</code>, <code>__construct</code>, <code>login</code>, <code>logout</code>, <code>me</code></p>
-                <p><strong>Dependencies:</strong> <code>ColumbiaGames\Api\Repositories\CustomerRepository</code>, <code>ColumbiaGames\Api\Support\SessionAuth</code>, <code>RuntimeException</code></p>
-                <p class="muted tiny">Snapshot timestamp: 2026-03-16T06:22:10.000Z</p>
+                <p><strong>Detected symbols:</strong> <code>AuthService</code>, <code>__construct</code>, <code>login</code>, <code>register</code>, <code>logout</code>, <code>me</code>, <code>updateProfile</code>, <code>changePassword</code>, <code>mapPublicUser</code></p>
+                <p><strong>Dependencies:</strong> <code>ColumbiaGames\Api\Repositories\CustomerRepository</code>, <code>ColumbiaGames\Api\Support\SessionAuth</code>, <code>DomainException</code>, <code>RuntimeException</code></p>
+                <p class="muted tiny">Snapshot timestamp: 2026-03-16T12:54:57.000Z</p>
               </div>
               <details>
                 <summary>Comment highlights</summary>
@@ -1074,7 +1086,7 @@
     <section class="symbol-card searchable" id="apps-api-src-services-authservice-php-authservice" data-search="class AuthService No dedicated symbol docblock found; inherits file intent: Authentication application service built around customer records and session state. final class AuthService ">
       <div class="symbol-head">
         <div>
-          <p class="eyebrow">class · line 15</p>
+          <p class="eyebrow">class · line 16</p>
           <h4><code>AuthService</code></h4>
         </div>
         <a class="anchor-link" href="#apps-api-src-services-authservice-php-authservice">#</a>
@@ -1164,7 +1176,7 @@
             <article class="file-card searchable" id="apps-api-src-services-checkoutservice-php" data-search="apps/api/src/Services/CheckoutService.php Checkout application service for summary, validation, and submit orchestration.  CheckoutService __construct summary validate submit buildCheckoutPayload loadCheckoutCustomer buildDraft normalizeInput buildRequirements validateDraft requireField ColumbiaGames\Api\Repositories\CartRepository ColumbiaGames\Api\Repositories\CheckoutRepository ColumbiaGames\Api\Repositories\CustomerRepository ColumbiaGames\Api\Support\ApiLogger ColumbiaGames\Api\Support\SessionAuth">
               <div class="card-head">
                 <div>
-                  <p class="eyebrow">PHP · 17.5 KB</p>
+                  <p class="eyebrow">PHP · 17.7 KB</p>
                   <h3><code>apps/api/src/Services/CheckoutService.php</code></h3>
                 </div>
                 <a class="anchor-link" href="#apps-api-src-services-checkoutservice-php">#</a>
@@ -1173,7 +1185,7 @@
               <div class="meta-grid">
                 <p><strong>Detected symbols:</strong> <code>CheckoutService</code>, <code>__construct</code>, <code>summary</code>, <code>validate</code>, <code>submit</code>, <code>buildCheckoutPayload</code>, <code>loadCheckoutCustomer</code>, <code>buildDraft</code>, <code>normalizeInput</code>, <code>buildRequirements</code>, <code>validateDraft</code>, <code>requireField</code></p>
                 <p><strong>Dependencies:</strong> <code>ColumbiaGames\Api\Repositories\CartRepository</code>, <code>ColumbiaGames\Api\Repositories\CheckoutRepository</code>, <code>ColumbiaGames\Api\Repositories\CustomerRepository</code>, <code>ColumbiaGames\Api\Support\ApiLogger</code>, <code>ColumbiaGames\Api\Support\SessionAuth</code></p>
-                <p class="muted tiny">Snapshot timestamp: 2026-03-16T06:22:10.000Z</p>
+                <p class="muted tiny">Snapshot timestamp: 2026-03-16T12:55:16.000Z</p>
               </div>
               <details>
                 <summary>Comment highlights</summary>
@@ -1620,19 +1632,19 @@
     </section></div>
               </div>
             </article>
-            <article class="file-card searchable" id="apps-api-src-support-router-php" data-search="apps/api/src/Support/Router.php Minimal regex-based HTTP router used by the native PHP API entrypoint. @var array&lt;int, array{method:string, pattern:string, handler:callable|array}&gt; Router get post patch delete add dispatch ">
+            <article class="file-card searchable" id="apps-api-src-support-router-php" data-search="apps/api/src/Support/Router.php Minimal regex-based HTTP router used by the native PHP API entrypoint. @var array&lt;int, array{method:string, pattern:string, handler:callable|array}&gt; Router get post patch put delete add dispatch ">
               <div class="card-head">
                 <div>
-                  <p class="eyebrow">PHP · 1.8 KB</p>
+                  <p class="eyebrow">PHP · 1.9 KB</p>
                   <h3><code>apps/api/src/Support/Router.php</code></h3>
                 </div>
                 <a class="anchor-link" href="#apps-api-src-support-router-php">#</a>
               </div>
               <p class="overview">Minimal regex-based HTTP router used by the native PHP API entrypoint.</p>
               <div class="meta-grid">
-                <p><strong>Detected symbols:</strong> <code>Router</code>, <code>get</code>, <code>post</code>, <code>patch</code>, <code>delete</code>, <code>add</code>, <code>dispatch</code></p>
+                <p><strong>Detected symbols:</strong> <code>Router</code>, <code>get</code>, <code>post</code>, <code>patch</code>, <code>put</code>, <code>delete</code>, <code>add</code>, <code>dispatch</code></p>
                 
-                <p class="muted tiny">Snapshot timestamp: 2026-03-16T06:22:10.000Z</p>
+                <p class="muted tiny">Snapshot timestamp: 2026-03-16T12:54:44.000Z</p>
               </div>
               <details>
                 <summary>Comment highlights</summary>
@@ -1658,19 +1670,19 @@
     </section></div>
               </div>
             </article>
-            <article class="file-card searchable" id="apps-api-src-support-sessionauth-php" data-search="apps/api/src/Support/SessionAuth.php Session helper for login state and current authenticated customer lookup.  SessionAuth login logout user ">
+            <article class="file-card searchable" id="apps-api-src-support-sessionauth-php" data-search="apps/api/src/Support/SessionAuth.php Session helper for login state and current authenticated customer lookup.  SessionAuth login refreshProfile logout user persistenceMode browserId syncSessionCookie ">
               <div class="card-head">
                 <div>
-                  <p class="eyebrow">PHP · 0.8 KB</p>
+                  <p class="eyebrow">PHP · 2.8 KB</p>
                   <h3><code>apps/api/src/Support/SessionAuth.php</code></h3>
                 </div>
                 <a class="anchor-link" href="#apps-api-src-support-sessionauth-php">#</a>
               </div>
               <p class="overview">Session helper for login state and current authenticated customer lookup.</p>
               <div class="meta-grid">
-                <p><strong>Detected symbols:</strong> <code>SessionAuth</code>, <code>login</code>, <code>logout</code>, <code>user</code></p>
+                <p><strong>Detected symbols:</strong> <code>SessionAuth</code>, <code>login</code>, <code>refreshProfile</code>, <code>logout</code>, <code>user</code>, <code>persistenceMode</code>, <code>browserId</code>, <code>syncSessionCookie</code></p>
                 
-                <p class="muted tiny">Snapshot timestamp: 2026-03-16T06:22:10.000Z</p>
+                <p class="muted tiny">Snapshot timestamp: 2026-03-16T12:53:00.000Z</p>
               </div>
               <details>
                 <summary>Comment highlights</summary>

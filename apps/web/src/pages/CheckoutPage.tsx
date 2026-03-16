@@ -124,8 +124,9 @@ export function CheckoutPage() {
 
           {requirements.requiresLogin && (
             <div className="result-card">
-              <p className="error">Checkout currently requires login because the legacy submit functions need a customer id.</p>
-              <Link to="/login">Go to login</Link>
+              <p className="error">Checkout is explicitly login-required in the rewrite. Anonymous checkout is disabled because the legacy submit functions write by customer id.</p>
+              <p className="muted">Policy: <code>{requirements.policy}</code> · reason: <code>{requirements.policyReason}</code> · guest allowed: {requirements.guestCheckoutAllowed ? 'yes' : 'no'}</p>
+              <Link to="/login">Go to account</Link>
             </div>
           )}
 

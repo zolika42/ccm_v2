@@ -49,7 +49,7 @@ export function App() {
             <Link to="/cart"><CartLinkLabel /></Link>
             <Link to="/checkout">Checkout</Link>
             <Link to="/library">Library</Link>
-            <Link to="/login">Login</Link>
+            <Link to="/login">Account</Link>
             </nav>
           </div>
         </div>

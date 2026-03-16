@@ -6,6 +6,85 @@ export type AuthUser = {
   email: string;
   name: string;
   points: number;
+  shipPhone?: string;
+  shipStreet?: string;
+  shipStreet2?: string;
+  shipCity?: string;
+  shipState?: string;
+  shipZip?: string;
+  shipCountry?: string;
+  billName?: string;
+  billStreet?: string;
+  billStreet2?: string;
+  billCity?: string;
+  billState?: string;
+  billZip?: string;
+  billCountry?: string;
+  payCardType?: string;
+  payCardMonth?: string;
+  payCardYear?: string;
+  payCardName?: string;
+  payCardLast4?: string;
+  authPersistence?: string;
+  browserId?: string | null;
+};
+
+export type RegistrationPayload = {
+  email: string;
+  name?: string;
+  password: string;
+  rememberMe?: boolean;
+  shipPhone?: string;
+  shipStreet?: string;
+  shipStreet2?: string;
+  shipCity?: string;
+  shipState?: string;
+  shipZip?: string;
+  shipCountry?: string;
+  billName?: string;
+  billStreet?: string;
+  billStreet2?: string;
+  billCity?: string;
+  billState?: string;
+  billZip?: string;
+  billCountry?: string;
+};
+
+export type ProfileUpdatePayload = {
+  email: string;
+  name?: string;
+  shipPhone?: string;
+  shipStreet?: string;
+  shipStreet2?: string;
+  shipCity?: string;
+  shipState?: string;
+  shipZip?: string;
+  shipCountry?: string;
+  billName?: string;
+  billStreet?: string;
+  billStreet2?: string;
+  billCity?: string;
+  billState?: string;
+  billZip?: string;
+  billCountry?: string;
+  payCardType?: string;
+  payCardMonth?: string;
+  payCardYear?: string;
+  payCardName?: string;
+  payCardLast4?: string;
+};
+
+export type PasswordResetPayload = {
+  currentPassword: string;
+  newPassword: string;
+};
+
+export type PasswordRecoveryPolicy = {
+  legacyForgotPasswordAvailable: boolean;
+  emailDependencyVerified: boolean;
+  passwordStorage: string;
+  implementedPath: string;
+  notes: string[];
 };
 
 export type CatalogSubCategory = {
@@ -144,6 +223,9 @@ export type CheckoutDraft = {
 
 export type CheckoutRequirements = {
   requiresLogin: boolean;
+  guestCheckoutAllowed: boolean;
+  policy: string;
+  policyReason: string;
   shippingRequired: boolean;
   paymentRequired: boolean;
   availablePaymentTypes: string[];
@@ -189,8 +271,6 @@ export type CheckoutState = {
     storage: string;
   };
 };
-
-
 
 export type LibraryItem = {
   productId: string;
@@ -259,7 +339,6 @@ export type CheckoutSubmitResponse = {
   data: CheckoutState;
   submission: CheckoutSubmission | null;
 };
-
 
 export type ApiMeta = {
   requestId: string;

@@ -28,6 +28,12 @@ final class Router
         $this->add('PATCH', $pattern, $handler);
     }
 
+
+    public function put(string $pattern, callable|array $handler): void
+    {
+        $this->add('PUT', $pattern, $handler);
+    }
+
     public function delete(string $pattern, callable|array $handler): void
     {
         $this->add('DELETE', $pattern, $handler);

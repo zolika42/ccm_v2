@@ -273,7 +273,10 @@ final class CheckoutService
         $paymentRequired = $subtotal > 0.0;
 
         return [
-            'requiresLogin' => $customer === null,
+            'requiresLogin' => true,
+            'guestCheckoutAllowed' => false,
+            'policy' => 'login-required',
+            'policyReason' => 'legacy_submit_requires_customer_id',
             'shippingRequired' => $shippingRequired,
             'paymentRequired' => $paymentRequired,
             'availablePaymentTypes' => $paymentRequired ? ['paypal', ...self::CARD_PAYMENT_TYPES] : ['free'],
@@ -290,7 +293,7 @@ final class CheckoutService
         }
 
         if ($customer === null) {
-            $errors['auth'][] = 'Login is required before checkout.';
+            $errors['auth'][] = 'Checkout requires an authenticated customer because legacy submit functions write by customer id.';
         }
 
         $this->requireField($errors, $draft, 'shipName', 'Shipping name is required.');
