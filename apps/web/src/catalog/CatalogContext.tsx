@@ -17,6 +17,8 @@ type ProductFilters = {
   q?: string;
   category?: string;
   sub_category?: string;
+  sub_category2?: string;
+  sort?: string;
   limit?: number;
   offset?: number;
 };
@@ -60,6 +62,8 @@ function normalizeFilters(filters: ProductFilters = {}): ProductFilters {
     q: filters.q?.trim() || undefined,
     category: filters.category?.trim() || undefined,
     sub_category: filters.sub_category?.trim() || undefined,
+    sub_category2: filters.sub_category2?.trim() || undefined,
+    sort: filters.sort?.trim() || undefined,
     limit: filters.limit ?? 30,
     offset: filters.offset ?? 0,
   };

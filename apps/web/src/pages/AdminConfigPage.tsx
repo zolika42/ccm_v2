@@ -8,17 +8,21 @@ import {
   exportAdminConfig,
   getAdminConfigInventory,
   getAdminProductUploadSettings,
+  getStorefrontTheme,
   importAdminConfig,
   previewAdminProductUpload,
+  updateAdminStorefrontTheme,
 } from '../api/client';
 import { useAdmin } from '../admin/AdminContext';
 import { useAuth } from '../auth/AuthContext';
+import { useStorefrontTheme } from '../storefront/StorefrontThemeContext';
 import type {
   AdminConfigBundle,
   AdminConfigInventory,
   AdminProductUploadApplyResult,
   AdminProductUploadPreview,
   AdminProductUploadSettings,
+  StorefrontThemeConfig,
 } from '../types';
 
 const DEFAULT_UPLOAD_SAMPLE = [
@@ -37,8 +41,11 @@ export function AdminConfigPage() {
   const [uploadText, setUploadText] = useState(DEFAULT_UPLOAD_SAMPLE);
   const [preview, setPreview] = useState<AdminProductUploadPreview | null>(null);
   const [applyResult, setApplyResult] = useState<AdminProductUploadApplyResult | null>(null);
+  const [storefrontTheme, setStorefrontTheme] = useState<StorefrontThemeConfig | null>(null);
+  const [themeSelection, setThemeSelection] = useState<'rewrite' | 'legacy'>('rewrite');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const { refreshTheme } = useStorefrontTheme();
 
   async function loadConfigData() {
     if (!scope || !isAdmin) {
@@ -47,15 +54,18 @@ export function AdminConfigPage() {
     setLoading(true);
     setError(null);
     try {
-      const [inventoryData, settingsData, exportData] = await Promise.all([
+      const [inventoryData, settingsData, exportData, storefrontThemeData] = await Promise.all([
         getAdminConfigInventory(scope.merchantId, scope.configId),
         getAdminProductUploadSettings(scope.merchantId, scope.configId),
         exportAdminConfig(scope.merchantId, scope.configId),
+        getStorefrontTheme(scope.merchantId, scope.configId),
       ]);
       setInventory(inventoryData);
       setSettings(settingsData);
       setExportBundle(JSON.stringify(exportData, null, 2));
       setImportText(JSON.stringify(exportData, null, 2));
+      setStorefrontTheme(storefrontThemeData);
+      setThemeSelection(storefrontThemeData.theme);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to load admin config data');
     } finally {
@@ -77,6 +87,26 @@ export function AdminConfigPage() {
       await loadConfigData();
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Config import failed');
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  async function handleStorefrontThemeSave() {
+    if (!scope) return;
+    setLoading(true);
+    setError(null);
+    try {
+      const nextTheme = await updateAdminStorefrontTheme({
+        merchantId: scope.merchantId,
+        configId: scope.configId,
+        theme: themeSelection,
+      });
+      setStorefrontTheme(nextTheme);
+      await refreshTheme(scope.merchantId, scope.configId);
+      await loadConfigData();
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Storefront theme update failed');
     } finally {
       setLoading(false);
     }
@@ -160,6 +190,26 @@ export function AdminConfigPage() {
               ))}
             </select>
           </label>
+        </div>
+      </div>
+
+      <div className="panel stack">
+        <h3>Storefront template</h3>
+        <div className="admin-toolbar">
+          <label>
+            <span>Backend-selected theme</span>
+            <select value={themeSelection} onChange={(event) => setThemeSelection(event.target.value as 'rewrite' | 'legacy')}>
+              <option value="rewrite">Rewrite / current template</option>
+              <option value="legacy">Legacy storefront theme</option>
+            </select>
+          </label>
+          <div className="result-card">
+            <strong>Current source</strong>
+            <p className="muted compact-copy">{storefrontTheme?.source ?? '—'} · raw value <code>{storefrontTheme?.rawTemplateStyle ?? 'rewrite'}</code></p>
+          </div>
+        </div>
+        <div className="row wrap-row">
+          <button type="button" onClick={() => void handleStorefrontThemeSave()} disabled={loading}>Save storefront theme</button>
         </div>
       </div>
 

@@ -1,0 +1,354 @@
+@import url('https://fonts.googleapis.com/css2?family=MedievalSharp&family=Roboto:wght@400;500;700&display=swap');
+
+.storefront-theme-root[data-storefront-theme='rewrite'] {
+  --storefront-heading-font: Arial, Helvetica, sans-serif;
+  --storefront-body-font: Arial, Helvetica, sans-serif;
+}
+
+.storefront-theme-root[data-storefront-theme='legacy'] {
+  --storefront-heading-font: 'MedievalSharp', Georgia, serif;
+  --storefront-body-font: 'Roboto', Arial, Helvetica, sans-serif;
+  --legacy-bg: #24160c;
+  --legacy-surface: rgba(244, 231, 205, 0.95);
+  --legacy-surface-soft: rgba(252, 246, 234, 0.92);
+  --legacy-border: rgba(91, 54, 17, 0.35);
+  --legacy-shadow: 0 24px 44px rgba(17, 10, 5, 0.28);
+  --legacy-green: #324c2f;
+  --legacy-brown: #6c3515;
+  --legacy-gold: #caa669;
+  --legacy-ink: #24170e;
+}
+
+.storefront-theme-root[data-storefront-theme='legacy'],
+.storefront-theme-root[data-storefront-theme='legacy'] body {
+  font-family: var(--storefront-body-font);
+}
+
+.storefront-theme-root[data-storefront-theme='legacy'] h1,
+.storefront-theme-root[data-storefront-theme='legacy'] h2,
+.storefront-theme-root[data-storefront-theme='legacy'] h3,
+.storefront-theme-root[data-storefront-theme='legacy'] .brand-legacy {
+  font-family: var(--storefront-heading-font);
+  letter-spacing: 0.03em;
+}
+
+.legacy-theme-shell {
+  min-height: 100vh;
+  background:
+    radial-gradient(circle at top, rgba(202, 166, 105, 0.16), transparent 22%),
+    linear-gradient(180deg, rgba(37, 22, 11, 0.98) 0%, rgba(72, 45, 20, 0.98) 100%);
+  color: var(--legacy-ink);
+}
+
+.legacy-topbar {
+  background: linear-gradient(180deg, #4b2710 0%, #32190a 100%);
+  border-bottom-color: var(--legacy-gold);
+  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.22);
+}
+
+.legacy-topbar-inner {
+  min-height: 88px;
+  gap: 1.25rem;
+}
+
+.legacy-branding {
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+}
+
+.brand-legacy {
+  font-size: clamp(1.4rem, 2vw, 2rem);
+}
+
+.legacy-brand-subtitle {
+  font-size: 0.88rem;
+  color: rgba(255, 247, 224, 0.8);
+}
+
+.legacy-topbar .session-pill {
+  border: 1px solid rgba(255,255,255,0.16);
+  background: rgba(255,255,255,0.08);
+  color: #fff8e9;
+}
+
+.storefront-topnav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+.storefront-topnav a.active {
+  background: rgba(255,255,255,0.16);
+}
+
+.legacy-drawer-toggle {
+  display: none;
+  min-width: 50px;
+  min-height: 50px;
+  padding: 0;
+  border-radius: 16px;
+  background: rgba(255,255,255,0.12);
+  border-color: rgba(255,255,255,0.15);
+}
+
+.legacy-shell-frame {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(230px, 270px) minmax(0, 1fr) minmax(240px, 290px);
+  gap: 1.1rem;
+  align-items: start;
+  padding-top: 1.25rem;
+  padding-bottom: 2.25rem;
+}
+
+.legacy-shell-left,
+.legacy-shell-right,
+.legacy-shell-main > * {
+  position: relative;
+  z-index: 1;
+}
+
+.legacy-shell-left,
+.legacy-shell-right {
+  position: sticky;
+  top: 104px;
+}
+
+.legacy-rail-blocks {
+  display: grid;
+  gap: 1rem;
+}
+
+.legacy-rail-block,
+.legacy-shell-main .panel,
+.legacy-shell-main .catalog-summary-card,
+.legacy-shell-main .catalog-toolbar-panel,
+.legacy-shell-main .detail-section,
+.legacy-shell-main .result-card,
+.legacy-shell-main .product-card,
+.legacy-shell-main .wishlist-card,
+.legacy-shell-main .library-card,
+.legacy-shell-main .cart-summary-panel {
+  background:
+    linear-gradient(180deg, rgba(255, 251, 240, 0.98) 0%, rgba(245, 231, 202, 0.96) 100%);
+  border: 1px solid var(--legacy-border);
+  box-shadow: var(--legacy-shadow);
+  border-radius: 24px;
+}
+
+.legacy-shell-main {
+  display: grid;
+}
+
+.legacy-shell-main .panel,
+.legacy-shell-main .catalog-summary-card,
+.legacy-shell-main .catalog-toolbar-panel,
+.legacy-shell-main .detail-section,
+.legacy-shell-main .result-card,
+.legacy-shell-main .cart-summary-panel {
+  backdrop-filter: blur(2px);
+}
+
+.legacy-rail-block {
+  padding: 1rem 1rem 1.1rem;
+}
+
+.legacy-rail-block h3 {
+  margin: 0 0 0.75rem;
+  color: var(--legacy-brown);
+}
+
+.legacy-rail-links,
+.legacy-category-links {
+  display: grid;
+  gap: 0.45rem;
+}
+
+.legacy-rail-links a,
+.legacy-category-links a {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 0.55rem 0.7rem;
+  border-radius: 14px;
+  color: var(--legacy-ink);
+  text-decoration: none;
+  background: rgba(255,255,255,0.45);
+  border: 1px solid rgba(108, 53, 21, 0.09);
+}
+
+.legacy-rail-links a.active,
+.legacy-category-links a.active,
+.legacy-category-links a.is-active,
+.legacy-rail-links a:hover,
+.legacy-category-links a:hover {
+  background: rgba(202, 166, 105, 0.26);
+  border-color: rgba(108, 53, 21, 0.22);
+}
+
+.legacy-category-links small {
+  color: rgba(36, 23, 14, 0.65);
+}
+
+.legacy-utility-cta .button-link {
+  width: 100%;
+}
+
+.compact-summary-list {
+  gap: 0.45rem;
+}
+
+.legacy-shell-main .page-header h2,
+.legacy-shell-main .detail-header h2,
+.legacy-shell-main .section-heading-row h3,
+.legacy-shell-main .panel h2,
+.legacy-shell-main .panel h3 {
+  color: var(--legacy-brown);
+}
+
+.legacy-shell-main .price,
+.legacy-shell-main .price.big {
+  color: var(--legacy-brown);
+}
+
+.legacy-shell-main .badge {
+  background: rgba(202, 166, 105, 0.22);
+  color: var(--legacy-brown);
+}
+
+.legacy-shell-main .badge.badge-accent {
+  background: rgba(50, 76, 47, 0.16);
+  color: #1f4a1b;
+}
+
+.legacy-shell-main .button-link,
+.legacy-shell-main button:not(.lightbox-backdrop):not(.lightbox-nav):not(.lightbox-close) {
+  background: linear-gradient(180deg, #5e2f15 0%, #3d1e0d 100%);
+  border-color: #5a2d14;
+  color: #fff7e5;
+  box-shadow: 0 14px 26px rgba(36, 20, 9, 0.22);
+}
+
+.legacy-shell-main .button-secondary,
+.legacy-shell-main .button-link.button-link-secondary,
+.legacy-shell-main .button-link.secondary-link,
+.legacy-shell-main .wishlist-toggle {
+  background: linear-gradient(180deg, rgba(255, 252, 245, 0.96) 0%, rgba(241, 229, 204, 0.96) 100%);
+  color: var(--legacy-brown);
+  border-color: rgba(108, 53, 21, 0.24);
+  box-shadow: 0 10px 20px rgba(36, 20, 9, 0.1);
+}
+
+.legacy-shell-main .wishlist-toggle.is-active {
+  background: linear-gradient(180deg, #325035 0%, #223a25 100%);
+  border-color: #325035;
+  color: #fff;
+}
+
+.legacy-shell-main input,
+.legacy-shell-main select,
+.legacy-shell-main textarea {
+  background: rgba(255, 255, 255, 0.94);
+  border-color: rgba(108, 53, 21, 0.18);
+}
+
+.legacy-shell-main .product-card-catalog,
+.legacy-shell-main .related-card {
+  overflow: hidden;
+  border-radius: 24px;
+}
+
+.legacy-shell-main .product-card-media,
+.legacy-shell-main .related-card-media {
+  background:
+    linear-gradient(135deg, rgba(94, 47, 21, 0.14), rgba(202, 166, 105, 0.24)),
+    repeating-linear-gradient(45deg, rgba(255,255,255,0.2) 0, rgba(255,255,255,0.2) 12px, transparent 12px, transparent 24px);
+}
+
+.legacy-shell-main .product-card-corner-badge {
+  background: rgba(50, 76, 47, 0.92);
+}
+
+.legacy-shell-main .catalog-summary-card,
+.legacy-shell-main .catalog-toolbar-panel {
+  border-radius: 24px;
+}
+
+.legacy-footer {
+  border-top: 1px solid rgba(202, 166, 105, 0.2);
+  padding: 1rem 0 1.5rem;
+  color: rgba(255, 245, 225, 0.82);
+}
+
+.legacy-footer-inner {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.legacy-shell-backdrop {
+  display: none;
+}
+
+@media (max-width: 1180px) {
+  .legacy-shell-frame {
+    grid-template-columns: minmax(220px, 250px) minmax(0, 1fr);
+  }
+
+  .legacy-shell-right {
+    display: none;
+  }
+}
+
+@media (max-width: 920px) {
+  .legacy-drawer-toggle {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .legacy-shell-frame {
+    grid-template-columns: 1fr;
+  }
+
+  .legacy-shell-left,
+  .legacy-shell-right {
+    position: static;
+  }
+
+  .legacy-shell-left {
+    position: fixed;
+    inset: 88px auto 0 0;
+    width: min(320px, calc(100% - 2rem));
+    padding: 1rem;
+    z-index: 40;
+    transform: translateX(-108%);
+    transition: transform 0.22s ease;
+  }
+
+  .legacy-shell-left.is-open {
+    transform: translateX(0);
+  }
+
+  .legacy-shell-backdrop {
+    display: block;
+    position: fixed;
+    inset: 88px 0 0;
+    background: rgba(11, 7, 4, 0.48);
+    z-index: 30;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.22s ease;
+  }
+
+  .legacy-shell-backdrop.is-drawer-open {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  .legacy-footer-inner {
+    flex-direction: column;
+  }
+}

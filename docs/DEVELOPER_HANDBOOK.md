@@ -1,7 +1,7 @@
 # Developer Handbook
 
 > Generated automatically by `scripts/docs/generate-docs.mjs`. Do not hand-edit this file; update the generator instead.
-> Generated at: 2026-03-17T08:25:03.670Z
+> Generated at: 2026-03-17T16:14:17.063Z
 
 ## 1. What this repo is
 

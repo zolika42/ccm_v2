@@ -21,6 +21,7 @@ import type {
   Cart,
   CatalogCategory,
   CheckoutDraft,
+  StorefrontThemeConfig,
   CheckoutState,
   LibraryState,
   Product,
@@ -425,11 +426,12 @@ function enrichFixtureProduct(product: Product): Product {
   return base;
 }
 
-export async function listProducts(params: { limit?: number; offset?: number; q?: string; category?: string; sub_category?: string; sub_category2?: string } = {}) {
+export async function listProducts(params: { limit?: number; offset?: number; q?: string; category?: string; sub_category?: string; sub_category2?: string; sort?: string } = {}) {
   const q = (params.q ?? '').toLowerCase();
   const category = (params.category ?? '').toLowerCase();
   const subCategory = (params.sub_category ?? '').toLowerCase();
   const subCategory2 = (params.sub_category2 ?? '').toLowerCase();
+  const sort = (params.sort ?? 'default').toLowerCase();
   const filtered = PRODUCTS.filter((product) => {
     const matchesQ = !q || `${product.productId} ${product.description} ${product.category} ${product.subCategory} ${product.subCategory2 ?? ''}`.toLowerCase().includes(q);
     const matchesCategory = !category || product.category.toLowerCase() === category;
@@ -437,9 +439,33 @@ export async function listProducts(params: { limit?: number; offset?: number; q?
     const matchesSub2 = !subCategory2 || (product.subCategory2 ?? '').toLowerCase() === subCategory2;
     return matchesQ && matchesCategory && matchesSub && matchesSub2;
   });
+  const sorted = [...filtered].sort((left, right) => {
+    const parsePrice = (value?: string | null) => Number((value ?? '').replace(/[^0-9.-]/g, '')) || 0;
+    const leftName = (left.description ?? left.productId).toLowerCase();
+    const rightName = (right.description ?? right.productId).toLowerCase();
+    switch (sort) {
+      case 'sku_asc':
+        return left.productId.localeCompare(right.productId);
+      case 'sku_desc':
+        return right.productId.localeCompare(left.productId);
+      case 'name_asc':
+        return leftName.localeCompare(rightName) || left.productId.localeCompare(right.productId);
+      case 'name_desc':
+        return rightName.localeCompare(leftName) || right.productId.localeCompare(left.productId);
+      case 'price_asc':
+        return parsePrice(left.price) - parsePrice(right.price) || left.productId.localeCompare(right.productId);
+      case 'price_desc':
+        return parsePrice(right.price) - parsePrice(left.price) || left.productId.localeCompare(right.productId);
+      default:
+        return 0;
+    }
+  });
+  const offset = params.offset ?? 0;
+  const limit = params.limit ?? 30;
+  const paged = sorted.slice(offset, offset + limit);
   return ok('/catalog/products', {
-    items: filtered.map(enrichFixtureProduct),
-    meta: { total: filtered.length, limit: params.limit ?? 30, offset: params.offset ?? 0 },
+    items: paged.map(enrichFixtureProduct),
+    meta: { total: sorted.length, limit, offset, sort },
   });
 }
 
@@ -657,7 +683,16 @@ const ADMIN_ACCESS: AdminAccess = {
   ],
 };
 
-let adminMarks = [
+let storefrontThemeConfig: StorefrontThemeConfig = {
+  merchantId: 'cg',
+  configId: 'default',
+  theme: 'rewrite',
+  rawTemplateStyle: 'rewrite',
+  availableThemes: ['rewrite', 'legacy'],
+  source: 'merchant_configurations.template_style',
+};
+
+let adminMarks: Array<{ id: number; action: string; note: string | null; customerId: number; createdAt: string }> = [
   { id: 1, action: 'mark', note: 'Packed for review', customerId: USER.customerId, createdAt: '2026-03-16T16:00:00Z' },
 ];
 
@@ -747,7 +782,26 @@ const ADMIN_PRODUCT_UPLOAD_SETTINGS: AdminProductUploadSettings = {
   },
 };
 
-export async function getAdminAccess() {
+export async function getStorefrontTheme(_merchantId?: string, _configId?: string) {
+  return ok('/storefront/theme', clone(storefrontThemeConfig));
+}
+
+export async function updateAdminStorefrontTheme(payload: { merchantId?: string; configId?: string; theme: string }) {
+  if (!signedIn()) return unauthorized<StorefrontThemeConfig>('/admin/storefront/theme');
+  const nextTheme = payload.theme === 'legacy' ? 'legacy' : 'rewrite';
+  storefrontThemeConfig = {
+    ...storefrontThemeConfig,
+    theme: nextTheme,
+    rawTemplateStyle: nextTheme,
+  };
+  const merchantConfigurationRow = ADMIN_CONFIG_INVENTORY.rows.find((row) => row.table === 'merchant_configurations');
+  if (merchantConfigurationRow?.row) {
+    merchantConfigurationRow.row.template_style = nextTheme;
+  }
+  return ok('/admin/storefront/theme', clone(storefrontThemeConfig));
+}
+
+export async function getAdminAccess(_merchantId?: string, _configId?: string) {
   if (!signedIn()) return unauthorized<AdminAccess>('/admin/access');
   return ok('/admin/access', clone(ADMIN_ACCESS));
 }
@@ -809,7 +863,7 @@ export async function listAdminOrders(params: { view?: string; q?: string; limit
   });
 }
 
-export async function getAdminOrderDetail(orderId: string) {
+export async function getAdminOrderDetail(orderId: string, _merchantId?: string, _configId?: string) {
   if (!signedIn()) return unauthorized<{ scope: unknown; order: AdminOrderDetail }>(`/admin/orders/${orderId}`);
   return ok(`/admin/orders/${orderId}`, {
     scope: clone(ADMIN_ACCESS.defaultScope!),
@@ -833,12 +887,12 @@ export async function markAdminOrder(orderId: string, payload: { action?: string
   });
 }
 
-export async function getAdminConfigInventory() {
+export async function getAdminConfigInventory(_merchantId?: string, _configId?: string) {
   if (!signedIn()) return unauthorized<AdminConfigInventory>('/admin/config/inventory');
   return ok('/admin/config/inventory', clone(ADMIN_CONFIG_INVENTORY));
 }
 
-export async function exportAdminConfig() {
+export async function exportAdminConfig(_merchantId?: string, _configId?: string) {
   if (!signedIn()) return unauthorized<AdminConfigBundle>('/admin/config/export');
   return ok('/admin/config/export', {
     schemaVersion: 1,
@@ -855,7 +909,7 @@ export async function exportAdminConfig() {
   });
 }
 
-export async function importAdminConfig() {
+export async function importAdminConfig(_payload?: unknown) {
   if (!signedIn()) return unauthorized<AdminConfigImportResult>('/admin/config/import');
   return ok('/admin/config/import', {
     scope: { merchantId: 'cg', configId: 'default' },
@@ -872,7 +926,7 @@ export async function importAdminConfig() {
   });
 }
 
-export async function getAdminProductUploadSettings() {
+export async function getAdminProductUploadSettings(_merchantId?: string, _configId?: string) {
   if (!signedIn()) return unauthorized<AdminProductUploadSettings>('/admin/product-upload/settings');
   return ok('/admin/product-upload/settings', clone(ADMIN_PRODUCT_UPLOAD_SETTINGS));
 }

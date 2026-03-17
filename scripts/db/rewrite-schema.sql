@@ -27,3 +27,16 @@ CREATE TABLE IF NOT EXISTS admin_order_marks (
 
 CREATE INDEX IF NOT EXISTS admin_order_marks_lookup_idx
     ON admin_order_marks (merchant_id, config_id, order_id, created_at DESC, id DESC);
+
+CREATE TABLE IF NOT EXISTS storefront_theme_overrides (
+    merchant_id text NOT NULL,
+    config_id text NOT NULL,
+    theme text NOT NULL,
+    created_at timestamptz NOT NULL DEFAULT now(),
+    updated_at timestamptz NOT NULL DEFAULT now(),
+    PRIMARY KEY (merchant_id, config_id)
+);
+
+CREATE INDEX IF NOT EXISTS storefront_theme_overrides_theme_idx
+    ON storefront_theme_overrides (theme, updated_at DESC);
+

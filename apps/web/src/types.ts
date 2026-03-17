@@ -104,6 +104,17 @@ export type CatalogCategory = {
   subCategories: CatalogSubCategory[];
 };
 
+export type StorefrontThemeName = 'rewrite' | 'legacy';
+
+export type StorefrontThemeConfig = {
+  merchantId: string;
+  configId: string;
+  theme: StorefrontThemeName;
+  rawTemplateStyle?: string;
+  availableThemes: StorefrontThemeName[];
+  source: string;
+};
+
 export type CustomerCatalogState = 'owned' | 'preordered';
 
 export type ThirdPartyImage = {

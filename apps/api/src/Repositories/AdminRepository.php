@@ -103,6 +103,71 @@ SQL);
         return null;
     }
 
+
+    public function getStorefrontThemeConfig(?string $merchantId = null, ?string $configId = null): array
+    {
+        $scope = $this->resolveStorefrontScope($merchantId, $configId);
+        $override = $this->findStorefrontThemeOverride($scope['merchantId'], $scope['configId']);
+        if ($override !== null) {
+            $rawTemplateStyle = trim((string) ($override['theme'] ?? ''));
+
+            return [
+                'merchantId' => $scope['merchantId'],
+                'configId' => $scope['configId'],
+                'theme' => $this->normalizeStorefrontTheme($rawTemplateStyle),
+                'rawTemplateStyle' => $rawTemplateStyle,
+                'availableThemes' => $this->availableStorefrontThemes(),
+                'source' => 'rewrite.storefront_theme_overrides.theme',
+            ];
+        }
+
+        $stmt = $this->ccmDb->prepare(<<<'SQL'
+SELECT template_style
+FROM merchant_configurations
+WHERE merchant_id = :merchant_id
+  AND config_id = :config_id
+LIMIT 1
+SQL);
+        $stmt->execute([
+            'merchant_id' => $scope['merchantId'],
+            'config_id' => $scope['configId'],
+        ]);
+        $row = $stmt->fetch(PDO::FETCH_ASSOC) ?: null;
+        $rawTemplateStyle = trim((string) ($row['template_style'] ?? ''));
+        $theme = $this->normalizeStorefrontTheme($rawTemplateStyle);
+
+        return [
+            'merchantId' => $scope['merchantId'],
+            'configId' => $scope['configId'],
+            'theme' => $theme,
+            'rawTemplateStyle' => $rawTemplateStyle,
+            'availableThemes' => $this->availableStorefrontThemes(),
+            'source' => $row === null ? 'default-fallback' : 'merchant_configurations.template_style (read-only fallback)',
+        ];
+    }
+
+    public function updateStorefrontTheme(array $scope, string $theme): array
+    {
+        $normalizedTheme = $this->normalizeStorefrontTheme($theme);
+        if (!in_array($normalizedTheme, $this->availableStorefrontThemes(), true)) {
+            throw new RuntimeException('Unsupported storefront theme.');
+        }
+
+        $stmt = $this->rewriteDb->prepare(<<<'SQL'
+INSERT INTO storefront_theme_overrides (merchant_id, config_id, theme, updated_at)
+VALUES (:merchant_id, :config_id, :theme, NOW())
+ON CONFLICT (merchant_id, config_id)
+DO UPDATE SET theme = EXCLUDED.theme, updated_at = NOW()
+SQL);
+        $stmt->execute([
+            'theme' => $normalizedTheme,
+            'merchant_id' => $scope['merchantId'],
+            'config_id' => $scope['configId'],
+        ]);
+
+        return $this->getStorefrontThemeConfig($scope['merchantId'], $scope['configId']);
+    }
+
     public function listOrders(array $scope, array $filters): array
     {
         $query = trim((string) ($filters['q'] ?? ''));
@@ -885,6 +950,51 @@ SQL);
             $params[$column] = $row[$column] ?? null;
         }
         $stmt->execute($params);
+    }
+
+
+    private function findStorefrontThemeOverride(string $merchantId, string $configId): ?array
+    {
+        $stmt = $this->rewriteDb->prepare(<<<'SQL'
+SELECT merchant_id, config_id, theme, created_at, updated_at
+FROM storefront_theme_overrides
+WHERE merchant_id = :merchant_id
+  AND config_id = :config_id
+LIMIT 1
+SQL);
+        $stmt->execute([
+            'merchant_id' => $merchantId,
+            'config_id' => $configId,
+        ]);
+
+        return $stmt->fetch(PDO::FETCH_ASSOC) ?: null;
+    }
+
+    private function resolveStorefrontScope(?string $merchantId, ?string $configId): array
+    {
+        $resolvedMerchantId = trim((string) ($merchantId ?? (getenv('STOREFRONT_MERCHANT_ID') ?: 'cg')));
+        $resolvedConfigId = trim((string) ($configId ?? (getenv('STOREFRONT_CONFIG_ID') ?: 'default')));
+
+        return [
+            'merchantId' => $resolvedMerchantId !== '' ? $resolvedMerchantId : 'cg',
+            'configId' => $resolvedConfigId !== '' ? $resolvedConfigId : 'default',
+        ];
+    }
+
+    /** @return list<string> */
+    private function availableStorefrontThemes(): array
+    {
+        return ['rewrite', 'legacy'];
+    }
+
+    private function normalizeStorefrontTheme(string $value): string
+    {
+        $normalized = strtolower(trim($value));
+        return match ($normalized) {
+            'legacy', 'classic', 'legacy-theme' => 'legacy',
+            'rewrite', 'modern', 'default', '' => 'rewrite',
+            default => 'rewrite',
+        };
     }
 
     private function toBool(mixed $value): bool

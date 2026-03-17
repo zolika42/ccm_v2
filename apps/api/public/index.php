@@ -12,6 +12,7 @@ use ColumbiaGames\Api\Controllers\CatalogController;
 use ColumbiaGames\Api\Controllers\CartController;
 use ColumbiaGames\Api\Controllers\CheckoutController;
 use ColumbiaGames\Api\Controllers\LibraryController;
+use ColumbiaGames\Api\Controllers\StorefrontController;
 use ColumbiaGames\Api\Controllers\WishlistController;
 use ColumbiaGames\Api\Database\ConnectionFactory;
 use ColumbiaGames\Api\Repositories\AdminRepository;
@@ -27,6 +28,7 @@ use ColumbiaGames\Api\Services\CartService;
 use ColumbiaGames\Api\Services\CatalogService;
 use ColumbiaGames\Api\Services\CheckoutService;
 use ColumbiaGames\Api\Services\LibraryService;
+use ColumbiaGames\Api\Services\StorefrontService;
 use ColumbiaGames\Api\Services\WishlistService;
 use ColumbiaGames\Api\Support\ApiLogger;
 use ColumbiaGames\Api\Support\Cors;
@@ -65,6 +67,7 @@ $cartService = new CartService($cartRepository, $productRepository);
 $checkoutService = new CheckoutService($cartRepository, $checkoutRepository, $customerRepository, $wishlistRepository);
 $libraryService = new LibraryService($libraryRepository);
 $wishlistService = new WishlistService($wishlistRepository, $productRepository);
+$storefrontService = new StorefrontService($adminRepository);
 
 $adminController = new AdminController($adminService);
 $authController = new AuthController($authService);
@@ -73,6 +76,7 @@ $cartController = new CartController($cartService);
 $checkoutController = new CheckoutController($checkoutService);
 $libraryController = new LibraryController($libraryService);
 $wishlistController = new WishlistController($wishlistService);
+$storefrontController = new StorefrontController($storefrontService);
 
 $router->get('/health', function () use ($connections): void {
     JsonResponse::success([
@@ -102,6 +106,7 @@ $router->post('/admin/config/import', [$adminController, 'importConfig']);
 $router->get('/admin/product-upload/settings', [$adminController, 'productUploadSettings']);
 $router->post('/admin/product-upload/preview', [$adminController, 'productUploadPreview']);
 $router->post('/admin/product-upload/apply', [$adminController, 'productUploadApply']);
+$router->put('/admin/storefront/theme', [$storefrontController, 'updateTheme']);
 
 $router->post('/auth/login', [$authController, 'login']);
 $router->post('/auth/register', [$authController, 'register']);
@@ -115,6 +120,7 @@ $router->get('/catalog/categories', [$catalogController, 'categories']);
 $router->get('/catalog/products', [$catalogController, 'index']);
 $router->get('/catalog/products/{productId}', [$catalogController, 'show']);
 $router->get('/catalog/products/{productId}/related', [$catalogController, 'related']);
+$router->get('/storefront/theme', [$storefrontController, 'theme']);
 
 $router->get('/cart/identity', [$cartController, 'identity']);
 $router->get('/cart', [$cartController, 'show']);

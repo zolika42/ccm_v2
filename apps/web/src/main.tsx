@@ -10,7 +10,9 @@ import { AuthProvider } from './auth/AuthContext';
 import { CartProvider } from './cart/CartContext';
 import { CatalogProvider } from './catalog/CatalogContext';
 import { WishlistProvider } from './wishlist/WishlistContext';
+import { StorefrontThemeProvider } from './storefront/StorefrontThemeContext';
 import './styles.css';
+import './storefront/storefront.css';
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
@@ -18,11 +20,13 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
       <AuthProvider>
         <AdminProvider>
           <CatalogProvider>
-            <WishlistProvider>
-              <CartProvider>
-                <App />
-              </CartProvider>
-            </WishlistProvider>
+            <StorefrontThemeProvider>
+              <WishlistProvider>
+                <CartProvider>
+                  <App />
+                </CartProvider>
+              </WishlistProvider>
+            </StorefrontThemeProvider>
           </CatalogProvider>
         </AdminProvider>
       </AuthProvider>

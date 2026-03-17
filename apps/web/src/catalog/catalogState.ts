@@ -2,11 +2,14 @@
  * @fileoverview URL/session persistence helpers for the storefront catalog view.
  */
 
+export type CatalogSort = 'default' | 'sku_asc' | 'sku_desc' | 'name_asc' | 'name_desc' | 'price_asc' | 'price_desc';
+
 export type CatalogViewState = {
   q: string;
   category: string;
   subCategory: string;
   subCategory2: string;
+  sort: CatalogSort;
   page: number;
 };
 
@@ -17,8 +20,16 @@ export const DEFAULT_CATALOG_VIEW_STATE: CatalogViewState = {
   category: '',
   subCategory: '',
   subCategory2: '',
+  sort: 'default',
   page: 1,
 };
+
+function normalizeSort(value: string | null): CatalogSort {
+  const normalized = (value ?? '').trim().toLowerCase();
+  return ['default', 'sku_asc', 'sku_desc', 'name_asc', 'name_desc', 'price_asc', 'price_desc'].includes(normalized)
+    ? normalized as CatalogSort
+    : 'default';
+}
 
 function safePage(value: string | null) {
   const parsed = Number(value ?? '1');
@@ -31,6 +42,7 @@ export function buildCatalogSearchParams(state: CatalogViewState) {
   if (state.category) params.set('category', state.category);
   if (state.subCategory) params.set('subCategory', state.subCategory);
   if (state.subCategory2) params.set('subCategory2', state.subCategory2);
+  if (state.sort !== 'default') params.set('sort', state.sort);
   if (state.page > 1) params.set('page', String(state.page));
   return params;
 }
@@ -46,12 +58,13 @@ export function catalogViewStateFromSearchParams(searchParams: URLSearchParams |
     category: searchParams.get('category')?.trim() ?? '',
     subCategory: searchParams.get('subCategory')?.trim() ?? '',
     subCategory2: searchParams.get('subCategory2')?.trim() ?? '',
+    sort: normalizeSort(searchParams.get('sort')),
     page: safePage(searchParams.get('page')),
   };
 }
 
 export function hasCatalogSearchParams(searchParams: URLSearchParams | ReadonlyURLSearchParamsLike) {
-  return ['q', 'category', 'subCategory', 'subCategory2', 'page'].some((key) => {
+  return ['q', 'category', 'subCategory', 'subCategory2', 'sort', 'page'].some((key) => {
     const value = searchParams.get(key);
     return value !== null && value !== '';
   });
@@ -74,6 +87,7 @@ export function readStoredCatalogViewState(): CatalogViewState | null {
       category: typeof parsed.category === 'string' ? parsed.category : '',
       subCategory: typeof parsed.subCategory === 'string' ? parsed.subCategory : '',
       subCategory2: typeof parsed.subCategory2 === 'string' ? parsed.subCategory2 : '',
+      sort: normalizeSort(typeof parsed.sort === 'string' ? parsed.sort : null),
       page: typeof parsed.page === 'number' && parsed.page > 0 ? Math.floor(parsed.page) : 1,
     };
   } catch {

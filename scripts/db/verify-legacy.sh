@@ -60,5 +60,6 @@ require_function "$STORE_DB" 'preorder_update_or_insert'
 
 require_table "$REWRITE_DB" 'public.admin_user_scopes'
 require_table "$REWRITE_DB" 'public.admin_order_marks'
+require_table "$REWRITE_DB" 'public.storefront_theme_overrides'
 
 echo "[verify] Legacy + rewrite schema checks passed."

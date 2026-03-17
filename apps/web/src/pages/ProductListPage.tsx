@@ -13,12 +13,22 @@ import {
   hasCatalogSearchParams,
   readStoredCatalogViewState,
   storeCatalogViewState,
+  type CatalogSort,
 } from '../catalog/catalogState';
 import { useCart } from '../cart/CartContext';
 import type { CatalogCategory, CatalogSubCategory, CatalogSubCategory2, Product } from '../types';
 import { useWishlist } from '../wishlist/WishlistContext';
 
 const PAGE_SIZE = 30;
+const SORT_OPTIONS: Array<{ value: CatalogSort; label: string }> = [
+  { value: 'default', label: 'Featured' },
+  { value: 'sku_asc', label: 'SKU ↑' },
+  { value: 'sku_desc', label: 'SKU ↓' },
+  { value: 'name_asc', label: 'Name A–Z' },
+  { value: 'name_desc', label: 'Name Z–A' },
+  { value: 'price_asc', label: 'Price low → high' },
+  { value: 'price_desc', label: 'Price high → low' },
+];
 
 function categoryTrail(product: Product) {
   return [product.category, product.subCategory, product.subCategory2].filter(Boolean).join(' / ');
@@ -51,6 +61,8 @@ export function ProductListPage() {
   const [activeCategory, setActiveCategory] = useState('');
   const [activeSubCategory, setActiveSubCategory] = useState('');
   const [activeSubCategory2, setActiveSubCategory2] = useState('');
+  const [selectedSort, setSelectedSort] = useState<CatalogSort>('default');
+  const [activeSort, setActiveSort] = useState<CatalogSort>('default');
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [message, setMessage] = useState<string | null>(null);
@@ -95,7 +107,7 @@ export function ProductListPage() {
     return selectedSubCategoryEntry.subCategory2s ?? [];
   }, [selectedSubCategoryEntry]);
 
-  const syncCatalogState = useCallback((state: { q: string; category: string; subCategory: string; subCategory2: string; page: number }, replace = false) => {
+  const syncCatalogState = useCallback((state: { q: string; category: string; subCategory: string; subCategory2: string; sort: CatalogSort; page: number }, replace = false) => {
     storeCatalogViewState(state);
     setSearchParams(buildCatalogSearchParams(state), { replace });
   }, [setSearchParams]);
@@ -106,6 +118,7 @@ export function ProductListPage() {
     category = '',
     subCategory = '',
     subCategory2 = '',
+    sort: CatalogSort = 'default',
     options: { replaceHistory?: boolean } = {},
   ) => {
     setLoading(true);
@@ -118,6 +131,7 @@ export function ProductListPage() {
         category: category || undefined,
         sub_category: subCategory || undefined,
         sub_category2: subCategory2 || undefined,
+        sort: sort === 'default' ? undefined : sort,
         limit: PAGE_SIZE,
         offset: (safePage - 1) * PAGE_SIZE,
       });
@@ -136,6 +150,7 @@ export function ProductListPage() {
           category: category || undefined,
           sub_category: subCategory || undefined,
           sub_category2: subCategory2 || undefined,
+          sort: sort === 'default' ? undefined : sort,
           limit: PAGE_SIZE,
           offset: (resolvedPage - 1) * PAGE_SIZE,
         });
@@ -148,6 +163,7 @@ export function ProductListPage() {
         category,
         subCategory,
         subCategory2,
+        sort,
         page: resolvedPage,
       };
 
@@ -158,6 +174,7 @@ export function ProductListPage() {
       setActiveCategory(category);
       setActiveSubCategory(subCategory);
       setActiveSubCategory2(subCategory2);
+      setActiveSort(sort);
       syncCatalogState(nextState, options.replaceHistory ?? false);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to load products');
@@ -199,7 +216,7 @@ export function ProductListPage() {
   }
 
   function handleSearchSubmit() {
-    void load(query.trim(), 1, selectedCategory, selectedSubCategory, selectedSubCategory2);
+    void load(query.trim(), 1, selectedCategory, selectedSubCategory, selectedSubCategory2, selectedSort);
   }
 
   function handleResetFilters() {
@@ -207,7 +224,13 @@ export function ProductListPage() {
     setSelectedCategory('');
     setSelectedSubCategory('');
     setSelectedSubCategory2('');
-    void load('', 1, '', '', '');
+    setSelectedSort('default');
+    void load('', 1, '', '', '', 'default');
+  }
+
+  function handleSortChange(sort: CatalogSort) {
+    setSelectedSort(sort);
+    void load(activeQuery, 1, activeCategory, activeSubCategory, activeSubCategory2, sort);
   }
 
   function handlePageChange(page: number) {
@@ -215,7 +238,7 @@ export function ProductListPage() {
       return;
     }
 
-    void load(activeQuery, page, activeCategory, activeSubCategory, activeSubCategory2);
+    void load(activeQuery, page, activeCategory, activeSubCategory, activeSubCategory2, activeSort);
   }
 
   useEffect(() => {
@@ -242,6 +265,7 @@ export function ProductListPage() {
         setSelectedCategory(initialState.category);
         setSelectedSubCategory(initialState.subCategory);
         setSelectedSubCategory2(initialState.subCategory2);
+        setSelectedSort(initialState.sort);
       }
 
       await load(
@@ -250,6 +274,7 @@ export function ProductListPage() {
         initialState.category,
         initialState.subCategory,
         initialState.subCategory2,
+        initialState.sort,
         { replaceHistory: true },
       );
     }
@@ -396,6 +421,14 @@ export function ProductListPage() {
                 ))}
               </select>
             </label>
+            <label>
+              <span>Sort by</span>
+              <select value={selectedSort} onChange={(e) => handleSortChange(e.target.value as CatalogSort)}>
+                {SORT_OPTIONS.map((option) => (
+                  <option key={option.value} value={option.value}>{option.label}</option>
+                ))}
+              </select>
+            </label>
             <div className="catalog-filter-actions">
               <button type="button" onClick={handleSearchSubmit}>Apply filters</button>
               <button type="button" className="button-secondary" onClick={handleResetFilters}>Reset</button>
@@ -411,11 +444,23 @@ export function ProductListPage() {
       {!loading && !error && (
         <>
           <div className="catalog-summary-row catalog-summary-card">
-            <p className="muted">
-              {hasProducts
-                ? `Showing ${rangeStart}-${rangeEnd} of ${totalProducts} products${activeQuery ? ` for “${activeQuery}”` : ''}${activeCategory ? ` in ${activeCategory}` : ''}${activeSubCategory ? ` / ${activeSubCategory}` : ''}${activeSubCategory2 ? ` / ${activeSubCategory2}` : ''}.`
-                : `No products found${activeQuery ? ` for “${activeQuery}”` : ''}${activeCategory ? ` in ${activeCategory}` : ''}${activeSubCategory ? ` / ${activeSubCategory}` : ''}${activeSubCategory2 ? ` / ${activeSubCategory2}` : ''}.`}
-            </p>
+            <div className="stack compact-stack">
+              <p className="muted">
+                {hasProducts
+                  ? `Showing ${rangeStart}-${rangeEnd} of ${totalProducts} products${activeQuery ? ` for “${activeQuery}”` : ''}${activeCategory ? ` in ${activeCategory}` : ''}${activeSubCategory ? ` / ${activeSubCategory}` : ''}${activeSubCategory2 ? ` / ${activeSubCategory2}` : ''}.`
+                  : `No products found${activeQuery ? ` for “${activeQuery}”` : ''}${activeCategory ? ` in ${activeCategory}` : ''}${activeSubCategory ? ` / ${activeSubCategory}` : ''}${activeSubCategory2 ? ` / ${activeSubCategory2}` : ''}.`}
+              </p>
+              <div className="row wrap-row catalog-sort-row">
+                <label className="catalog-inline-select">
+                  <span>Sort</span>
+                  <select value={activeSort} onChange={(e) => handleSortChange(e.target.value as CatalogSort)}>
+                    {SORT_OPTIONS.map((option) => (
+                      <option key={option.value} value={option.value}>{option.label}</option>
+                    ))}
+                  </select>
+                </label>
+              </div>
+            </div>
             {renderPagination()}
           </div>
 

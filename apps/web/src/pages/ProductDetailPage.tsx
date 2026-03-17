@@ -132,7 +132,7 @@ export function ProductDetailPage() {
             <div className="price big">{product.price || '—'}</div>
           </div>
 
-          {product.header ? <p className="product-detail-lead">{product.header}</p> : null}
+          <HtmlContent value={product.extendedDescription} className="product-detail-lead legacy-rich-text" />
 
           <div className="badges">
             {product.isDownloadable && <span className="badge">Downloadable</span>}
@@ -169,13 +169,6 @@ export function ProductDetailPage() {
       </div>
 
       <div className="product-detail-content stack">
-        {product.extendedDescription ? (
-          <section className="detail-section">
-            <h3>Overview</h3>
-            <HtmlContent value={product.extendedDescription} className="legacy-rich-text" />
-          </section>
-        ) : null}
-
         {product.specs ? (
           <section className="detail-section">
             <h3>Specs</h3>
@@ -187,13 +180,6 @@ export function ProductDetailPage() {
           <section className="detail-section">
             <h3>Resources</h3>
             <HtmlContent value={product.resources} className="legacy-rich-text" />
-          </section>
-        ) : null}
-
-        {product.notes ? (
-          <section className="detail-section">
-            <h3>Notes</h3>
-            <HtmlContent value={product.notes} className="legacy-rich-text" />
           </section>
         ) : null}
 

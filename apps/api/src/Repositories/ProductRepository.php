@@ -24,6 +24,7 @@ final class ProductRepository
         $category = trim((string) ($filters['category'] ?? ''));
         $subCategory = trim((string) ($filters['sub_category'] ?? ''));
         $subCategory2 = trim((string) ($filters['sub_category2'] ?? ''));
+        $sort = $this->normalizeSort((string) ($filters['sort'] ?? ''));
 
         $where = ["LOWER(TRIM(COALESCE(product_status, ''))) <> 'hidden'"];
         $params = [];
@@ -54,6 +55,8 @@ final class ProductRepository
         $countStmt->execute($params);
         $total = (int) (($countStmt->fetch()['total'] ?? 0));
 
+        $orderBySql = $this->buildCatalogOrderBy($sort);
+
         $sql = "
 SELECT
     product_id,
@@ -70,7 +73,7 @@ SELECT
     preorder
 FROM products
 WHERE {$whereSql}
-ORDER BY category_weight NULLS LAST, category, sub_category, sub_category2, product_id
+ORDER BY {$orderBySql}
 LIMIT :limit OFFSET :offset
 ";
         $stmt = $this->db->prepare($sql);
@@ -92,6 +95,7 @@ LIMIT :limit OFFSET :offset
                 'total' => $total,
                 'limit' => $limit,
                 'offset' => $offset,
+                'sort' => $sort,
             ],
         ];
     }
@@ -252,6 +256,29 @@ SQL;
                 'subCategory2Count' => $subCategory2Count,
             ],
         ];
+    }
+
+
+    private function normalizeSort(string $value): string
+    {
+        $normalized = strtolower(trim($value));
+        return match ($normalized) {
+            'sku_asc', 'sku_desc', 'name_asc', 'name_desc', 'price_asc', 'price_desc' => $normalized,
+            default => 'default',
+        };
+    }
+
+    private function buildCatalogOrderBy(string $sort): string
+    {
+        return match ($sort) {
+            'sku_asc' => 'product_id ASC',
+            'sku_desc' => 'product_id DESC',
+            'name_asc' => 'LOWER(COALESCE(product_description, product_id)) ASC, product_id ASC',
+            'name_desc' => 'LOWER(COALESCE(product_description, product_id)) DESC, product_id DESC',
+            'price_asc' => "NULLIF(regexp_replace(COALESCE(product_price, ''), '[^0-9.\-]', '', 'g'), '')::numeric ASC NULLS LAST, product_id ASC",
+            'price_desc' => "NULLIF(regexp_replace(COALESCE(product_price, ''), '[^0-9.\-]', '', 'g'), '')::numeric DESC NULLS LAST, product_id ASC",
+            default => 'category_weight NULLS LAST, category, sub_category, sub_category2, product_id',
+        };
     }
 
     private function enrichWithCustomerCatalogState(array $items, ?int $customerId): array

@@ -21,6 +21,7 @@ import type {
   PasswordResetPayload,
   ProfileUpdatePayload,
   RegistrationPayload,
+  StorefrontThemeConfig,
   WishlistState,
 } from '../types';
 import * as mockApi from '../fixtures/mockApi';
@@ -77,7 +78,7 @@ export async function logout(): Promise<void> {
   await generatedApiClient.logout();
 }
 
-export async function listProducts(params: { limit?: number; offset?: number; q?: string; category?: string; sub_category?: string; sub_category2?: string } = {}) {
+export async function listProducts(params: { limit?: number; offset?: number; q?: string; category?: string; sub_category?: string; sub_category2?: string; sort?: string } = {}) {
   return USE_FIXTURE_API ? mockApi.listProducts(params) : generatedApiClient.listProducts(params);
 }
 
@@ -212,6 +213,20 @@ export async function getAdminProductUploadSettings(merchantId?: string, configI
   const response = USE_FIXTURE_API
     ? await mockApi.getAdminProductUploadSettings(merchantId, configId)
     : await requestEnvelope<AdminProductUploadSettings>('GET', '/admin/product-upload/settings', { query: { merchantId, configId } });
+  return response.data;
+}
+
+export async function getStorefrontTheme(merchantId?: string, configId?: string): Promise<StorefrontThemeConfig> {
+  const response = USE_FIXTURE_API
+    ? await mockApi.getStorefrontTheme(merchantId, configId)
+    : await requestEnvelope<StorefrontThemeConfig>('GET', '/storefront/theme', { query: { merchantId, configId } });
+  return response.data;
+}
+
+export async function updateAdminStorefrontTheme(payload: { merchantId?: string; configId?: string; theme: string }): Promise<StorefrontThemeConfig> {
+  const response = USE_FIXTURE_API
+    ? await mockApi.updateAdminStorefrontTheme(payload)
+    : await requestEnvelope<StorefrontThemeConfig>('PUT', '/admin/storefront/theme', { body: payload });
   return response.data;
 }
 
