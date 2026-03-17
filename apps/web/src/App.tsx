@@ -2,7 +2,7 @@
  * @fileoverview Application shell: top navigation and route table for the React frontend.
  */
 import React from 'react';
-import { Link, Route, Routes } from 'react-router-dom';
+import { Link, Route, Routes, useLocation } from 'react-router-dom';
 import { useAdmin } from './admin/AdminContext';
 import { useAuth } from './auth/AuthContext';
 import { useCart } from './cart/CartContext';
@@ -13,6 +13,7 @@ import { LoginPage } from './pages/LoginPage';
 import { WishlistPage } from './pages/WishlistPage';
 import { ProductDetailPage } from './pages/ProductDetailPage';
 import { ProductListPage } from './pages/ProductListPage';
+import { getStoredCatalogHref } from './catalog/catalogState';
 import { AdminOrdersPage } from './pages/AdminOrdersPage';
 import { AdminOrderDetailPage } from './pages/AdminOrderDetailPage';
 import { AdminConfigPage } from './pages/AdminConfigPage';
@@ -50,6 +51,9 @@ function AdminNavLink() {
 }
 
 export function App() {
+  useLocation();
+  const productsHref = getStoredCatalogHref();
+
   return (
     <div className="app-shell">
       <header className="topbar">
@@ -58,7 +62,7 @@ export function App() {
           <div className="topbar-meta">
             <SessionStatus />
             <nav>
-              <Link to="/products">Products</Link>
+              <Link to={productsHref}>Products</Link>
               <Link to="/cart"><CartLinkLabel /></Link>
               <Link to="/checkout">Checkout</Link>
               <Link to="/wishlist">Wishlist</Link>

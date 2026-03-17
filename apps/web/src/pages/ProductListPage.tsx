@@ -2,9 +2,18 @@
  * @fileoverview Product catalog list page used as the storefront landing view.
  */
 import React from 'react';
-import { useEffect, useMemo, useState } from 'react';
-import { Link } from 'react-router-dom';
-import { addCartItem, getCatalogCategories, listProducts } from '../api/client';
+import { useCallback, useEffect, useMemo, useState } from 'react';
+import { Link, useSearchParams } from 'react-router-dom';
+import { addCartItem, getCatalogCategories, getLibraryDownloadUrl, listProducts } from '../api/client';
+import { buildProductSummary, getPrimaryProductImage, isOwnedDownloadableProduct } from '../catalog/catalogMedia';
+import {
+  buildCatalogSearchParams,
+  catalogViewStateFromSearchParams,
+  DEFAULT_CATALOG_VIEW_STATE,
+  hasCatalogSearchParams,
+  readStoredCatalogViewState,
+  storeCatalogViewState,
+} from '../catalog/catalogState';
 import { useCart } from '../cart/CartContext';
 import type { CatalogCategory, CatalogSubCategory, CatalogSubCategory2, Product } from '../types';
 import { useWishlist } from '../wishlist/WishlistContext';
@@ -50,6 +59,7 @@ export function ProductListPage() {
   const [totalProducts, setTotalProducts] = useState(0);
   const { refresh } = useCart();
   const { isInWishlist, isBusy: isWishlistBusy, toggleWishlist } = useWishlist();
+  const [searchParams, setSearchParams] = useSearchParams();
 
   const totalPages = Math.max(1, Math.ceil(totalProducts / PAGE_SIZE));
   const pageWindow = useMemo(() => {
@@ -85,7 +95,19 @@ export function ProductListPage() {
     return selectedSubCategoryEntry.subCategory2s ?? [];
   }, [selectedSubCategoryEntry]);
 
-  async function load(search = '', page = 1, category = '', subCategory = '', subCategory2 = '') {
+  const syncCatalogState = useCallback((state: { q: string; category: string; subCategory: string; subCategory2: string; page: number }, replace = false) => {
+    storeCatalogViewState(state);
+    setSearchParams(buildCatalogSearchParams(state), { replace });
+  }, [setSearchParams]);
+
+  const load = useCallback(async (
+    search = '',
+    page = 1,
+    category = '',
+    subCategory = '',
+    subCategory2 = '',
+    options: { replaceHistory?: boolean } = {},
+  ) => {
     setLoading(true);
     setError(null);
 
@@ -105,6 +127,9 @@ export function ProductListPage() {
       const resolvedTotalPages = Math.max(1, Math.ceil(total / PAGE_SIZE));
       const resolvedPage = Math.min(safePage, resolvedTotalPages);
 
+      let finalItems = items;
+      let finalTotal = total;
+
       if (resolvedPage !== safePage) {
         const fallback = await listProducts({
           q: search,
@@ -114,30 +139,32 @@ export function ProductListPage() {
           limit: PAGE_SIZE,
           offset: (resolvedPage - 1) * PAGE_SIZE,
         });
-
-        setProducts(fallback.data.items);
-        setTotalProducts(Math.max(fallback.data.items.length, fallback.data.meta?.total ?? 0));
-        setCurrentPage(resolvedPage);
-        setActiveQuery(search);
-        setActiveCategory(category);
-        setActiveSubCategory(subCategory);
-        setActiveSubCategory2(subCategory2);
-        return;
+        finalItems = fallback.data.items;
+        finalTotal = Math.max(fallback.data.items.length, fallback.data.meta?.total ?? 0);
       }
 
-      setProducts(items);
-      setTotalProducts(total);
+      const nextState = {
+        q: search,
+        category,
+        subCategory,
+        subCategory2,
+        page: resolvedPage,
+      };
+
+      setProducts(finalItems);
+      setTotalProducts(finalTotal);
       setCurrentPage(resolvedPage);
       setActiveQuery(search);
       setActiveCategory(category);
       setActiveSubCategory(subCategory);
       setActiveSubCategory2(subCategory2);
+      syncCatalogState(nextState, options.replaceHistory ?? false);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to load products');
     } finally {
       setLoading(false);
     }
-  }
+  }, [syncCatalogState]);
 
   async function handleAddToCart(productId: string) {
     setBusyProductId(productId);
@@ -154,11 +181,9 @@ export function ProductListPage() {
     }
   }
 
-
   async function handleToggleWishlist(productId: string) {
     setMessage(null);
     setError(null);
-
 
     try {
       const result = await toggleWishlist(productId, 1);
@@ -194,18 +219,46 @@ export function ProductListPage() {
   }
 
   useEffect(() => {
+    let cancelled = false;
+
     async function bootstrap() {
       try {
         const categoryResponse = await getCatalogCategories();
-        setCategories(categoryResponse.categories);
+        if (!cancelled) {
+          setCategories(categoryResponse.categories);
+        }
       } catch (err) {
-        setError(err instanceof Error ? err.message : 'Failed to load categories');
+        if (!cancelled) {
+          setError(err instanceof Error ? err.message : 'Failed to load categories');
+        }
       }
 
-      await load('', 1, '', '', '');
+      const initialState = hasCatalogSearchParams(searchParams)
+        ? catalogViewStateFromSearchParams(searchParams)
+        : readStoredCatalogViewState() ?? DEFAULT_CATALOG_VIEW_STATE;
+
+      if (!cancelled) {
+        setQuery(initialState.q);
+        setSelectedCategory(initialState.category);
+        setSelectedSubCategory(initialState.subCategory);
+        setSelectedSubCategory2(initialState.subCategory2);
+      }
+
+      await load(
+        initialState.q,
+        initialState.page,
+        initialState.category,
+        initialState.subCategory,
+        initialState.subCategory2,
+        { replaceHistory: true },
+      );
     }
 
     void bootstrap();
+
+    return () => {
+      cancelled = true;
+    };
   }, []);
 
   useEffect(() => {
@@ -236,11 +289,58 @@ export function ProductListPage() {
   const rangeStart = totalProducts === 0 ? 0 : (currentPage - 1) * PAGE_SIZE + 1;
   const rangeEnd = totalProducts === 0 ? 0 : Math.min(currentPage * PAGE_SIZE, totalProducts);
 
+  function renderPagination() {
+    if (totalPages <= 1) {
+      return null;
+    }
+
+    return (
+      <nav className="pagination" aria-label="Products pagination">
+        <button type="button" className="pagination-button" disabled={currentPage === 1} onClick={() => handlePageChange(currentPage - 1)}>
+          Previous
+        </button>
+        {pageWindow[0] > 1 && (
+          <>
+            <button type="button" className="pagination-button" onClick={() => handlePageChange(1)}>
+              1
+            </button>
+            {pageWindow[0] > 2 && <span className="pagination-ellipsis">…</span>}
+          </>
+        )}
+        {pageWindow.map((page) => (
+          <button
+            key={page}
+            type="button"
+            className={`pagination-button${page === currentPage ? ' is-active' : ''}`}
+            aria-current={page === currentPage ? 'page' : undefined}
+            onClick={() => handlePageChange(page)}
+          >
+            {page}
+          </button>
+        ))}
+        {pageWindow[pageWindow.length - 1] < totalPages && (
+          <>
+            {pageWindow[pageWindow.length - 1] < totalPages - 1 && <span className="pagination-ellipsis">…</span>}
+            <button type="button" className="pagination-button" onClick={() => handlePageChange(totalPages)}>
+              {totalPages}
+            </button>
+          </>
+        )}
+        <button type="button" className="pagination-button" disabled={currentPage === totalPages} onClick={() => handlePageChange(currentPage + 1)}>
+          Next
+        </button>
+      </nav>
+    );
+  }
+
   return (
-    <section>
-      <div className="page-header product-page-header">
-        <h2>Products</h2>
-        <div className="catalog-toolbar">
+    <section className="catalog-page stack">
+      <div className="page-header product-page-header catalog-page-header">
+        <div>
+          <h2>Products</h2>
+          <p className="muted">Clean MVP storefront: focused filters, better card layout, remembered paging, and direct owned-download access.</p>
+        </div>
+        <div className="catalog-toolbar catalog-toolbar-panel">
           <div className="row search-row">
             <input
               value={query}
@@ -252,7 +352,7 @@ export function ProductListPage() {
               }}
               placeholder="Search products…"
             />
-            <button onClick={handleSearchSubmit}>Search</button>
+            <button type="button" onClick={handleSearchSubmit}>Search</button>
           </div>
           <div className="catalog-filters catalog-filters-three-level">
             <label>
@@ -303,93 +403,93 @@ export function ProductListPage() {
           </div>
         </div>
       </div>
+
       {message && <p className="success">{message}</p>}
       {loading && <p>Loading…</p>}
       {error && <p className="error">{error}</p>}
-      {!loading && !error && (
-        <div className="catalog-summary-row">
-          <p className="muted">
-            {hasProducts
-              ? `Showing ${rangeStart}-${rangeEnd} of ${totalProducts} products${activeQuery ? ` for “${activeQuery}”` : ''}${activeCategory ? ` in ${activeCategory}` : ''}${activeSubCategory ? ` / ${activeSubCategory}` : ''}${activeSubCategory2 ? ` / ${activeSubCategory2}` : ''}.`
-              : `No products found${activeQuery ? ` for “${activeQuery}”` : ''}${activeCategory ? ` in ${activeCategory}` : ''}${activeSubCategory ? ` / ${activeSubCategory}` : ''}${activeSubCategory2 ? ` / ${activeSubCategory2}` : ''}.`}
-          </p>
-          {totalPages > 1 && (
-            <nav className="pagination" aria-label="Products pagination">
-              <button type="button" className="pagination-button" disabled={currentPage === 1} onClick={() => handlePageChange(currentPage - 1)}>
-                Previous
-              </button>
-              {pageWindow[0] > 1 && (
-                <>
-                  <button type="button" className="pagination-button" onClick={() => handlePageChange(1)}>
-                    1
-                  </button>
-                  {pageWindow[0] > 2 && <span className="pagination-ellipsis">…</span>}
-                </>
-              )}
-              {pageWindow.map((page) => (
-                <button
-                  key={page}
-                  type="button"
-                  className={`pagination-button${page === currentPage ? ' is-active' : ''}`}
-                  aria-current={page === currentPage ? 'page' : undefined}
-                  onClick={() => handlePageChange(page)}
-                >
-                  {page}
-                </button>
-              ))}
-              {pageWindow[pageWindow.length - 1] < totalPages && (
-                <>
-                  {pageWindow[pageWindow.length - 1] < totalPages - 1 && <span className="pagination-ellipsis">…</span>}
-                  <button type="button" className="pagination-button" onClick={() => handlePageChange(totalPages)}>
-                    {totalPages}
-                  </button>
-                </>
-              )}
-              <button type="button" className="pagination-button" disabled={currentPage === totalPages} onClick={() => handlePageChange(currentPage + 1)}>
-                Next
-              </button>
-            </nav>
-          )}
-        </div>
-      )}
-      <div className="product-grid">
-        {products.map((product) => {
-          const ownedLabel = customerStateLabel(product);
-          const wishlisted = isInWishlist(product.productId);
-          const wishlistBusy = isWishlistBusy(product.productId);
 
-          return (
-            <article className="product-card" key={product.productId}>
-              <div className="product-meta">{categoryTrail(product)}</div>
-              <h3>{product.description || product.productId}</h3>
-              <div className="product-id">{product.productId}</div>
-              <div className="price">{product.price || '—'}</div>
-              <div className="badges">
-                {product.isDownloadable && <span className="badge">Downloadable</span>}
-                {product.status && <span className="badge subtle">{product.status}</span>}
-                {ownedLabel && <span className="badge badge-accent">{ownedLabel}</span>}
-                {product.thirdParty?.rating && <span className="badge subtle">3rd-party ★ {product.thirdParty.rating}</span>}
-              </div>
-              {product.thirdParty?.description && <p className="muted compact-copy">{product.thirdParty.description}</p>}
-              <div className="product-actions">
-                <Link to={`/products/${encodeURIComponent(product.productId)}`}>Open</Link>
-                <button type="button" disabled={busyProductId === product.productId} onClick={() => void handleAddToCart(product.productId)}>
-                  {busyProductId === product.productId ? 'Adding…' : 'Add to cart'}
-                </button>
-                <button
-                  type="button"
-                  className={`button-secondary wishlist-toggle${wishlisted ? ' is-active' : ''}`}
-                  aria-pressed={wishlisted}
-                  disabled={wishlistBusy}
-                  onClick={() => void handleToggleWishlist(product.productId)}
-                >
-                  {wishlistBusy ? 'Saving…' : wishlisted ? '♥ Wishlisted' : '♡ Wishlist'}
-                </button>
-              </div>
-            </article>
-          );
-        })}
-      </div>
+      {!loading && !error && (
+        <>
+          <div className="catalog-summary-row catalog-summary-card">
+            <p className="muted">
+              {hasProducts
+                ? `Showing ${rangeStart}-${rangeEnd} of ${totalProducts} products${activeQuery ? ` for “${activeQuery}”` : ''}${activeCategory ? ` in ${activeCategory}` : ''}${activeSubCategory ? ` / ${activeSubCategory}` : ''}${activeSubCategory2 ? ` / ${activeSubCategory2}` : ''}.`
+                : `No products found${activeQuery ? ` for “${activeQuery}”` : ''}${activeCategory ? ` in ${activeCategory}` : ''}${activeSubCategory ? ` / ${activeSubCategory}` : ''}${activeSubCategory2 ? ` / ${activeSubCategory2}` : ''}.`}
+            </p>
+            {renderPagination()}
+          </div>
+
+          <div className="product-grid product-grid-catalog">
+            {products.map((product) => {
+              const ownedLabel = customerStateLabel(product);
+              const wishlisted = isInWishlist(product.productId);
+              const wishlistBusy = isWishlistBusy(product.productId);
+              const primaryImage = getPrimaryProductImage(product);
+              const downloadReady = isOwnedDownloadableProduct(product);
+              const productSummary = buildProductSummary(product);
+              const productHref = `/products/${encodeURIComponent(product.productId)}`;
+
+              return (
+                <article className="product-card product-card-catalog" key={product.productId}>
+                  <Link className="product-card-link" to={productHref}>
+                    <div className="product-card-media">
+                      {primaryImage ? (
+                        <img src={primaryImage.url} alt={primaryImage.alt} className="product-card-image" loading="lazy" />
+                      ) : (
+                        <div className="product-card-image product-card-image-placeholder" aria-hidden="true">
+                          <span>{product.category || 'Catalog item'}</span>
+                        </div>
+                      )}
+                      {downloadReady ? <span className="product-card-corner-badge">Owned download</span> : null}
+                    </div>
+
+                    <div className="product-card-body">
+                      <div className="product-meta">{categoryTrail(product) || 'Uncategorized'}</div>
+                      <h3>{product.description || product.productId}</h3>
+                      <div className="product-id">{product.productId}</div>
+                      <div className="price">{product.price || '—'}</div>
+                      <div className="badges">
+                        {product.isDownloadable && <span className="badge">Downloadable</span>}
+                        {ownedLabel && <span className="badge badge-accent">{ownedLabel}</span>}
+                        {product.releaseDate && <span className="badge subtle">Release: {product.releaseDate}</span>}
+                        {product.thirdParty?.rating && <span className="badge subtle">3rd-party ★ {product.thirdParty.rating}</span>}
+                      </div>
+                      {productSummary && <p className="muted compact-copy product-card-summary">{productSummary}</p>}
+                    </div>
+                  </Link>
+
+                  <div className="product-card-footer">
+                    <div className="product-actions product-actions-stack">
+                      {downloadReady ? (
+                        <a className="button-link button-link-secondary" href={getLibraryDownloadUrl(product.productId)}>
+                          Download now
+                        </a>
+                      ) : null}
+                      <button type="button" disabled={busyProductId === product.productId} onClick={() => void handleAddToCart(product.productId)}>
+                        {busyProductId === product.productId ? 'Adding…' : 'Add to cart'}
+                      </button>
+                      <button
+                        type="button"
+                        className={`button-secondary wishlist-toggle${wishlisted ? ' is-active' : ''}`}
+                        aria-pressed={wishlisted}
+                        disabled={wishlistBusy}
+                        onClick={() => void handleToggleWishlist(product.productId)}
+                      >
+                        {wishlistBusy ? 'Saving…' : wishlisted ? '♥ Wishlisted' : '♡ Wishlist'}
+                      </button>
+                    </div>
+                  </div>
+                </article>
+              );
+            })}
+          </div>
+
+          <div className="catalog-summary-row catalog-summary-row-bottom">
+            <div className="muted">Page {currentPage} of {totalPages}</div>
+            {renderPagination()}
+          </div>
+        </>
+      )}
     </section>
   );
 }

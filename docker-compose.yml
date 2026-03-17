@@ -67,6 +67,7 @@ services:
     environment:
       WEB_PORT: ${WEB_PORT:-5173}
       VITE_API_BASE_URL: ${VITE_API_BASE_URL:-http://localhost:8080}
+      VITE_LEGACY_MEDIA_BASE_URL: ${VITE_LEGACY_MEDIA_BASE_URL:-https://secure.columbiagames.com/pix/}
     ports:
       - "${WEB_PORT:-5173}:5173"
     volumes:

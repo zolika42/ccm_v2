@@ -2,10 +2,14 @@
  * @fileoverview Product detail page with related products and add-to-cart action.
  */
 import React from 'react';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
-import { addCartItem, getProduct, getRelated } from '../api/client';
+import { addCartItem, getLibraryDownloadUrl, getProduct, getRelated } from '../api/client';
+import { getPrimaryProductImage, getProductGalleryImages, isOwnedDownloadableProduct } from '../catalog/catalogMedia';
+import { getStoredCatalogHref } from '../catalog/catalogState';
 import { useCart } from '../cart/CartContext';
+import { HtmlContent } from '../components/HtmlContent';
+import { ProductGallery } from '../components/ProductGallery';
 import type { Product } from '../types';
 import { useWishlist } from '../wishlist/WishlistContext';
 
@@ -29,14 +33,6 @@ function customerStateLabel(product: Product) {
   return null;
 }
 
-function mediaUrl(value?: string) {
-  if (!value) {
-    return '';
-  }
-
-  return value.startsWith('//') ? `https:${value}` : value;
-}
-
 export function ProductDetailPage() {
   const { productId = '' } = useParams();
   const [product, setProduct] = useState<Product | null>(null);
@@ -47,6 +43,10 @@ export function ProductDetailPage() {
   const [adding, setAdding] = useState(false);
   const { refresh } = useCart();
   const { isInWishlist, isBusy: isWishlistBusy, toggleWishlist } = useWishlist();
+
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }, [productId]);
 
   useEffect(() => {
     async function load() {
@@ -64,7 +64,6 @@ export function ProductDetailPage() {
 
     void load();
   }, [productId]);
-
 
   async function handleToggleWishlist() {
     if (!product) return;
@@ -101,102 +100,143 @@ export function ProductDetailPage() {
     }
   }
 
+  const galleryImages = useMemo(() => (product ? getProductGalleryImages(product) : []), [product]);
+  const backToCatalogHref = getStoredCatalogHref();
+
   if (error) return <p className="error">{error}</p>;
   if (!product) return <p>Loading…</p>;
 
   const ownedLabel = customerStateLabel(product);
-  const thirdPartyImage = mediaUrl(product.thirdParty?.image || product.thirdParty?.thumbnail);
   const wishlisted = isInWishlist(product.productId);
   const wishlistBusy = isWishlistBusy(product.productId);
+  const downloadReady = isOwnedDownloadableProduct(product);
 
   return (
-    <section className="panel stack">
-      <div className="detail-header">
-        <div>
-          <div className="product-id">{product.productId}</div>
-          <h2>{product.description || product.productId}</h2>
-          <div className="muted">{categoryTrail(product)}</div>
-        </div>
-        <div className="price big">{product.price || '—'}</div>
+    <section className="panel stack product-detail-page">
+      <div className="detail-breadcrumbs">
+        <Link to={backToCatalogHref}>← Back to products</Link>
       </div>
 
-      <div className="stack">
-        {product.extendedDescription && <p>{product.extendedDescription}</p>}
-        <div className="purchase-row">
-          <label className="qty-input">
-            Quantity
-            <input type="number" min={1} max={999} value={quantity} onChange={(e) => setQuantity(Math.max(1, Number(e.target.value) || 1))} />
-          </label>
-          <button type="button" disabled={adding} onClick={() => void handleAddToCart()}>{adding ? 'Adding…' : 'Add to cart'}</button>
-          <button
-            type="button"
-            className={`button-secondary wishlist-toggle${wishlisted ? ' is-active' : ''}`}
-            aria-pressed={wishlisted}
-            disabled={wishlistBusy}
-            onClick={() => void handleToggleWishlist()}
-          >
-            {wishlistBusy ? 'Saving…' : wishlisted ? '♥ Wishlisted' : '♡ Wishlist'}
-          </button>
+      <div className="product-detail-layout">
+        <div className="product-detail-gallery-column">
+          <ProductGallery images={galleryImages} title={product.description || product.productId} />
         </div>
-        {message && <p className="success">{message}</p>}
-        <div className="badges">
-          {product.isDownloadable && <span className="badge">Downloadable</span>}
-          {product.releaseDate && <span className="badge subtle">Release: {product.releaseDate}</span>}
-          {ownedLabel && <span className="badge badge-accent">{ownedLabel}</span>}
-          {product.thirdParty?.rating && <span className="badge subtle">3rd-party ★ {product.thirdParty.rating}</span>}
+
+        <div className="product-detail-summary stack">
+          <div className="detail-header">
+            <div>
+              <div className="product-id">{product.productId}</div>
+              <h2>{product.description || product.productId}</h2>
+              <div className="muted">{categoryTrail(product) || 'Uncategorized'}</div>
+            </div>
+            <div className="price big">{product.price || '—'}</div>
+          </div>
+
+          {product.header ? <p className="product-detail-lead">{product.header}</p> : null}
+
+          <div className="badges">
+            {product.isDownloadable && <span className="badge">Downloadable</span>}
+            {product.releaseDate && <span className="badge subtle">Release: {product.releaseDate}</span>}
+            {ownedLabel && <span className="badge badge-accent">{ownedLabel}</span>}
+            {product.thirdParty?.rating && <span className="badge subtle">3rd-party ★ {product.thirdParty.rating}</span>}
+          </div>
+
+          <div className="purchase-row purchase-row-detail">
+            <label className="qty-input">
+              Quantity
+              <input type="number" min={1} max={999} value={quantity} onChange={(e) => setQuantity(Math.max(1, Number(e.target.value) || 1))} />
+            </label>
+            <button type="button" disabled={adding} onClick={() => void handleAddToCart()}>{adding ? 'Adding…' : 'Add to cart'}</button>
+            <button
+              type="button"
+              className={`button-secondary wishlist-toggle${wishlisted ? ' is-active' : ''}`}
+              aria-pressed={wishlisted}
+              disabled={wishlistBusy}
+              onClick={() => void handleToggleWishlist()}
+            >
+              {wishlistBusy ? 'Saving…' : wishlisted ? '♥ Wishlisted' : '♡ Wishlist'}
+            </button>
+            {downloadReady ? (
+              <a className="button-link button-link-secondary" href={getLibraryDownloadUrl(product.productId)}>
+                Download now
+              </a>
+            ) : null}
+          </div>
+
+          {message && <p className="success">{message}</p>}
+          {error && <p className="error">{error}</p>}
         </div>
-        {product.specs && (
-          <div>
+      </div>
+
+      <div className="product-detail-content stack">
+        {product.extendedDescription ? (
+          <section className="detail-section">
+            <h3>Overview</h3>
+            <HtmlContent value={product.extendedDescription} className="legacy-rich-text" />
+          </section>
+        ) : null}
+
+        {product.specs ? (
+          <section className="detail-section">
             <h3>Specs</h3>
-            <pre>{product.specs}</pre>
-          </div>
-        )}
-        {product.resources && (
-          <div>
+            <HtmlContent value={product.specs} className="legacy-rich-text" />
+          </section>
+        ) : null}
+
+        {product.resources ? (
+          <section className="detail-section">
             <h3>Resources</h3>
-            <pre>{product.resources}</pre>
-          </div>
-        )}
+            <HtmlContent value={product.resources} className="legacy-rich-text" />
+          </section>
+        ) : null}
+
+        {product.notes ? (
+          <section className="detail-section">
+            <h3>Notes</h3>
+            <HtmlContent value={product.notes} className="legacy-rich-text" />
+          </section>
+        ) : null}
+
+        {product.thirdParty ? (
+          <section className="detail-section third-party-panel">
+            <div className="section-heading-row">
+              <h3>3rd-party catalog notes</h3>
+              {product.thirdParty.thirdPartyId ? <span className="badge subtle">{product.thirdParty.thirdPartyId}</span> : null}
+            </div>
+            {product.thirdParty.description ? <HtmlContent value={product.thirdParty.description} className="legacy-rich-text" /> : <p className="muted compact-copy">External enrichment exists for this product, but no summary text was available.</p>}
+          </section>
+        ) : null}
       </div>
 
-      {product.thirdParty && (
-        <section className="stack third-party-panel">
-          <div>
-            <h3>3rd-party product details</h3>
-            <p className="muted compact-copy">
-              Legacy catalog enrichment sourced from <code>3rd_party_product_details</code>
-              {product.thirdParty.thirdPartyId ? ` / ${product.thirdParty.thirdPartyId}` : ''}.
-            </p>
-          </div>
-          {thirdPartyImage && (
-            <div className="third-party-image-wrap">
-              <img src={thirdPartyImage} alt={`${product.description} third-party`} className="third-party-image" />
-            </div>
-          )}
-          {product.thirdParty.description && <p>{product.thirdParty.description}</p>}
-          {product.thirdParty.gallery && product.thirdParty.gallery.length > 0 && (
-            <div className="third-party-gallery">
-              {product.thirdParty.gallery.map((image, index) => (
-                <figure key={`${image.url}-${index}`} className="third-party-gallery-item">
-                  <img src={mediaUrl(image.url)} alt={image.description || `${product.description} gallery ${index + 1}`} className="third-party-gallery-image" />
-                  {image.description && <figcaption className="muted compact-copy">{image.description}</figcaption>}
-                </figure>
-              ))}
-            </div>
-          )}
-        </section>
-      )}
-
-      <div>
-        <h3>Related products</h3>
+      <div className="detail-section">
+        <div className="section-heading-row">
+          <h3>Related products</h3>
+          <Link to={backToCatalogHref}>Back to catalog</Link>
+        </div>
         {related.length === 0 ? <p className="muted">No related products found.</p> : (
-          <ul className="small-list">
-            {related.map((item) => (
-              <li key={item.productId}>
-                <Link to={`/products/${encodeURIComponent(item.productId)}`}>{item.productId} — {item.description || item.productId}</Link>
-              </li>
-            ))}
-          </ul>
+          <div className="related-grid">
+            {related.map((item) => {
+              const relatedImage = getPrimaryProductImage(item);
+              return (
+                <Link key={item.productId} to={`/products/${encodeURIComponent(item.productId)}`} className="related-card">
+                  <div className="related-card-media">
+                    {relatedImage ? (
+                      <img src={relatedImage.url} alt={relatedImage.alt} className="related-card-image" loading="lazy" />
+                    ) : (
+                      <div className="related-card-image related-card-image-placeholder" aria-hidden="true">
+                        <span>{item.category || 'Catalog item'}</span>
+                      </div>
+                    )}
+                  </div>
+                  <div className="related-card-body">
+                    <div className="product-id">{item.productId}</div>
+                    <strong>{item.description || item.productId}</strong>
+                    <span className="price">{item.price || '—'}</span>
+                  </div>
+                </Link>
+              );
+            })}
+          </div>
         )}
       </div>
     </section>

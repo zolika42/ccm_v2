@@ -25,7 +25,7 @@ final class ProductRepository
         $subCategory = trim((string) ($filters['sub_category'] ?? ''));
         $subCategory2 = trim((string) ($filters['sub_category2'] ?? ''));
 
-        $where = ['1=1'];
+        $where = ["LOWER(TRIM(COALESCE(product_status, ''))) <> 'hidden'"];
         $params = [];
 
         if ($search !== '') {
@@ -127,6 +127,7 @@ SELECT
     caption4
 FROM products
 WHERE product_id = :product_id
+  AND LOWER(TRIM(COALESCE(product_status, ''))) <> 'hidden'
 LIMIT 1
 SQL;
         $stmt = $this->db->prepare($sql);
@@ -164,6 +165,7 @@ FROM related_products rp
 JOIN products p
     ON p.product_id = trim(rp.related_product_id)
 WHERE trim(rp.product_id) = :product_id
+  AND LOWER(TRIM(COALESCE(p.product_status, ''))) <> 'hidden'
 ORDER BY p.product_id
 SQL;
         $stmt = $this->db->prepare($sql);
@@ -183,6 +185,7 @@ SELECT
     COUNT(*) AS product_count,
     MIN(category_weight) AS category_weight
 FROM products
+WHERE LOWER(TRIM(COALESCE(product_status, ''))) <> 'hidden'
 GROUP BY 1, 2, 3
 ORDER BY category_weight NULLS LAST, category_name, sub_category_name, sub_category2_name
 SQL;
