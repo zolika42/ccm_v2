@@ -1,0 +1,287 @@
+@media all and (max-width: 1024px) {
+	img, iframe {
+          max-width: 100%;
+        }
+	div#main-wrapper::before {
+		display: none;
+	}
+	
+	div#main-wrapper {
+	  max-width: unset;
+	  width: unset;
+	  margin: auto;
+	  min-height: unset;
+	  padding: unset;
+	}
+
+	div#main-wrapper div#left-wrapper .search {
+	  display: none;
+	}
+
+	.hidden {
+	  display: none;
+   	}
+
+	div#main-wrapper div#left-wrapper p {
+	  display: none;
+	}
+
+	div#left-wrapper {
+	  display: none;
+	  background-color: rgb(0, 102, 0);
+	  color: #ffffcc;
+	  height: unset;
+	  min-height: unset;
+	}
+
+	div#center-wrapper {
+	  padding: 0 18px 0 18px;
+	  text-align: justify;
+	}
+	
+	
+	/* Zsanna: gets a width for the Checkout page */
+#center-wrapper form {
+  width: 100%;
+}
+
+
+/* Zsanna: gets a width for the Register text */
+form .text2 {
+  width: 100%;
+}
+.headline2 {
+  font-size: 12pt;
+  width: 100%;
+}
+
+
+
+	div#right-wrapper {
+	  text-align: center;
+          height: unset;
+	  min-height: unset;
+          background: url(/css/images/content_bg.png) repeat-y;
+	  background-size: contain;
+	  
+/* Zsanna: Hamburger menu appears at this width */  
+	  width: 70px;
+	  font-size: 10px;
+	}
+
+	#right-wrapper .buttons {
+          display: none;
+	}
+
+        footer {
+          display: none;
+        }
+    
+        header:before {
+          display: none;
+        }
+
+        header {
+          background-image: unset;
+          height: auto;
+          background-repeat: unset;
+          background-position: unset;
+        }
+
+	header div.dragon {
+		display: none;
+	}
+
+	div#main-logo {
+	  text-align: center;
+	  position: absolute;
+	  width: 315px;
+	  left: 37%;
+	}
+
+	#main-logo a {
+	  font-family: 'MedievalSharp', cursive;
+	  text-decoration: none;
+	  color: #533e3d;
+	  font-size: 2em;
+	  font-weight: bold;
+	  margin-right: 20px;
+	  margin-bottom: -15px;
+	  display: block;
+	  text-shadow: 1px -4px 1px #97775b85;
+	  position: relative;
+	  z-index: 1;
+	  padding-top: 20px;
+	  padding-right: 70px;
+	  -moz-transform: rotate(3deg);
+	  -webkit-transform: rotate(3deg);
+	  -o-transform: rotate(3deg);
+	  -ms-transform: rotate(3deg);
+	  transform: rotate(3deg);
+	}
+
+	div#search-mobile {
+	  display: block;
+	}
+
+	div#main-menu {
+	  display: none;
+  	  border-radius: unset;
+	  left: unset;
+	}
+
+        div#main-menu-mobile {
+	  display: none;
+          margin: -1px 0 -1px 0;
+          background: url(/css/images/content_bg.png) repeat-y;
+	  background-size: contain;
+	}
+
+        div#main-menu-mobile .menu-search,
+        div#main-menu-mobile h1 {
+	  display: none;
+	}
+
+        div#main-menu-mobile .menu-button {
+	  font-family: 'MedievalSharp', cursive;
+	  color: #533e3d;
+	  text-decoration: none;
+	  font-size: 1.2em;
+	}
+
+	#mobile-buttons {
+	  display: block;
+          background: url(/css/images/content_bg.png) repeat-y;
+          background-size: cover;
+          padding: 0;
+	}
+
+        #mobile-buttons .buttons {
+	    width: 240px;
+	    margin: auto;
+        }
+
+        #mobile-buttons .buttons label {
+          background-size: 70px;
+	  width: 70px;
+	  height: 70px;
+          padding: 0 5px;
+	  font-size: small;
+	  line-height: 1;
+	}
+	div#main-menu-wrapper {
+          top: 0;
+	  float: left;
+	  padding: 0;
+	  padding-right: 37px;
+          background: url(/css/images/content_bg.png) repeat-y;
+	  background-size: cover;
+	  max-width: unset;
+	}
+
+	#login-register-wrapper {
+	  box-shadow: unset;
+	}
+
+	#login-register-wrapper input[type="text"],
+	#login-register-wrapper input[type="password"] {
+          width: 100%;
+        }
+
+	.login-wrapper {
+	  border-right: unset;
+	  border-bottom: 1px solid;
+	}
+
+	.hamburger-menu {
+          position: relative;
+          width: 40px !important;
+          left: 95%;
+          margin-top: 15px;
+          margin-left: 10px;
+	}
+
+	.hamburger-menu div {
+	  width: 25px;
+	  height: 3px;
+	  background-color: #533e3d;
+	  margin: 5px 0;
+	}
+
+	.menu {
+	  text-decoration: none;
+	  height: 30px;
+	  display: block;
+	  padding-top: 12px;
+	  font-size: 1.2em;
+	  text-align: center;
+	}
+
+	.menu-contact2 {
+	  font-size: 0.8em;
+	}
+
+	.card-logos {
+	  width: 42.5%;
+	  margin: auto;
+	}
+
+	.paypal-logo {
+	  margin: auto;
+	  width: 65px;
+	  padding-top: 2em;
+	}
+
+	.menu-home {
+	  padding-left: unset;
+	}
+
+	[class*="grid-"] {
+	    width: 100%;
+	  }
+
+	.grid {
+	  padding: 5px;
+	  box-sizing: border-box;
+	}
+
+	.left {
+	  float: left;
+	}
+
+	.right {
+	  float: right;
+	}
+
+	.text-center {
+	  text-align: center;
+	}
+
+	.text-right {
+	  text-align: right;
+	}
+	#wargame-wrapper #sortable-table {
+  	  display: block;
+  	  overflow-x: scroll;
+	}
+	
+	td.product_description > .product_image img {
+	  display: none;
+	}
+
+  td.product_description .product-content .product_image {
+    width: 25% !important;
+  } 
+
+  footer::before {
+	  display: none;
+  }
+}
+@media all and (max-width: 634px) {
+  div#main-menu-wrapper {
+    background-size: contain !important;
+  }
+  #main-logo {
+    display: none;
+  }
+}

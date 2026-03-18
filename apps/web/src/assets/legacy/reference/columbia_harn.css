@@ -1,0 +1,1126 @@
+/* Zsanna's and Zoli's new fantastic, great CSS */
+
+/*------------------------------------------------------------------
+[TABLE OF CONTENTS]
+-------------------------------------------------------------------*/
+@import url(https://fonts.googleapis.com/css?family=Montserrat:300,400,400i,500,500i,600,600i,700,700i,800|Open+Sans:400,400i,600,600i,700,700i,800&display=swap);
+/* Typography
+================================================== */
+
+
+@import url('https://fonts.googleapis.com/css2?family=MedievalSharp&amp;display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300&amp;display=swap');
+html {
+  min-height: 100%;
+  font-family: 'Roboto', sans-serif;
+}
+
+body {
+  display: table;
+  height: 100%;
+  min-height: 100%;
+  margin: auto;
+  background: url('images/bg.gif');
+  background-attachment: fixed;
+}
+
+#center-wrapper h1,
+#center-wrapper h2,
+#center-wrapper h3,
+#center-wrapper h4,
+#center-wrapper h5,
+#center-wrapper h6 {
+  font-family: 'MedievalSharp', cursive;
+  color: #533e3d;
+  font-weight: bold;
+  margin: 1.5em 0 0.5em;
+}
+
+div#main-wrapper:before {
+  left: 19px;
+  content: '';
+  background-image: url('images/left_border.png');
+  width: 10px;
+  height: 100%;
+  position: absolute;
+  background-size: 10px;
+}
+
+div#main-wrapper {
+  display: flex;
+  max-width: 960px;
+  width: 100%;
+  margin: auto;
+  position: relative;
+  clear: both;
+  height: 100%;
+  background: url('images/content_bg.png') repeat-y;
+  background-size: contain;
+  padding: 0 20px;
+  min-height: inherit;
+
+}
+/* Zsanna: Sticky left menu */
+div#left-wrapper {
+  position: sticky;
+  color: #533e3d;
+  height: 100%;
+  min-height: 100%;
+  top:0;
+}
+
+/* Zsanna: Category name */
+div#left-wrapper h1 {
+  font-family: 'MedievalSharp', cursive;
+  width: ;
+  float: left;
+  color: #533e3d;
+  font-size: 26px;
+}
+
+div#left-wrapper div.left.text-center div.grid {
+  height: 36px;
+background: #7d7936;
+border: 1px solid beige;
+}
+
+#left-wrapper .menu-button {
+ font-family: 'MedievalSharp', cursive;
+width: ;
+cursor: pointer;
+box-sizing: border-box;
+text-decoration: none;
+display: block;
+float: left;
+text-align: center;
+margin-left: 10px;
+color: wheat;
+}
+
+#product-image-wrapper {
+  width: 250px;
+   /* Zsanna - 100% height+taller margin */
+  height: 100%;
+  max-height: 100%;
+  float: left;
+  margin: 10px 20px 65px 10px;
+}
+
+#product-image-wrapper img {
+	 /* Zsanna - Zoom in + center horizontally */
+  max-width: 250px;
+  margin-left: auto;
+  margin-right: auto;
+  display: block;
+  margin-bottom: 5px;
+ cursor: zoom-in;
+}
+
+ /* Zsanna - Description under image */
+#product-image-wrapper .product-details {
+  position: absolute;
+  /*  top: 226px;*/
+  width: 240px;
+  background: #91251f;
+  padding: 5px;
+  border-radius: 5px;
+  color: #ffcc;
+}
+
+#product-image-wrapper .product-details .product-id:before {
+    content: '#';
+}
+
+#product-image-wrapper .product-details .product-id {
+  float: right;
+  font-size: 0.8em;
+  font-weight: bold;
+}
+
+#product-image-wrapper .product-details .product-price {
+  float: left;
+  font-weight: bold;
+}
+
+#product-image-wrapper .product-details .product-description {
+  float: left;
+  width: 98%;
+  margin: 5px 0 5px 5px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-align: center;
+}
+
+#main-menu-mobile input {
+  background: transparent;
+  border: 0;
+  margin: 0;
+  padding: 0;
+  -webkit-appearance: unset;
+  user-select: unset;
+  white-space: unset;
+  align-items: unset;
+  font-size: 0.9em;
+  font: unset; 
+}
+
+#main-menu-mobile form {
+  margin: 0;
+  padding: 0;
+  padding-top: 10px;
+}
+
+#left-wrapper .menu-form {
+  margin: 0;
+}
+
+#left-wrapper .menu-form:hover {
+  opacity: 0.6;
+}
+
+.menu-search {
+  padding: 10px;
+}
+
+div#center-wrapper {
+  position: relative;
+  min-height: 100%;
+  color: #2a2a2a;
+}
+
+/* Zsanna: color for the link */
+div#center-wrapper a {
+  color: #91251f;
+}
+
+/* Zsanna: gets a width in order to fix the Checkout button */
+#center-wrapper form {
+  width: 620px;
+}
+
+
+
+div#right-wrapper {
+  position: relative;
+  color: #2a2a2a;
+  min-height: 100%;
+  word-break: break-word;
+  
+  /* Zsanna: gets a width in order to fix the Checkout button */
+  
+  width: 150px;
+}
+
+/* Zsanna: ne torlódjon össze a To Order résszel */
+.buttons {
+  padding-top: 35px;
+}
+
+
+
+
+header:before {
+  width: 960px;
+  height: 247px;
+  position: absolute;
+  content: '';
+  background: url(images/left_border.png) no-repeat;
+  background-size: 13px;
+  left: -6px;
+  right: 0;
+  margin: 0 auto 0 auto;
+}
+
+header div.dragon {
+  position: absolute;
+  width: 960px;
+  height: 180px;
+  margin: auto;
+  background: url(images/footer_dragon.png) no-repeat;
+  top: -40px;
+  left: -30px;
+  right: 0;
+  bottom: 0;
+  margin: 0 auto 0 auto;
+  z-index: 1;
+}
+
+header {
+  background-image: url(images/header.png);
+  height: 246px;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+#center-wrapper table {
+  width: 100%;
+}
+
+div#main-logo {
+  text-align: center;
+  width: 410px;
+  left: 55%;
+  position: absolute;
+}
+
+#main-logo a {
+  font-family: 'MedievalSharp', cursive;
+  text-decoration: none;
+  color: #533e3d;
+  font-size: 2em;
+  font-weight: bold;
+  margin-right: 20px;
+  margin-bottom: -15px;
+  display: block;
+  text-shadow: 1px -4px 1px #97775b85;
+  position: relative;
+  z-index: 1;
+  padding-top: 20px;
+  padding-right: 70px;
+  -moz-transform: rotate(3deg);
+  -webkit-transform: rotate(3deg);
+  -o-transform: rotate(3deg);
+  -ms-transform: rotate(3deg);
+  transform: rotate(3deg);
+}
+
+div#main-menu-wrapper {
+  top: 125px;
+  position: relative;
+  height: 120px;
+  margin: auto;
+  max-width: 960px;
+}
+
+div#main-menu {
+  float: left;
+  position: relative;
+}
+
+div#search-mobile {
+  display: none;
+  padding: 15px 20px 5px 20px;
+}
+
+div#main-menu-mobile {
+  display: none;
+}
+
+#mobile-buttons {
+  display: none;
+}
+
+.menu {
+  font-family: 'MedievalSharp', cursive;
+  text-decoration: none;
+  color: #533e3d;
+  height: 30px;
+  display: block;
+  padding-top: 12px;
+  font-size: 1.2em;
+  text-align: center;
+  font-weight: bold;
+}
+
+.menu-first {
+  text-align: left;
+}
+
+.menu-home {
+  background: url('images/home.png') no-repeat;
+  padding-left: 25px;
+  height: 95px;
+  background-position: 60% 0%;
+  text-align: center;
+  line-height: 9.5em;
+}
+
+.menu-myaccount {
+  background: url('images/myaccount.png') no-repeat;
+  padding-left: 25px;
+  height: 95px;
+  background-position: 60% 0%;
+  text-align: center;
+  line-height: 9.5em;
+  background-size: 55px;
+}
+
+.menu-forum {
+  background: url('images/harnforum.gif') no-repeat 5% 0%;
+  font-size: 0;
+  width: 55px;
+  margin-top: 10px;
+}
+
+.menu-forum2 {
+  background: url('images/gamesforum.gif') no-repeat 5% 0%;
+  font-size: 0;
+  width: 55px;
+  margin-top: 10px;
+}
+
+.menu-contact2 {
+  font-size: 1em;
+}
+
+.menu-last {
+  text-align: right;
+}
+
+footer:before {
+  content: '';
+  background-image: url('images/footer_dragon.png');
+  width: 310px;
+  height: 180px;
+  position: absolute;
+  background-repeat: no-repeat;
+  margin-left: -14px;
+}
+
+footer {
+  height: 241px;
+  background-image: url('images/footer.png');
+  background-size: cover;
+  background-repeat: no-repeat;
+  max-width: 960px;
+  margin: auto;
+  padding: 0 20px;
+}
+
+#add_to_cart_button,
+td .product-content a.addtocart {
+  font-family: 'MedievalSharp', cursive;
+  background-image: url(images/add_to_cart.png);
+  background-color: unset;
+  color: unset;
+  border-radius: unset;
+  background-size: 100px;
+  background-repeat: no-repeat;
+  background-position: center bottom;
+  width: 126px;
+  height: 90px;
+  border: unset;
+  text-align: center;
+  font-size: x-large;
+  line-height: 0;
+}
+
+/* Zsanna's hover element added */
+#add_to_cart_button:hover {
+  opacity: 0.5;
+}
+
+#view_cart_button {
+  font-family: 'MedievalSharp', cursive;
+  background-image: url(images/view_cart.png);
+  background-color: unset;
+  color: unset;
+  border-radius: unset;
+  background-size: 100px;
+  background-repeat: no-repeat;
+  background-position: center bottom;
+  width: 125px;
+  height: 90px;
+  border: unset;
+  text-align: center;
+  font-size: x-large;
+  line-height: 0;
+}
+
+/* Zsanna's hover element added */
+#view_cart_button:hover {
+  opacity: 0.5;
+}
+
+#checkout_button {
+  font-family: 'MedievalSharp', cursive;
+  background-image: url(images/checkout.png);
+  background-color: unset;
+  color: unset;
+  border-radius: unset;
+  background-size: 100px;
+  background-repeat: no-repeat;
+  background-position: center bottom;
+  width: 125px;
+  height: 90px;
+  border: unset;
+  text-align: center;
+  font-size: x-large;
+  line-height: 0;
+}
+
+/* Zsanna's hover element added */
+#checkout_button:hover {
+  opacity: 0.5;
+}
+
+.card-logos {
+  margin: auto;
+  width: 85%;
+  padding-top: 1em;
+}
+
+.paypal-logo img {
+  width: 44px;
+}
+
+#login-register-wrapper {
+  box-shadow: black 1px 1px 5px 0px;
+}
+
+#login-register-wrapper input[type="text"],
+#login-register-wrapper input[type="password"] {
+  width: 90%;
+}
+
+.login-wrapper, .register-wrapper {
+  padding: 10px !important;
+  position: relative;
+  min-height: 450px;
+}
+
+.login-wrapper {
+  border-right: 1px solid;
+}
+
+.register-wrapper h4 {
+  margin: 1.3em 0 2.5em 0;
+}
+
+#login-register-wrapper label {
+  margin: 2em 0 0 0;
+  display: block;
+}
+
+.grid {
+  padding: 5px;
+  box-sizing: border-box;
+}
+
+.grid-1 {
+  width: 8.33333333%;
+}
+.grid-2 {
+  width: 16.6666667%;
+}
+.grid-3 {
+  width: 25%;
+}
+.grid-4 {
+  width: 33.3333333%;
+}
+.grid-5 {
+  width: 41.6666667%;
+}
+.grid-6 {
+  width: 50%;
+}
+.grid-7 {
+  width: 58.3333333%;
+}
+.grid-8 {
+  width: 66.6666666%;
+}
+.grid-9 {
+  width: 75%;
+}
+.grid-10 {
+  width: 83.3333333%;
+}
+.grid-11 {
+  width: 91.6666666%;
+}
+.grid-12 {
+  width: 100%;
+}
+
+.left {
+  float: left;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.green {
+  color: #006600;
+}
+
+.red {
+  color: #FF0000;
+}
+
+.uppercase {
+  text-transform: uppercase;
+}
+
+.margin-top-3em-important {
+  margin-top: 3em !important;
+}
+
+.margin-top-08em-important {
+  margin-top: 0.8em !important;
+}
+
+.margin-bottom-08em-important {
+  margin-bottom: 0.8em !important;
+}
+
+.hidden {
+  display: none;
+}
+
+.tooltip {
+  visibility: hidden;
+  width: 120px;
+  background-color: black;
+  color: #fff;
+  text-align: center;
+  padding: 5px 0;
+  border-radius: 6px;
+ 
+  /* Position the tooltip text - see examples below! */
+  position: absolute;
+  z-index: 1;
+}
+
+label:hover .tooltip {
+  visibility: visible;
+}
+
+
+ /* Zsanna added a pointer to the cart labels*/
+.buttons label {
+  cursor: pointer;
+}
+
+
+
+span.help-icon {
+background: #2a2a2a;
+    border-radius: 100%;
+    width: 10px;
+    height: 10px;
+    position: relative;
+    display: inline-block;
+    margin: 0 0 0 3px;
+    color: wheat;
+    font-size: x-small;
+    font-weight: bold;
+    text-align: center;
+    padding: 3px;
+}
+
+/* Make changes page*/
+#makechanges-wrapper h2 {
+  width: 100%;
+  float: left;
+  position: relative;
+  text-transform: uppercase;
+}
+#makechanges-wrapper label {
+  width: 40%;
+  display: block;
+  float: left;
+  margin: 10px 0 10px 0;
+  padding: 0;
+  height: 30px;
+}
+
+#makechanges-wrapper input, #makechanges-wrapper select, #makechanges-wrapper button {
+  width: 60%;
+  display: block;
+  float: right;
+  margin: 10px 0 10px 0;
+  height: 30px;
+  padding: 5px;
+}
+
+#makechanges-wrapper input.library-button {
+  float: unset;
+  width: 45%;
+}
+
+/* Wargame page */
+td.order_num input {
+    width: 3em;
+    margin: auto;
+    display: block;
+    text-align: center;
+}
+
+td.sku {
+    text-align: left;
+    font-style: italic;
+    width: 4em;
+    word-wrap: break-word;
+    word-break: break-all;
+    white-space: normal;
+}
+
+td.product_description {
+    text-align: center;
+}
+
+td.product_description > a {
+  text-decoration: none;
+  color: #000;
+  font-weight: bold;
+  float: left;
+  display: block;
+  width: 80%;
+  padding-top: 8%;
+}
+
+td.product_description .product_image img {
+  float: left;
+  width: 20%;
+  min-height: 20%;
+/* Zsanna - Zoom in cursor */
+  cursor: zoom-in;
+}
+
+div.product-content .product_image {
+  overflow: hidden;
+}
+
+div.product-content .product_image img {
+  float: left;
+  width: 100%;
+  min-height: 100%;
+}
+
+.productimage2 img {
+  max-width: 100%;
+  cursor: zoom-in;
+}
+
+td.price {
+    text-align: right;
+}
+
+/* Download history */
+#sortable-table td a {
+    color: #000;
+    font-weight: bold;
+}
+
+/* Overlay */
+div#overlay {
+  overflow: scroll;
+  position: fixed;
+  height: 100%;
+  width: 100%;
+  background: #fdf8cc;
+  top: 0;
+  left: 0;
+  z-index: 4;
+  scroll-behavior: smooth;
+  opacity: 0.9;
+}
+
+div#overlay-close {
+  position: fixed;
+  right: 2%;
+  top: 7%;
+  margin: 5%;
+  background: rgb(0, 102, 0);
+  width: 35px;
+  height: 35px;
+  text-align: center;
+  line-height: 34px;
+  font-weight: bold;
+  border: 1px solid #fdf8cc;
+  border-radius: 100%;
+  cursor: pointer;
+  color: #fdf8cc;
+  z-index: 10;
+}
+
+div.product-content {
+  position: fixed;
+  top: 10%;
+  z-index: 10;
+  height: 80%;
+  overflow-y: scroll;
+  background: #fdf8cc;
+  -webkit-box-shadow: 0px 0px 15px 10px rgba(0,0,0,0.75);
+  -moz-box-shadow: 0px 0px 15px 10px rgba(0,0,0,0.75);
+  box-shadow: 0px 0px 15px 10px rgba(0,0,0,0.75);
+  width: 90%;
+  max-width: 500px;
+  margin: auto;
+}
+
+div.product-content:hover {
+    color: #000;
+}
+
+div.product-content::-webkit-scrollbar-track {
+    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.1);
+    background-color: #F5F5F5;
+    border-radius: 10px;
+}
+
+div.product-content::-webkit-scrollbar {
+    width: 10px;
+    background-color: #F5F5F5;
+}
+
+div.product-content::-webkit-scrollbar-thumb {
+    border-radius: 10px;
+    background-color: #FFF;
+    background-image: -webkit-gradient(linear,
+                                       40% 0%,
+                                       75% 84%,
+                                       from(#4D9C41),
+                                       to(#19911D),
+                                       color-stop(.6,#54DE5D))
+}
+
+td .product-content a.addtocart {
+  position: fixed;
+  top: 40%;
+  right: 4%;
+  padding: 0 5px;
+  width: 100px;
+  height: 100px;
+}
+
+.pricetag{
+  white-space: nowrap;
+  position: absolute;
+  displaY: inline-block;
+  height: 52px;
+  border-radius: 0 10px 10px 0;
+  padding: 0 20px 0 25px;
+  background: #E8EDF0;
+  border: 0px solid #C7D2D4;
+  border-top-width: 0px;
+  border-bottom-width: 0px;
+  color: #2a2a2a;
+  line-height: 50px;
+  transform-style: preserve-3d;
+  transform: rotateZ(20deg);
+  font-size: medium;
+  left: 2%;
+  top: 15%;
+  -webkit-box-shadow: 10px 10px 5px 0px rgba(0,0,0,0.75);
+  -moz-box-shadow: 10px 10px 5px 0px rgba(0,0,0,0.75);
+  box-shadow: 10px 10px 5px 0px rgba(0,0,0,0.75);
+}
+
+.pricetag:before{
+  position: absolute;
+  content: "\25CF";
+  color: white;
+  text-shadow: 0 0 1px #333;
+  font-size: 22px;
+  line-height: 0px;
+  text-indent: 20px;
+  left: -29px;
+  width: 2px;
+  height: 0px;
+  border-right: 28px solid #E8EDF0;
+  border-top: 25px solid transparent;
+  border-bottom: 28px solid transparent;
+}
+
+.pricetag:after{
+  position:absolute;
+  right:0;
+  margin:1px 7px;
+  font-weight:bold;
+  font-size:19px;
+  content:"\00D7";
+}
+
+#center-wrapper > form > div > img {
+  padding: 0 10px;
+}
+
+/* CSS table */
+/*==================================================================
+ *  * [ Ver2 ]*/
+.table100.ver2 td {
+  font-size: 14px;
+  color: #808080;
+  line-height: 1.4;
+}
+
+.table100.ver2 th {
+  font-size: 12px;
+  color: #fff;
+  line-height: 1.4;
+  text-transform: uppercase;
+
+  background-color: #333333;
+}
+
+.table100.ver2 .row100:hover > td {
+  background-color: #83d160;
+  color: #fff;
+}
+
+.table100.ver2 .hov-column-ver2 {
+  background-color: #83d160;
+  color: #fff;
+}
+
+.table100.ver2 .hov-column-head-ver2 {
+  background-color: #484848 !important;
+}
+
+.table100.ver2 .row100 > td:hover {
+  background-color: #57b846;
+  color: #fff;
+}
+
+/*==================================================================
+ *  * [ Ver2 ]*/
+.table100.ver2 tbody tr.even {
+  background-color: #97775b85;
+}
+
+.table100.ver2 td {
+  font-size: 14px;
+  color: #000000;
+  line-height: 1.4;
+  padding: 1em;
+}
+
+.table100.ver2 th {
+  font-size: 12px;
+  color: #fff;
+  line-height: 1.4;
+  text-transform: uppercase;
+  cursor: pointer;
+  background-color: #333333;
+}
+
+.table100.ver2 .row100:hover > td {
+  background-color: #97775b;
+  color: #fff;
+}
+
+.table100.ver2 .hov-column-ver2 {
+  background-color: #83d160;
+  color: #fff;
+}
+
+.table100.ver2 .hov-column-head-ver2 {
+  background-color: #484848 !important;
+}
+
+.table100.ver2 .row100 > td:hover {
+  background-color: #97775b;
+  color: #fff;
+}
+
+.boardgamegeeks-details .rating {
+  float: right;
+  width: 100%;
+  text-align: right;
+  padding: 15px;
+}
+.boardgamegeeks-details .comment-wrapper {
+    overflow: auto;
+    padding: 20px;
+}
+
+.boardgamegeeks-details .comment-wrapper .comment .comment {
+    padding-bottom: 15px;
+    border-bottom: 1px solid;
+    margin-top: 15px;
+    float: left;
+    width: 100%;
+    font-style: italic;
+    word-break: break-word;
+}
+.boardgamegeeks-details .comment-wrapper .comment .rating {
+  float: right;
+  width: 20px;
+  text-align: right;
+  padding: 5px;
+  color: green;
+  font-size: large;
+}
+.boardgamegeeks-details .comment-wrapper .comment .username {
+  float: left;
+  padding: 5px;
+  width: 130px;
+  font-weight: bolder;
+  font-size: 1.2em;
+}
+
+ /* Zsanna: adds inline scrolling to BGG comments */
+.comment-wrapper {
+  display: inline-block;
+
+  height: 600px;
+
+}
+
+#realted-products-wrapper .product {
+  padding: 10px;
+  float: left;
+}
+
+#realted-products-wrapper .product-image {
+  width: 180px;
+  overflow: hidden;
+  height: 180px;
+  border: 1px solid green;
+}
+
+#realted-products-wrapper .product-image img {
+  width: 180px;
+}
+
+#realted-products-wrapper .product-title {
+  position: absolute;
+  margin-top: -40px;
+  background-color: lightgrey;
+  width: 160px;
+  padding: 10px;
+  text-align: center;
+  font-weight: bold;
+  color: #2a2a2a;
+  opacity: 0.8;
+  white-space: pre;
+  overflow: hidden;
+  font-size: 0.9em;
+}
+
+#realted-products-wrapper .pricetag {
+  top: unset;
+  margin-top: -120px;
+  left: unset;
+  margin-left: 25px;
+}
+
+/* Zoltan's new fantastic, great CSS's end */
+
+/* link colour definitions */
+a:hover { opacity: 0.6} /* hover works only in MSIE 4.x+ and Opera 4+ */
+a:focus { outline: auto; }
+
+/* text format definitions */
+/* big headline: title of page */
+.headline1 {  font-size: 14pt; font-weight: bold; text-align: center; color: #006600}
+
+/* smaller headline: subtitle */
+.headline2 {  font-size: 12pt; font-weight: bold; color: #006600;
+
+/* Zsanna: no site-wide width */
+width: 41%;
+
+}
+
+/* Zsanna: form width */
+form .text2 {
+  width: 40%;
+}
+#login-register-wrapper input[type="text"], #login-register-wrapper input[type="password"] {
+  width: 44%;
+}
+
+
+
+
+/* normal text */
+.text1 {  font-size: 12pt}
+
+.text1 a {
+  color: brown;
+  font-weight: bold;
+
+/* bold text */
+.text2 {  font-size: 10pt; font-weight: bold}
+.text3 { font-size: 10pt; font-weight: normal}
+.headline3 {
+font-size: 16pt; font-weight: bold; color: #006600
+}
+
+/*
+ *  *  * Page template layout
+ *   *   */
+
+.content-block {
+  padding-bottom: 3em;
+}
+
+#center-wrapper h2 {
+  font-size: 110%;
+}
+
+.right-block {
+  color: #ffffcc;
+}
+
+.right-block p {
+  padding: 0.5em;
+}
+
+.right-block h1,
+.left-block h1 {
+  font-family: 'MedievalSharp', cursive;
+  font-weight: bold;
+  font-size: 120%;
+  padding: 0.5em;
+  text-transform: uppercase;
+}
+
+div#right-wrapper h1 {
+    font-size: 1.1em;
+}
+
+.row_0 {
+  background-color: white;
+}
+
+.number {
+  text-align: right;
+}
+
+/*
+ *  *  * Points
+ *   *   */
+table.points {
+  margin-left: auto;
+  margin-right: 1em;
+  padding: 0.2em 0.5em;
+  border: 4px #533e3d solid;
+  border-radius: 10px;
+}
+
+table.points td {
+  text-align: right;
+}
+
+table.points input {
+  width: 4em;
+}
+
+.button {
+  padding: 0.2em 0;
+  border: 4px #cc0000 solid;
+  border-radius: 8px;
+  background: #ffc;
+  color: #0000ff;
+  font-weight: bold;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.menu-button {
+  color: #ffcc;
+  font-weight: bold;
+  font-size: 14px;
+  display: block;
+  margin: 0;
+  line-height: 1.5em;
+  text-align: center;
+}
+

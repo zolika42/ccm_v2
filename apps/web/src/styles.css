@@ -15,8 +15,8 @@ body {
 }
 
 .container {
-  width: min(1100px, calc(100% - 2rem));
-  margin: 0 auto;
+  min-width: 960px;
+  margin: 0 5rem;
 }
 
 .topbar {
@@ -643,7 +643,6 @@ body {
   position: sticky;
   top: 0;
   z-index: 20;
-  backdrop-filter: blur(10px);
 }
 
 .topbar nav {
@@ -736,8 +735,8 @@ button:hover:not(:disabled),
 }
 
 .product-grid-catalog {
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 1.25rem;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 0.5rem;
 }
 
 .product-card-catalog {

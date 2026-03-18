@@ -110,7 +110,7 @@ export function CartPage() {
           <div><dt>Shippable subtotal</dt><dd>{cart.summary.shippableSubtotalFormatted ?? cart.summary.subtotalFormatted} {cart.summary.currency}</dd></div>
           <div><dt>Subtotal</dt><dd>{cart.summary.subtotalFormatted} {cart.summary.currency}</dd></div>
         </dl>
-        {cart.summary.hasItems ? <Link className="button-link" to="/checkout">Continue to checkout</Link> : null}
+        {cart.summary.hasItems ? <Link className="button-link legacy-image-action legacy-image-action-checkout" to="/checkout">Continue to checkout</Link> : null}
         <p className="muted">Checkout summary and validation are now wired; order submit comes next.</p>
       </aside>
     </section>

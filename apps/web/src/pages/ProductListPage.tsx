@@ -360,11 +360,8 @@ export function ProductListPage() {
 
   return (
     <section className="catalog-page stack">
+      <h2>Products</h2>
       <div className="page-header product-page-header catalog-page-header">
-        <div>
-          <h2>Products</h2>
-          <p className="muted">Clean MVP storefront: focused filters, better card layout, remembered paging, and direct owned-download access.</p>
-        </div>
         <div className="catalog-toolbar catalog-toolbar-panel">
           <div className="row search-row">
             <input
@@ -510,7 +507,7 @@ export function ProductListPage() {
                           Download now
                         </a>
                       ) : null}
-                      <button type="button" disabled={busyProductId === product.productId} onClick={() => void handleAddToCart(product.productId)}>
+                      <button type="button" className="legacy-image-action legacy-image-action-addtocart" disabled={busyProductId === product.productId} onClick={() => void handleAddToCart(product.productId)}>
                         {busyProductId === product.productId ? 'Adding…' : 'Add to cart'}
                       </button>
                       <button

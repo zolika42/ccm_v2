@@ -94,10 +94,24 @@ function LegacyRightRail() {
   const { summary } = useCart();
   return (
     <div className="legacy-rail-blocks">
+      <section className="legacy-rail-block legacy-icon-rail" aria-label="Legacy storefront shortcuts">
+        <NavLink to="/" className="legacy-icon-link legacy-icon-link-home" aria-label="Home">
+          <span className="sr-only">Home</span>
+        </NavLink>
+        <NavLink to="/login" className="legacy-icon-link legacy-icon-link-account" aria-label="My account">
+          <span className="sr-only">My account</span>
+        </NavLink>
+        <NavLink to="/cart" className="legacy-icon-link legacy-icon-link-cart" aria-label="View cart">
+          <span className="sr-only">View cart</span>
+        </NavLink>
+        <NavLink to="/checkout" className="legacy-icon-link legacy-icon-link-checkout" aria-label="Checkout">
+          <span className="sr-only">Checkout</span>
+        </NavLink>
+      </section>
       <section className="legacy-rail-block legacy-utility-cta">
-        <h3>Campaign kit</h3>
-        <p>Legacy-inspired shell, reusable rails, and backend-controlled theme switching now drive the storefront.</p>
-        <NavLink to="/cart" className="button-link">Open cart</NavLink>
+        <h3>Storefront status</h3>
+        <p>The admin/config selector now controls whether shoppers see the rewrite shell or this legacy storefront theme.</p>
+        <NavLink to="/cart" className="button-link legacy-image-action legacy-image-action-viewcart">View cart</NavLink>
       </section>
       <section className="legacy-rail-block">
         <h3>Cart snapshot</h3>
@@ -106,14 +120,6 @@ function LegacyRightRail() {
           <div><dt>Unique</dt><dd>{summary?.uniqueItemCount ?? 0}</dd></div>
           <div><dt>Subtotal</dt><dd>{summary?.subtotalFormatted ?? '0.00'}</dd></div>
         </dl>
-      </section>
-      <section className="legacy-rail-block">
-        <h3>Need help?</h3>
-        <ul className="bullet-list compact-list">
-          <li>Direct cart actions stay available on catalog cards.</li>
-          <li>Wishlist toggles stay visible on cards and PDP.</li>
-          <li>Checkout keeps the rewrite business logic underneath.</li>
-        </ul>
       </section>
     </div>
   );
@@ -193,7 +199,7 @@ export function StorefrontChrome({ children }: { children: ReactNode }) {
             </button>
             <div>
               <div className="brand brand-legacy">Columbia Games</div>
-              <div className="legacy-brand-subtitle">Backend-driven legacy storefront theme</div>
+              <div className="legacy-brand-subtitle">Legacy storefront theme · selected from admin/config</div>
             </div>
           </div>
           <div className="topbar-meta legacy-topbar-meta">
@@ -216,8 +222,8 @@ export function StorefrontChrome({ children }: { children: ReactNode }) {
 
       <footer className="legacy-footer">
         <div className="container legacy-footer-inner">
-          <span>Current template preserved as rewrite.</span>
-          <span>Legacy shell now starts on the same backend data model.</span>
+          <span>Rewrite remains available as the current template.</span>
+          <span>This full papyrus-and-icons design is the Legacy storefront theme.</span>
         </div>
       </footer>
     </div>
