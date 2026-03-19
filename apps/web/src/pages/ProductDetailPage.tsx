@@ -146,7 +146,7 @@ export function ProductDetailPage() {
               Quantity
               <input type="number" min={1} max={999} value={quantity} onChange={(e) => setQuantity(Math.max(1, Number(e.target.value) || 1))} />
             </label>
-            <button type="button" className="legacy-image-action legacy-image-action-addtocart" disabled={adding} onClick={() => void handleAddToCart()}>{adding ? 'Adding…' : 'Add to cart'}</button>
+            <button type="button" className="button-link add-to-cart-button" disabled={adding} onClick={() => void handleAddToCart()}>{adding ? 'Adding…' : 'Add to cart'}</button>
             <button
               type="button"
               className={`button-secondary wishlist-toggle${wishlisted ? ' is-active' : ''}`}

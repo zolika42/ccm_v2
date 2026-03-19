@@ -8,6 +8,7 @@ declare(strict_types=1);
 
 namespace ColumbiaGames\Api\Repositories;
 
+use ColumbiaGames\Api\Support\CatalogCategoryContentRegistry;
 use PDO;
 
 final class ProductRepository
@@ -26,7 +27,7 @@ final class ProductRepository
         $subCategory2 = trim((string) ($filters['sub_category2'] ?? ''));
         $sort = $this->normalizeSort((string) ($filters['sort'] ?? ''));
 
-        $where = ["LOWER(TRIM(COALESCE(product_status, ''))) <> 'hidden'"];
+        $where = [$this->catalogVisibilityWhere()];
         $params = [];
 
         if ($search !== '') {
@@ -102,7 +103,8 @@ LIMIT :limit OFFSET :offset
 
     public function findById(string $productId, ?int $customerId = null): ?array
     {
-        $sql = <<<'SQL'
+        $visibilitySql = $this->catalogVisibilityWhere();
+        $sql = <<<SQL
 SELECT
     product_id,
     product_description,
@@ -131,7 +133,7 @@ SELECT
     caption4
 FROM products
 WHERE product_id = :product_id
-  AND LOWER(TRIM(COALESCE(product_status, ''))) <> 'hidden'
+  AND {$visibilitySql}
 LIMIT 1
 SQL;
         $stmt = $this->db->prepare($sql);
@@ -150,7 +152,8 @@ SQL;
 
     public function related(string $productId, ?int $customerId = null): array
     {
-        $sql = <<<'SQL'
+        $visibilitySql = $this->catalogVisibilityWhere('p');
+        $sql = <<<SQL
 SELECT
     trim(rp.related_product_id) AS related_product_id,
     p.product_id,
@@ -169,7 +172,7 @@ FROM related_products rp
 JOIN products p
     ON p.product_id = trim(rp.related_product_id)
 WHERE trim(rp.product_id) = :product_id
-  AND LOWER(TRIM(COALESCE(p.product_status, ''))) <> 'hidden'
+  AND {$visibilitySql}
 ORDER BY p.product_id
 SQL;
         $stmt = $this->db->prepare($sql);
@@ -181,7 +184,8 @@ SQL;
 
     public function categories(): array
     {
-        $sql = <<<'SQL'
+        $visibilitySql = $this->catalogVisibilityWhere();
+        $sql = <<<SQL
 SELECT
     COALESCE(NULLIF(trim(category), ''), 'Uncategorized') AS category_name,
     COALESCE(NULLIF(trim(sub_category), ''), '') AS sub_category_name,
@@ -189,7 +193,7 @@ SELECT
     COUNT(*) AS product_count,
     MIN(category_weight) AS category_weight
 FROM products
-WHERE LOWER(TRIM(COALESCE(product_status, ''))) <> 'hidden'
+WHERE {$visibilitySql}
 GROUP BY 1, 2, 3
 ORDER BY category_weight NULLS LAST, category_name, sub_category_name, sub_category2_name
 SQL;
@@ -210,6 +214,7 @@ SQL;
                 $categories[$categoryName] = [
                     'name' => $categoryName,
                     'productCount' => 0,
+                    'descriptionHtml' => $this->categoryDescriptionHtml($categoryName),
                     'subCategories' => [],
                 ];
             }
@@ -224,6 +229,7 @@ SQL;
                 $categories[$categoryName]['subCategories'][$subCategoryName] = [
                     'name' => $subCategoryName,
                     'productCount' => 0,
+                    'descriptionHtml' => $this->categoryDescriptionHtml($categoryName, $subCategoryName),
                     'subCategory2s' => [],
                 ];
                 $subCategoryCount++;
@@ -238,6 +244,7 @@ SQL;
             $categories[$categoryName]['subCategories'][$subCategoryName]['subCategory2s'][] = [
                 'name' => $subCategory2Name,
                 'productCount' => $productCount,
+                'descriptionHtml' => $this->categoryDescriptionHtml($categoryName, $subCategoryName, $subCategory2Name),
             ];
             $subCategory2Count++;
         }
@@ -258,6 +265,21 @@ SQL;
         ];
     }
 
+    private function catalogVisibilityWhere(string $alias = ''): string
+    {
+        $prefix = $alias !== '' ? rtrim($alias, '.') . '.' : '';
+
+        return implode(' AND ', [
+            "LOWER(TRIM(COALESCE({$prefix}product_status, ''))) <> 'hidden'",
+            "LOWER(TRIM(COALESCE({$prefix}category, ''))) <> 'hidden'",
+            "COALESCE({$prefix}category_weight, 0) >= 0",
+        ]);
+    }
+
+    private function categoryDescriptionHtml(string $category, string $subCategory = '', string $subCategory2 = ''): ?string
+    {
+        return CatalogCategoryContentRegistry::descriptionFor($category, $subCategory, $subCategory2);
+    }
 
     private function normalizeSort(string $value): string
     {

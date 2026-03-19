@@ -1,11 +1,22 @@
 /**
- * @fileoverview Authenticated digital library screen for owned downloadable products.
+ * @fileoverview Authenticated digital library screen using storefront catalog cards for owned downloads.
  */
 import React from 'react';
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { getLibrary, getLibraryDownloadUrl } from '../api/client';
+import { resolveCatalogMediaUrl } from '../catalog/catalogMedia';
+import { StoreCollectionCard } from '../catalog/components/StoreCollectionCard';
 import type { LibraryState } from '../types';
+
+function libraryCategoryLabel(item: LibraryState['items'][number]) {
+  return [item.category, item.subCategory].filter(Boolean).join(' / ');
+}
+
+function librarySummary(item: LibraryState['items'][number]) {
+  const bits = [item.status, item.releaseDate ? `Release: ${item.releaseDate}` : ''].filter(Boolean);
+  return bits.join(' · ');
+}
 
 export function LibraryPage() {
   const [library, setLibrary] = useState<LibraryState | null>(null);
@@ -50,7 +61,7 @@ export function LibraryPage() {
       <section className="stack">
         <div className="panel">
           <h2>Digital library</h2>
-          <p className="muted">The library is tied to the logged-in customer account.</p>
+          <p className="muted">Please sign in to access your owned downloads.</p>
         </div>
         <div className="result-card">
           <p className="error">Please log in to view owned downloads.</p>
@@ -69,7 +80,7 @@ export function LibraryPage() {
               <h2>Digital library</h2>
               <p className="muted">Owned downloadable titles will appear here after purchase.</p>
             </div>
-            <button type="button" onClick={() => void loadLibrary()}>Reload library</button>
+            <button type="button" onClick={() => void loadLibrary()}>Refresh library</button>
           </div>
           <div className="result-card">
             <p>No downloadable purchases were found for this account yet.</p>
@@ -86,44 +97,44 @@ export function LibraryPage() {
         <div className="page-header">
           <div>
             <h2>Digital library</h2>
-            <p className="muted">Customer <code>{library.customerId}</code> · {library.meta.count} owned download{library.meta.count === 1 ? '' : 's'}</p>
+            <p className="muted">{library.meta.count} owned download{library.meta.count === 1 ? '' : 's'} ready in your library.</p>
           </div>
-          <button type="button" onClick={() => void loadLibrary()}>Reload library</button>
+          <button type="button" className="button-secondary" onClick={() => void loadLibrary()}>Refresh library</button>
         </div>
+      </div>
 
-        <div className="library-grid">
-          {library.items.map((item) => (
-            <article key={item.productId} className="library-card">
-              <div className="stack compact-stack">
-                <div className="row wrap-row library-card-header">
-                  <div>
-                    <h3>{item.description}</h3>
-                    <div className="product-id">{item.productId}</div>
-                  </div>
-                  <div className="badges">
-                    <span className="badge">Owned × {item.quantity}</span>
-                    {item.hasDownloadFile ? <span className="badge">Download file present</span> : <span className="badge subtle">No file mapped yet</span>}
-                  </div>
-                </div>
-
-                <dl className="summary-list library-meta-list">
-                  <div><dt>Category</dt><dd>{item.category || '—'}</dd></div>
-                  <div><dt>Subcategory</dt><dd>{item.subCategory || '—'}</dd></div>
-                  <div><dt>Filename</dt><dd><code>{item.downloadableFilename || '—'}</code></dd></div>
-                  <div><dt>Status</dt><dd>{item.status || '—'}</dd></div>
-                  <div><dt>Release</dt><dd>{item.releaseDate || '—'}</dd></div>
-                </dl>
-
-                <div className="row wrap-row">
-                  <Link className="button-link" to={`/products/${encodeURIComponent(item.productId)}`}>View product</Link>
-                  {item.hasDownloadFile ? (
-                    <a className="button-link" href={getLibraryDownloadUrl(item.productId)}>Download</a>
-                  ) : null}
-                </div>
-              </div>
-            </article>
-          ))}
-        </div>
+      <div className="library-grid product-grid-catalog">
+        {library.items.map((item) => (
+          <StoreCollectionCard
+            key={item.productId}
+            href={`/products/${encodeURIComponent(item.productId)}`}
+            title={item.description}
+            productId={item.productId}
+            categoryLabel={libraryCategoryLabel(item)}
+            priceLabel={item.price || '—'}
+            summary={librarySummary(item)}
+            imageUrl={resolveCatalogMediaUrl(item.image)}
+            imageAlt={item.description}
+            cornerBadge={item.hasDownloadFile ? 'Owned download' : 'Owned item'}
+            badges={(
+              <>
+                <span className="badge">Owned × {item.quantity}</span>
+                {item.hasDownloadFile ? <span className="badge badge-accent">Ready to download</span> : <span className="badge subtle">File pending</span>}
+                {item.downloadableFilename ? <span className="badge subtle">{item.downloadableFilename}</span> : null}
+              </>
+            )}
+            actions={(
+              <>
+                <Link className="button-link button-link-secondary" to={`/products/${encodeURIComponent(item.productId)}`}>View product</Link>
+                {item.hasDownloadFile ? (
+                  <a className="button-link" href={getLibraryDownloadUrl(item.productId)}>Download now</a>
+                ) : (
+                  <span className="button-link button-link-secondary disabled-action" aria-disabled="true">Download pending</span>
+                )}
+              </>
+            )}
+          />
+        ))}
       </div>
     </section>
   );

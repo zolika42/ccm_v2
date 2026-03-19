@@ -151,7 +151,7 @@ export function LoginPage() {
     setSuccess(null);
     try {
       await updateProfile(profileForm);
-      setSuccess('Profile saved. /auth/me now reflects the new values.');
+      setSuccess('Profile saved.');
     } catch {
       // handled by provider
     }
@@ -172,15 +172,12 @@ export function LoginPage() {
   }
 
   return (
-    <section className="stack">
-      <div className="panel">
+    <section className="stack account-page">
+      <div className="panel account-hero-panel">
         <div className="page-header">
           <div>
             <h2>Account & authentication</h2>
-            <p className="muted">
-              Login + registration write against legacy <code>customers</code>. Persistent browser sign-in is handled via
-              a first-party remembered session, while cart/browser continuity still uses <code>bid-cg</code>.
-            </p>
+            <p className="muted">Sign in, create an account, or update your saved customer details from one place.</p>
           </div>
           <span className={`session-pill ${isAuthenticated ? '' : 'muted-pill'}`}>
             {isAuthenticated ? 'Authenticated' : 'Guest session'}
@@ -191,26 +188,24 @@ export function LoginPage() {
         {error && <p className="error">{error}</p>}
 
         {user ? (
-          <div className="result-card">
+          <div className="result-card account-summary-card">
             <strong>{user.name || user.email}</strong>
             <div>Email: {user.email}</div>
-            <div>Customer ID: {user.customerId}</div>
-            <div>Points: {user.points}</div>
-            <div>Auth persistence: {persistenceLabel}</div>
-            <div>Browser ID: {user.browserId ?? 'n/a'}</div>
+            <div>Reward points: {user.points}</div>
+            <div>Sign-in mode: {persistenceLabel}</div>
           </div>
         ) : (
-          <p className="muted">No authenticated customer session yet.</p>
+          <p className="muted">You are currently browsing as a guest.</p>
         )}
 
         <div className="row wrap-row">
-          <button type="button" onClick={() => void handleRefreshSession()} disabled={loading}>Refresh session</button>
+          <button type="button" onClick={() => void handleRefreshSession()} disabled={loading}>Refresh account</button>
           <button type="button" onClick={() => void handleLogout()} disabled={loading || !isAuthenticated}>Logout</button>
         </div>
       </div>
 
       {!isAuthenticated && (
-        <div className="panel form-panel">
+        <div className="panel form-panel account-panel">
           <h3>Login</h3>
           <form onSubmit={handleLogin} className="stack">
             <label>
@@ -223,7 +218,7 @@ export function LoginPage() {
             </label>
             <label className="checkbox-label">
               <input checked={rememberMe} onChange={(e) => setRememberMe(e.target.checked)} type="checkbox" />
-              <span>Remember this browser (migration replacement for legacy browser→customer auto-login)</span>
+              <span>Remember this browser</span>
             </label>
             <div className="row wrap-row">
               <button type="submit" disabled={loading}>{loading ? 'Logging in…' : 'Login'}</button>
@@ -233,12 +228,9 @@ export function LoginPage() {
       )}
 
       {!isAuthenticated && (
-        <div className="panel form-panel">
+        <div className="panel form-panel account-panel">
           <h3>Create account</h3>
-          <p className="muted">
-            Dump-validated minimum required fields for new legacy-compatible customer creation: email and password. Name is optional,
-            and when billing fields are left blank on registration the rewrite mirrors the supplied shipping address into the legacy billing fields.
-          </p>
+<p className="muted">Create a customer account and save your basic shipping details for faster checkout.</p>
           <form onSubmit={handleRegister} className="stack">
             <div className="form-grid two-col">
               <label><span>Name (optional)</span><input value={registerForm.name ?? ''} onChange={(e) => setRegisterForm((current) => ({ ...current, name: e.target.value }))} /></label>
@@ -262,10 +254,10 @@ export function LoginPage() {
         </div>
       )}
 
-      <div className="panel form-panel">
-        <h3>Profile / “make changes”</h3>
+      <div className="panel form-panel account-panel">
+        <h3>Profile details</h3>
         {!isAuthenticated ? (
-          <p className="muted">Log in first to edit the legacy-backed customer profile.</p>
+          <p className="muted">Log in first to edit your saved profile details.</p>
         ) : (
           <form onSubmit={handleProfileSave} className="stack">
             <div className="form-grid two-col">
@@ -298,25 +290,11 @@ export function LoginPage() {
         )}
       </div>
 
-      <div className="panel form-panel">
-        <h3>Password recovery / reset</h3>
-        {recoveryPolicy && (
-          <div className="result-card">
-            <strong>Current rewrite policy</strong>
-            <ul className="bullet-list compact-list">
-              <li>Email-based forgot password available: {recoveryPolicy.legacyForgotPasswordAvailable ? 'yes' : 'no'}</li>
-              <li>Legacy mail dependency verified: {recoveryPolicy.emailDependencyVerified ? 'yes' : 'no'}</li>
-              <li>Implemented path: <code>{recoveryPolicy.implementedPath}</code></li>
-              <li>Password storage assumption: <code>{recoveryPolicy.passwordStorage}</code></li>
-            </ul>
-          </div>
-        )}
+      <div className="panel form-panel account-panel">
+        <h3>Password</h3>
 
         {!isAuthenticated ? (
-          <p className="muted">
-            The rewrite intentionally does not offer an email-based forgot-password flow yet, because the checked-in legacy
-            assets do not prove the old entrypoint or its mail dependency. Log in once and use the authenticated reset path.
-          </p>
+<p className="muted">Please sign in first, then you can change your password here.</p>
         ) : (
           <form onSubmit={handlePasswordReset} className="stack">
             <label>

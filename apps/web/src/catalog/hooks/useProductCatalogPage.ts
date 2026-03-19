@@ -80,6 +80,23 @@ export function useProductCatalogPage() {
     return selectedSubCategoryEntry?.subCategory2s ?? [];
   }, [selectedSubCategoryEntry]);
 
+
+  const selectedSubCategory2Entry = useMemo(
+    () => subCategory2Options.find((entry) => entry.name === draftFilters.subCategory2) ?? null,
+    [draftFilters.subCategory2, subCategory2Options],
+  );
+
+  const activeCategoryDescriptionHtml = useMemo(() => {
+    return selectedSubCategory2Entry?.descriptionHtml
+      ?? selectedSubCategoryEntry?.descriptionHtml
+      ?? selectedCategoryEntry?.descriptionHtml
+      ?? null;
+  }, [selectedCategoryEntry, selectedSubCategory2Entry, selectedSubCategoryEntry]);
+
+  const activeCategoryHeading = useMemo(() => {
+    return [draftFilters.category, draftFilters.subCategory, draftFilters.subCategory2].filter(Boolean).join(' / ');
+  }, [draftFilters.category, draftFilters.subCategory, draftFilters.subCategory2]);
+
   const syncCatalogState = useCallback((state: CatalogViewState, replace = false) => {
     storeCatalogViewState(state);
 
@@ -328,6 +345,8 @@ export function useProductCatalogPage() {
     appliedViewState,
     subCategoryOptions,
     subCategory2Options,
+    activeCategoryDescriptionHtml,
+    activeCategoryHeading,
     isInWishlist,
     isWishlistBusy,
     setSelectedCategory,

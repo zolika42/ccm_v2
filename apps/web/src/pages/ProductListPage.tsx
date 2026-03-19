@@ -7,6 +7,7 @@ import { CatalogSummaryCard } from '../catalog/components/CatalogSummaryCard';
 import { ProductCatalogCard } from '../catalog/components/ProductCatalogCard';
 import { SORT_OPTIONS } from '../catalog/constants';
 import { useProductCatalogPage } from '../catalog/hooks/useProductCatalogPage';
+import { HtmlContent } from '../components/HtmlContent';
 
 export function ProductListPage() {
   const {
@@ -27,6 +28,8 @@ export function ProductListPage() {
     appliedViewState,
     subCategoryOptions,
     subCategory2Options,
+    activeCategoryDescriptionHtml,
+    activeCategoryHeading,
     isInWishlist,
     isWishlistBusy,
     setSelectedCategory,
@@ -65,6 +68,15 @@ export function ProductListPage() {
       {message && <p className="success">{message}</p>}
       {loading && <p>Loading…</p>}
       {error && <p className="error">{error}</p>}
+      {!loading && !error && activeCategoryDescriptionHtml && (
+        <section className="catalog-description-card stack" aria-label="Selected category description">
+          <div className="catalog-description-header">
+            <h3>{activeCategoryHeading || 'Category overview'}</h3>
+            <div className="muted compact-copy">Legacy category description</div>
+          </div>
+          <HtmlContent value={activeCategoryDescriptionHtml} className="legacy-rich-text" />
+        </section>
+      )}
 
       {!loading && !error && (
         <>
@@ -97,7 +109,7 @@ export function ProductListPage() {
             ))}
           </div>
 
-          <div className="catalog-summary-row catalog-summary-row-bottom">
+          <div className="catalog-summary-row catalog-summary-card">
             <div className="muted">Page {currentPage} of {totalPages}</div>
             <CatalogPagination
               currentPage={currentPage}

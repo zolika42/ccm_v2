@@ -90,17 +90,20 @@ export type PasswordRecoveryPolicy = {
 export type CatalogSubCategory2 = {
   name: string;
   productCount: number;
+  descriptionHtml?: string | null;
 };
 
 export type CatalogSubCategory = {
   name: string;
   productCount: number;
+  descriptionHtml?: string | null;
   subCategory2s?: CatalogSubCategory2[];
 };
 
 export type CatalogCategory = {
   name: string;
   productCount: number;
+  descriptionHtml?: string | null;
   subCategories: CatalogSubCategory[];
 };
 

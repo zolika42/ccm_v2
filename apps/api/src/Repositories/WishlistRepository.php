@@ -182,6 +182,9 @@ FROM real_wishlists rw
 JOIN products p
     ON p.product_id = rw.product_id
 WHERE rw.ship_email = :customer_id
+  AND LOWER(TRIM(COALESCE(p.product_status, ''))) <> 'hidden'
+  AND LOWER(TRIM(COALESCE(p.category, ''))) <> 'hidden'
+  AND COALESCE(p.category_weight, 0) >= 0
 ORDER BY p.category_weight NULLS LAST, p.category, p.sub_category, p.sub_category2, rw.product_id
 SQL);
         $stmt->execute(['customer_id' => (string) $customerId]);

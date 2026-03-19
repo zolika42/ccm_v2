@@ -65,7 +65,7 @@ export function CartPage() {
         <div className="page-header">
           <div>
             <h2>Cart</h2>
-            <p className="muted">Storage mode: <code>{cart.storage}</code></p>
+            <p className="muted">Review your items before heading to checkout.</p>
           </div>
           <button type="button" onClick={() => void loadCart()}>Refresh cart</button>
         </div>
@@ -110,8 +110,7 @@ export function CartPage() {
           <div><dt>Shippable subtotal</dt><dd>{cart.summary.shippableSubtotalFormatted ?? cart.summary.subtotalFormatted} {cart.summary.currency}</dd></div>
           <div><dt>Subtotal</dt><dd>{cart.summary.subtotalFormatted} {cart.summary.currency}</dd></div>
         </dl>
-        {cart.summary.hasItems ? <Link className="button-link legacy-image-action legacy-image-action-checkout" to="/checkout">Continue to checkout</Link> : null}
-        <p className="muted">Checkout summary and validation are now wired; order submit comes next.</p>
+        {cart.summary.hasItems ? <Link className="button-link checkout-link-cta" to="/checkout"><span className="checkout-link-cta-icon" aria-hidden="true" />Checkout</Link> : null}
       </aside>
     </section>
   );

@@ -124,6 +124,9 @@ components:
           type: string
         productCount:
           type: integer
+        descriptionHtml:
+          type: string
+          nullable: true
     ThirdPartyImage:
       type: object
       properties:
@@ -204,6 +207,9 @@ components:
           type: string
         productCount:
           type: integer
+        descriptionHtml:
+          type: string
+          nullable: true
         subCategory2s:
           type: array
           items:
@@ -216,6 +222,9 @@ components:
           type: string
         productCount:
           type: integer
+        descriptionHtml:
+          type: string
+          nullable: true
         subCategories:
           type: array
           items:
